@@ -1,0 +1,34 @@
+{
+  "name": "bridget-src",
+  "version": "0.0.1",
+  "description": "bridget theme source file",
+  "private": true,
+  "scripts": {
+    "build": "hugo -v --source=exampleSite --themesDir ../.. --gc",
+    "build:preview": "hugo -v --source=exampleSite --themesDir ../.. -D --gc",
+    "server": "hugo server --source=exampleSite --themesDir ../.. -D --disableFastRender",
+    "server:production": "hugo server --source=exampleSite --themesDir ../.. --disableFastRender -e production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sped0n/bridget.git"
+  },
+  "keywords": [
+    "hugo",
+    "theme",
+    "photography"
+  ],
+  "author": "spedon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sped0n/bridget/issues"
+  },
+  "homepage": "https://github.com/Sped0n/bridget#readme",
+  "devDependencies": {
+    "eslint": "^8.35.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.6.1",
+    "eslint-plugin-promise": "^6.1.1"
+  }
+}
