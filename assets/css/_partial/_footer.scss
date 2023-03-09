@@ -13,21 +13,21 @@ footer {
   line-height: 1.5;
   padding: 4px 9px;
   float: none;
-
+  
   .footer_name {
   }
-
+  
   .footer_categoryWrapper {
     .footer_category {
       cursor: pointer;
     }
-
+    
     .selected {
       text-decoration: underline;
       font-style: italic;
     }
   }
-
+  
   .footer_threshold {
     button {
       border: none;
@@ -38,9 +38,10 @@ footer {
       cursor: pointer;
     }
   }
-
+  
   .footer_imageIndex {
     margin: 0;
+    
     .ftid {
       display: inline-block;
       text-align: center;
@@ -54,11 +55,11 @@ footer {
     top: 0;
     padding: 3px 8px;
     font-size: 17px;
-
+    
     .footer_threshold {
       display: none;
     }
-
+    
     .footer_imageIndex {
       display: none;
     }
