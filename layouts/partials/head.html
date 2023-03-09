@@ -1,0 +1,8 @@
+{{- $fingerprint := .Scratch.Get "fingerprint" | default "" -}}
+{{- $style := dict "Source" "css/style.scss" "Fingerprint" $fingerprint -}}
+{{- $options := dict "targetPath" "css/style.min.css" "enableSourceMap" true -}}
+{{- $style = dict "Context" . "ToCSS" $options | merge $style -}}
+{{- partial "plugin/style.html" $style -}}
+
+{{ $js := resources.Get "js/theme.js" }}
+<script type="text/javascript" src="{{ $js.RelPermalink }}" defer></script>
