@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    {{- partial "head.html" . -}}
+    <title>{{ .Title }}</title>
+</head>
+<body>
+<header>
+    {{- partial "header.html" . -}}
+</header>
+<div id="main">
+    {{ $sourcePath := "images" }}
+    {{ $gallery := site.GetPage $sourcePath }}
+    {{ with $gallery.Resources.ByType "image" }}
+        {{ range . }}
+            <img class="image" src="{{ .RelPermalink }}" alt="x"/>
+        {{ end }}
+    {{ end }}
+</div>
+{{- partial "footer.html" . -}}
+</body>
+</html>
