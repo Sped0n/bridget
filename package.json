@@ -6,8 +6,8 @@
   "scripts": {
     "build": "hugo -v --source=exampleSite --themesDir ../.. --gc",
     "build:preview": "hugo -v --source=exampleSite --themesDir ../.. -D --gc",
-    "server": "hugo server --source=exampleSite --themesDir ../.. -D --disableFastRender",
-    "server:production": "hugo server --source=exampleSite --themesDir ../.. --disableFastRender -e production"
+    "server": "hugo server --source=exampleSite -D --disableFastRender --watch --verbose",
+    "server:production": "hugo server --source=exampleSite --disableFastRender -e production --watch --verbose"
   },
   "repository": {
     "type": "git",
