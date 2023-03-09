@@ -1,0 +1,13 @@
+.image {
+  width: 40vmin;
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.image[data-status="inactive"] {
+  display: none;
+}
+
+.image[data-status="active"] {
+  display: block;
+}
