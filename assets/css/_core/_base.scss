@@ -1,9 +1,7 @@
 html {
   font-family: $global-font-family;
-  font-weight: $global-font-weight;
-  font-size: $global-font-size;
-  line-height: $global-line-height;
-  width: 100%;
+  overflow: hidden;
+  position: relative;
   scroll-behavior: smooth;
 }
 
@@ -12,4 +10,5 @@ body {
   height: 100vh;
   margin: 0;
   overflow: hidden;
+  line-height: 1.5;
 }
