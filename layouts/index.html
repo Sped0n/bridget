@@ -1,23 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    {{- partial "head.html" . -}}
-    <title>{{ .Title }}</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  {{- partial "head.html" . -}}
+  <title>{{ .Title }}</title>
 </head>
 <body>
 <header>
-    {{- partial "header.html" . -}}
+  {{- partial "header.html" . -}}
 </header>
 <div id="main">
-    {{ $sourcePath := "images" }}
-    {{ $gallery := site.GetPage $sourcePath }}
-    {{ with $gallery.Resources.ByType "image" }}
-        {{ range . }}
-            <img class="image" src="{{ .RelPermalink }}" alt="x"/>
-        {{ end }}
-    {{ end }}
+  {{ $sourcePath := "images" }}
+  {{ $gallery := site.GetPage $sourcePath }}
+  {{ $images := $gallery.Resources.ByType "image" }}
+  {{ $index := len $images }}
+  <script type="text/javascript">
+    document.body.setAttribute('featuredPicNum', {{$index}})
+  </script>
+  {{ range $images }}
+  {{ $index = sub $index 1}}
+  <img class="image" data-index="{{ $index }}" data-status="inactive" src="{{ .RelPermalink }}"/>
+  {{ end }}
+
 </div>
-{{- partial "footer.html" . -}}
+<footer>
+  {{ partial "footer.html" . }}
+</footer>
 </body>
 </html>
