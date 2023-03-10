@@ -1,5 +1,6 @@
 .image {
-  width: 50vmin;
+  max-height: 45vmin;
+  width: auto;
   position: absolute;
   transform: translate(-50%, -50%);
 }
