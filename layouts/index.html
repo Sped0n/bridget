@@ -16,11 +16,11 @@
   {{ $images := $gallery.Resources.ByType "image" }}
   {{ $index := len $images }}
   <script type="text/javascript">
-    document.body.setAttribute('featuredPicNum', {{$index}})
+    document.body.setAttribute('featuredPicNum', {{ $index }})
   </script>
   {{ range $images }}
-  {{ $index = sub $index 1}}
-  <img class="image" data-index="{{ $index }}" data-status="inactive" src="{{ .RelPermalink }}"/>
+    {{ $index = sub $index 1}}
+    <img class="image" data-index="{{ $index }}" data-status="inactive" src="{{ .RelPermalink }}" height="{{ .Height }}" width="{{ .Width }}"/>
   {{ end }}
 
 </div>
