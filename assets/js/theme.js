@@ -19,6 +19,7 @@ function duper (num) {
   return ('0000' + num).slice(-4)
 }
 
+// threshold display update
 function thresholdUpdate () {
   thresholdNum.item(0).innerText = duper(threshold[thresholdIndex])
 }
@@ -77,8 +78,9 @@ const activate = (image, x, y) => {
     image.style.left = '50%'
     image.style.top = '50%'
     const activeImages = document.getElementsByClassName('active')
-    for (let i = 0; i <= 3; i++) {
-      activeImages.item(i).classList.add(`trailingImage${4 - i}`)
+    const activeImagesCount = activeImages.length
+    for (let i = activeImagesCount; i > 1; i--) {
+      activeImages.item(i - 2).classList.add(`trailingImage${(activeImagesCount - 1) - (i - 2)}`)
     }
   })
 
