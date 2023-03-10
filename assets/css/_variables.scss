@@ -8,3 +8,7 @@ $global-font-family: system-ui, -apple-system, BlinkMacSystemFont, PingFang SC, 
 $global-font-size: 16px;
 $global-font-weight: 400;
 $global-line-height: 1.5rem;
+
+:root {
+  --footer-height: 38px;
+}
