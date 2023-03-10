@@ -58,11 +58,22 @@ function init () {
 
 // let specified image show
 const activate = (image, x, y) => {
+  for (const node of document.getElementsByClassName('top')) {
+    if (node.classList.contains('top')) {
+      node.classList.remove('top')
+      node.replaceWith(node.cloneNode(true))
+    }
+  }
   image.style.left = `${x}px`
   image.style.top = `${y}px`
   image.style.zIndex = '' + globalIndex
 
   image.dataset.status = 'active'
+  image.classList.add('top')
+  image.addEventListener('click', () => {
+    image.style.left = '50%'
+    image.style.top = '50%'
+  })
 
   last = { x, y }
 }
