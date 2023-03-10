@@ -20,7 +20,9 @@
   </script>
   {{ range $images }}
     {{ $index = sub $index 1}}
-    <img class="image" data-index="{{ $index }}" data-status="inactive" src="{{ .RelPermalink }}" height="{{ .Height }}" width="{{ .Width }}"/>
+    <div class="image inactive" data-index="{{ $index }}">
+      <img src="{{ .RelPermalink }}" height="{{ .Height }}" width="{{ .Width }}"/>
+    </div>
   {{ end }}
 
 </div>
