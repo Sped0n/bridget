@@ -1,10 +1,10 @@
 .image {
-  height: 55vmin;
+  max-height: 55vmin;
   position: absolute;
   transform: translate(-50%, -50%);
   
   img {
-    height: 55vmin;
+    max-height: 55vmin;
     width: auto;
   }
 }
@@ -17,6 +17,21 @@
 .active {
   opacity: 1;
   transition: opacity 0ms ease-in-out;
+}
+
+.top {
+  transition: all 0.5s ease-in-out 1.5s;
+  max-height: calc(100vh - var(--footer-height));
+  display: flex;
+  align-items: center;
+  width: auto;
+  
+  img {
+    transition: all 0.5s ease-in-out 2s;
+    max-height: calc(100vh - var(--footer-height));
+    width: auto;
+    max-width: 100vw;
+  }
 }
 
 .trailingImage1 {

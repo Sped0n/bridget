@@ -24,6 +24,15 @@ function thresholdUpdate () {
   thresholdNum.item(0).innerText = duper(threshold[thresholdIndex])
 }
 
+function footerHeightUpdate () {
+  const r = document.querySelector(':root')
+  if (window.innerWidth > 768) {
+    r.style.setProperty('--footer-height', '38px')
+  } else {
+    r.style.setProperty('--footer-height', '31px')
+  }
+}
+
 // footer index number display module
 const footerIndex = document.getElementsByClassName('ftid')
 const numSpan = (numOne, numTwo) => {
@@ -42,6 +51,7 @@ const numSpan = (numOne, numTwo) => {
 function init () {
   numSpan(0, featuredPicNum)
   thresholdUpdate()
+  footerHeightUpdate()
   document.getElementById('thresholdDec').addEventListener('click', function () {
     if (thresholdIndex > 0) {
       thresholdIndex--
@@ -55,6 +65,15 @@ function init () {
       thresholdUpdate()
     }
   }, { passive: true })
+}
+
+const center = e => {
+  e.style.left = '50%'
+  if (window.innerWidth > 768) {
+    e.style.top = 'calc((100% - 38px) / 2)'
+  } else {
+    e.style.top = 'calc((100% - 31px) / 2 + 31px)'
+  }
 }
 
 // let specified image show
@@ -72,16 +91,20 @@ const activate = (image, x, y) => {
   // activate image
   image.classList.remove('inactive')
   image.classList.add('active')
-  // set top image
-  image.classList.add('top')
   image.addEventListener('click', () => {
-    image.style.left = '50%'
-    image.style.top = '50%'
+    window.removeEventListener('mousemove', handleOnMove)
+    // set top image
+    image.classList.add('top')
+    center(image)
+    // set tailing images
     const activeImages = document.getElementsByClassName('active')
     const activeImagesCount = activeImages.length
     for (let i = activeImagesCount; i > 1; i--) {
       activeImages.item(i - 2).classList.add(`trailingImage${(activeImagesCount - 1) - (i - 2)}`)
     }
+  }, {
+    passive: true,
+    once: true
   })
 
   last = { x, y }
@@ -114,6 +137,11 @@ const handleOnMove = e => {
 
 init()
 
-window.onmousemove = e => handleOnMove(e)
-
-window.ontouchmove = e => handleOnMove(e.touches[0])
+window.addEventListener('mousemove', handleOnMove)
+window.addEventListener('resize', () => {
+  const isTop = document.getElementsByClassName('top')
+  if (isTop.length) {
+    center(isTop.item(0))
+  }
+  footerHeightUpdate()
+})
