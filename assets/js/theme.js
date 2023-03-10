@@ -11,6 +11,7 @@ const thresholdSensitivity = [100, 40, 18, 14, 9, 5]
 let thresholdIndex = 2
 
 let globalIndex = 0
+
 let last = { x: 0, y: 0 }
 
 // fulfill space with zero
@@ -27,14 +28,13 @@ const footerIndex = document.getElementsByClassName('ftid')
 const numSpan = (numOne, numTwo) => {
   const numOneString = duper(numOne)
   const numTwoString = duper(numTwo)
-  footerIndex.item(0).innerText = numOneString[0]
-  footerIndex.item(1).innerText = numOneString[1]
-  footerIndex.item(2).innerText = numOneString[2]
-  footerIndex.item(3).innerText = numOneString[3]
-  footerIndex.item(4).innerText = numTwoString[0]
-  footerIndex.item(5).innerText = numTwoString[1]
-  footerIndex.item(6).innerText = numTwoString[2]
-  footerIndex.item(7).innerText = numTwoString[3]
+  for (let i = 0; i <= 7; i++) {
+    if (i > 3) {
+      footerIndex.item(i).innerText = numTwoString[i - 4]
+    } else {
+      footerIndex.item(i).innerText = numOneString[i]
+    }
+  }
 }
 
 // initialization
