@@ -68,11 +68,18 @@ const activate = (image, x, y) => {
   image.style.top = `${y}px`
   image.style.zIndex = '' + globalIndex
 
-  image.dataset.status = 'active'
+  // activate image
+  image.classList.remove('inactive')
+  image.classList.add('active')
+  // set top image
   image.classList.add('top')
   image.addEventListener('click', () => {
     image.style.left = '50%'
     image.style.top = '50%'
+    const activeImages = document.getElementsByClassName('active')
+    for (let i = 0; i <= 3; i++) {
+      activeImages.item(i).classList.add(`trailingImage${4 - i}`)
+    }
   })
 
   last = { x, y }
@@ -94,7 +101,10 @@ const handleOnMove = e => {
     activate(lead, e.clientX, e.clientY)
     numSpan((imageIndex + 1), featuredPicNum)
     // hide the image unused
-    if (tail) tail.dataset.status = 'inactive'
+    if (tail) {
+      tail.classList.remove('active')
+      tail.classList.add('inactive')
+    }
     // self increment
     globalIndex++
   }
