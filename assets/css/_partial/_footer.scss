@@ -6,6 +6,7 @@ footer {
   right: 0;
   z-index: 777;
   background-color: #fff;
+  height: 38px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -61,6 +62,7 @@ footer {
     top: 0;
     padding: 3px 8px;
     font-size: 17px;
+    height: 31px;
     
     .footer_threshold {
       display: none;
