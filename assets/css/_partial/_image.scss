@@ -18,3 +18,20 @@
   opacity: 1;
   transition: opacity 0ms ease-in-out;
 }
+
+.trailingImage1 {
+  transition: opacity 0.5s ease-in-out 1s;
+  opacity: 0;
+}
+.trailingImage2 {
+  transition: opacity 0.5s ease-in-out 0.75s;
+  opacity: 0;
+}
+.trailingImage3 {
+  transition: opacity 0.5s ease-in-out 0.5s;
+  opacity: 0;
+}
+.trailingImage4 {
+  transition: opacity 0.5s ease-in-out 0.25s;
+  opacity: 0;
+}
