@@ -1,12 +1,18 @@
-const images = document.getElementsByClassName('image')
+const images = document.getElementsByClassName('image_container')
 
-const featuredPicNum = document.body.getAttribute('featuredPicNum')
+const imagesArray = JSON.parse(document.getElementById('images_array').textContent)
+
+alert(imagesArray.length)
 
 const thresholdNum = document.getElementsByClassName('thid')
 
 const threshold = [0, 40, 80, 120, 160, 200]
 
 const thresholdSensitivity = [100, 40, 18, 14, 9, 5]
+
+const r = document.querySelector(':root')
+
+const activeImageIndexes = []
 
 let thresholdIndex = 2
 
@@ -25,12 +31,16 @@ function thresholdUpdate () {
 }
 
 function footerHeightUpdate () {
-  const r = document.querySelector(':root')
   if (window.innerWidth > 768) {
     r.style.setProperty('--footer-height', '38px')
   } else {
     r.style.setProperty('--footer-height', '31px')
   }
+}
+
+function overlayInit () {
+  // largest z index
+  document.getElementsByClassName('overlay').item(0).style.zIndex = '7'
 }
 
 // footer index number display module
@@ -49,7 +59,7 @@ const numSpan = (numOne, numTwo) => {
 
 // initialization
 function init () {
-  numSpan(0, featuredPicNum)
+  numSpan(0, images.length)
   thresholdUpdate()
   footerHeightUpdate()
   document.getElementById('thresholdDec').addEventListener('click', function () {
@@ -76,32 +86,50 @@ const center = e => {
   }
 }
 
+const overlayCursor = e => {
+  const overlayCursor = document.getElementsByClassName('overlay_cursor').item(0)
+  overlayCursor.style.left = `${e.clientX}px`
+  overlayCursor.style.top = `${e.clientY}px`
+}
+
 // let specified image show
 const activate = (image, x, y) => {
-  for (const node of document.getElementsByClassName('top')) {
-    if (node.classList.contains('top')) {
-      node.classList.remove('top')
-      node.replaceWith(node.cloneNode(true))
-    }
-  }
+  // top reset
+  Array.from(document.getElementsByClassName('top')).forEach(e => {
+    e.classList.remove('top')
+    e.replaceWith(e.cloneNode(true))
+  })
+  // z index reset
   image.style.left = `${x}px`
   image.style.top = `${y}px`
-  image.style.zIndex = '' + globalIndex
-
   // activate image
-  image.classList.remove('inactive')
-  image.classList.add('active')
+  image.dataset.status = 'active'
+
+  activeImageIndexes.push(globalIndex % images.length)
+  if (activeImageIndexes.length > 5) {
+    images[activeImageIndexes.shift()].style.zIndex = '-1'
+  }
+  activeImageIndexes.forEach((e, i) => {
+    images[e].style.zIndex = `${i + 1}`
+  })
+  // top
   image.addEventListener('click', () => {
+    // stop images animation
     window.removeEventListener('mousemove', handleOnMove)
     // set top image
     image.classList.add('top')
     center(image)
     // set tailing images
-    const activeImages = document.getElementsByClassName('active')
-    const activeImagesCount = activeImages.length
-    for (let i = activeImagesCount; i > 1; i--) {
-      activeImages.item(i - 2).classList.add(`trailingImage${(activeImagesCount - 1) - (i - 2)}`)
-    }
+    activeImageIndexes.forEach((e, i) => {
+      const activeImageNum = activeImageIndexes.length
+      if (i < 4) {
+        images[e].classList.add(`trailingImage${activeImageNum - 1 - i}`)
+      }
+      images[e].classList.replace('active', 'resume')
+    })
+    // overlay init
+    overlayInit()
+    window.addEventListener('mousemove', overlayCursor)
   }, {
     passive: true,
     once: true
@@ -124,11 +152,10 @@ const handleOnMove = e => {
     const tail = images[(globalIndex - 5) % images.length]
     // show top image and change index
     activate(lead, e.clientX, e.clientY)
-    numSpan((imageIndex + 1), featuredPicNum)
+    numSpan((imageIndex + 1), images.length)
     // hide the image unused
     if (tail) {
-      tail.classList.remove('active')
-      tail.classList.add('inactive')
+      tail.dataset.status = 'inactive'
     }
     // self increment
     globalIndex++
@@ -144,4 +171,26 @@ window.addEventListener('resize', () => {
     center(isTop.item(0))
   }
   footerHeightUpdate()
+})
+
+document.getElementsByClassName('prev_section').item(0).addEventListener('mouseover', () => {
+  document.getElementsByClassName('overlay_cursor').item(0).innerText = 'PREV'
+})
+
+document.getElementsByClassName('close_section').item(0).addEventListener('click', () => {
+  document.getElementsByClassName('overlay').item(0).style.zIndex = '-1'
+  document.getElementsByClassName('top').item(0).classList.remove('top')
+  document.getElementsByClassName('trailingImage4').item(0).classList.remove('trailingImage4')
+  document.getElementsByClassName('trailingImage3').item(0).classList.remove('trailingImage3')
+  document.getElementsByClassName('trailingImage2').item(0).classList.remove('trailingImage2')
+  document.getElementsByClassName('trailingImage1').item(0).classList.remove('trailingImage1')
+  window.addEventListener('mousemove', handleOnMove)
+})
+
+document.getElementsByClassName('close_section').item(0).addEventListener('mouseover', () => {
+  document.getElementsByClassName('overlay_cursor').item(0).innerText = 'CLOSE'
+})
+
+document.getElementsByClassName('next_section').item(0).addEventListener('mouseover', () => {
+  document.getElementsByClassName('overlay_cursor').item(0).innerText = 'NEXT'
 })
