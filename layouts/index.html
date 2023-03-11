@@ -24,13 +24,15 @@
     {{ $.Scratch.Add "img" slice }}
     {{ range . }}
       {{ $index = sub $index 1}}
-      {{ $.Scratch.Add "img" (dict "link" .RelPermalink "height" .Height "width" .Width) }}
-      <div class="image_container" data-index="{{ $index }}" data-status="inactive">
-        <img src="{{ .RelPermalink }}" height="{{ .Height }}" width="{{ .Width }}"/>
-      </div>
+      {{ $.Scratch.Add "img" (dict "index" (string $index) "url" (string .RelPermalink) "height" (string .Height) "width" (string .Width)) }}
     {{ end }}
     <script id="images_array" type="application/json">{{ $.Scratch.Get "img" | jsonify | safeJS }}</script>
   {{ end }}
+  <div class="image_container" id="layer5" data-status="null"></div>
+  <div class="image_container" id="layer4" data-status="null"></div>
+  <div class="image_container" id="layer3" data-status="null"></div>
+  <div class="image_container" id="layer2" data-status="null"></div>
+  <div class="image_container" id="layer1" data-status="null"></div>
 </div>
 <footer>
   {{ partial "footer.html" . }}

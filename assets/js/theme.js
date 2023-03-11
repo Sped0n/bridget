@@ -1,8 +1,11 @@
-const images = document.getElementsByClassName('image_container')
+const imagesArray = JSON.parse(document.getElementById('images_array').textContent).sort((a, b) => {
+  if (a.index < b.index) {
+    return -1
+  }
+  return 1
+})
 
-const imagesArray = JSON.parse(document.getElementById('images_array').textContent)
-
-alert(imagesArray.length)
+const imagesArrayLen = imagesArray.length
 
 const thresholdNum = document.getElementsByClassName('thid')
 
@@ -12,13 +15,25 @@ const thresholdSensitivity = [100, 40, 18, 14, 9, 5]
 
 const r = document.querySelector(':root')
 
-const activeImageIndexes = []
+const posXArray = ['0px', '0px', '0px', '0px', '0px']
+
+const posYArray = ['0px', '0px', '0px', '0px', '0px']
+
+const layer5 = document.getElementById('layer5')
+const layer4 = document.getElementById('layer4')
+const layer3 = document.getElementById('layer3')
+const layer2 = document.getElementById('layer2')
+const layer1 = document.getElementById('layer1')
 
 let thresholdIndex = 2
 
 let globalIndex = 0
 
 let last = { x: 0, y: 0 }
+
+function sleep (ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
 
 // fulfill space with zero
 function duper (num) {
@@ -43,9 +58,9 @@ function overlayInit () {
   document.getElementsByClassName('overlay').item(0).style.zIndex = '7'
 }
 
-// footer index number display module
-const footerIndex = document.getElementsByClassName('ftid')
 const numSpan = (numOne, numTwo) => {
+  // footer index number display module
+  const footerIndex = document.getElementsByClassName('ftid')
   const numOneString = duper(numOne)
   const numTwoString = duper(numTwo)
   for (let i = 0; i <= 7; i++) {
@@ -59,9 +74,10 @@ const numSpan = (numOne, numTwo) => {
 
 // initialization
 function init () {
-  numSpan(0, images.length)
+  numSpan(0, imagesArrayLen)
   thresholdUpdate()
   footerHeightUpdate()
+  // threshold buttons initialization
   document.getElementById('thresholdDec').addEventListener('click', function () {
     if (thresholdIndex > 0) {
       thresholdIndex--
@@ -92,41 +108,61 @@ const overlayCursor = e => {
   overlayCursor.style.top = `${e.clientY}px`
 }
 
-// let specified image show
-const activate = (image, x, y) => {
-  // top reset
-  Array.from(document.getElementsByClassName('top')).forEach(e => {
-    e.classList.remove('top')
-    e.replaceWith(e.cloneNode(true))
-  })
-  // z index reset
-  image.style.left = `${x}px`
-  image.style.top = `${y}px`
-  // activate image
-  image.dataset.status = 'active'
-
-  activeImageIndexes.push(globalIndex % images.length)
-  if (activeImageIndexes.length > 5) {
-    images[activeImageIndexes.shift()].style.zIndex = '-1'
+const FIFO = element => {
+  function layerProcess (layerL, layerH) {
+    if (layerL.childElementCount) layerL.removeChild(layerL.lastElementChild)
+    if (layerH.childElementCount) layerL.appendChild(layerH.lastElementChild.cloneNode(true))
   }
-  activeImageIndexes.forEach((e, i) => {
-    images[e].style.zIndex = `${i + 1}`
-  })
+  layerProcess(layer1, layer2)
+  layerProcess(layer2, layer3)
+  layerProcess(layer3, layer4)
+  layerProcess(layer4, layer5)
+  if (layer5.childElementCount) layer5.removeChild(layer5.lastElementChild)
+  layer5.appendChild(element)
+}
+
+const posCache = (x, y) => {
+  // pop element if length surpass limitation
+  posXArray.shift()
+  posYArray.shift()
+  // push new element
+  posXArray.push(`${x}px`)
+  posYArray.push(`${y}px`)
+}
+
+function layersPosSet () {
+  function posSet (layer, index) {
+    layer.style.left = posXArray[index]
+    layer.style.top = posYArray[index]
+  }
+  posSet(layer5, 4)
+  posSet(layer4, 3)
+  posSet(layer3, 2)
+  posSet(layer2, 1)
+  posSet(layer1, 0)
+}
+
+// let specified image show
+const activate = (index, x, y) => {
+  const img = document.createElement('img')
+  img.setAttribute('src', imagesArray[index].url)
+  img.setAttribute('alt', imagesArray[index].index)
+  img.setAttribute('height', imagesArray[index].height)
+  img.setAttribute('width', imagesArray[index].width)
+  posCache(x, y)
+  layersPosSet()
+  FIFO(img)
   // top
-  image.addEventListener('click', () => {
+  layer5.addEventListener('click', () => {
     // stop images animation
     window.removeEventListener('mousemove', handleOnMove)
     // set top image
-    image.classList.add('top')
-    center(image)
-    // set tailing images
-    activeImageIndexes.forEach((e, i) => {
-      const activeImageNum = activeImageIndexes.length
-      if (i < 4) {
-        images[e].classList.add(`trailingImage${activeImageNum - 1 - i}`)
-      }
-      images[e].classList.replace('active', 'resume')
-    })
+    center(layer5)
+    layer5.dataset.status = 't0'
+    layer4.dataset.status = 't1'
+    layer3.dataset.status = 't2'
+    layer2.dataset.status = 't3'
+    layer1.dataset.status = 't4'
     // overlay init
     overlayInit()
     window.addEventListener('mousemove', overlayCursor)
@@ -147,16 +183,10 @@ const distanceFromLast = (x, y) => {
 const handleOnMove = e => {
   if (distanceFromLast(e.clientX, e.clientY) > (window.innerWidth / thresholdSensitivity[thresholdIndex])) {
     // images showing array
-    const imageIndex = globalIndex % images.length
-    const lead = images[imageIndex]
-    const tail = images[(globalIndex - 5) % images.length]
+    const imageIndex = globalIndex % imagesArrayLen
     // show top image and change index
-    activate(lead, e.clientX, e.clientY)
-    numSpan((imageIndex + 1), images.length)
-    // hide the image unused
-    if (tail) {
-      tail.dataset.status = 'inactive'
-    }
+    activate(imageIndex, e.clientX, e.clientY)
+    numSpan((imageIndex + 1), imagesArrayLen)
     // self increment
     globalIndex++
   }
@@ -177,13 +207,20 @@ document.getElementsByClassName('prev_section').item(0).addEventListener('mouseo
   document.getElementsByClassName('overlay_cursor').item(0).innerText = 'PREV'
 })
 
-document.getElementsByClassName('close_section').item(0).addEventListener('click', () => {
+document.getElementsByClassName('close_section').item(0).addEventListener('click', async function f () {
   document.getElementsByClassName('overlay').item(0).style.zIndex = '-1'
-  document.getElementsByClassName('top').item(0).classList.remove('top')
-  document.getElementsByClassName('trailingImage4').item(0).classList.remove('trailingImage4')
-  document.getElementsByClassName('trailingImage3').item(0).classList.remove('trailingImage3')
-  document.getElementsByClassName('trailingImage2').item(0).classList.remove('trailingImage2')
-  document.getElementsByClassName('trailingImage1').item(0).classList.remove('trailingImage1')
+  layersPosSet()
+  layer5.dataset.status = 'r0'
+  layer4.dataset.status = 'r1'
+  layer3.dataset.status = 'r2'
+  layer2.dataset.status = 'r3'
+  layer1.dataset.status = 'r4'
+  await sleep(2500)
+  layer5.dataset.status = 'null'
+  layer4.dataset.status = 'null'
+  layer3.dataset.status = 'null'
+  layer2.dataset.status = 'null'
+  layer1.dataset.status = 'null'
   window.addEventListener('mousemove', handleOnMove)
 })
 
