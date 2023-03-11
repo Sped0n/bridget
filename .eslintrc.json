@@ -5,14 +5,18 @@
     },
     "extends": [
         "standard-with-typescript",
-        "plugin:prettier/recommended"
+        "prettier"
     ],
     "overrides": [
     ],
+    "plugins": ["prettier"],
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
     "rules": {
+        "prettier/prettier": "error",
+        "arrow-body-style": "off",
+        "prefer-arrow-callback": "off"
     }
 }
