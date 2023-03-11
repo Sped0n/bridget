@@ -1,0 +1,38 @@
+.overlay {
+  background-color: transparent;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  display: grid;
+  cursor: none;
+  grid-template-columns: repeat(3, 1fr);
+  
+  
+  section {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .overlay_cursor {
+    position: absolute;
+    translate: -50% -110%;
+    font-size: 24px;
+    letter-spacing: 2px;
+    font-weight: bold;
+    color: greenyellow;
+    -webkit-text-stroke: 1px #fff;
+  }
+  
+  .prev_section:hover > .overlay_cursor::after {
+    content: 'PREV';
+  }
+  .close_section:hover > .overlay_cursor::after {
+    content: 'CLOSE';
+  }
+  .next_section:hover > .overlay_cursor::after {
+    content: 'NEXT';
+  }
+}
