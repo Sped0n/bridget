@@ -4,6 +4,7 @@
   "description": "bridget theme source file",
   "private": true,
   "scripts": {
+    "lint": "eslint . --ext .vue,.js,.ts,.jsx,.tsx --fix",
     "build": "hugo -v --source=exampleSite --themesDir ../.. --gc",
     "build:preview": "hugo -v --source=exampleSite --themesDir ../.. -D --gc",
     "server": "hugo server --source=exampleSite -D --disableFastRender --watch --verbose",
@@ -25,10 +26,17 @@
   },
   "homepage": "https://github.com/Sped0n/bridget#readme",
   "devDependencies": {
-    "eslint": "^8.35.0",
+    "@typescript-eslint/eslint-plugin": "^5.54.1",
+    "@typescript-eslint/parser": "^5.54.1",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.7.0",
     "eslint-config-standard": "^17.0.0",
+    "eslint-config-standard-with-typescript": "^34.0.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-n": "^15.6.1",
-    "eslint-plugin-promise": "^6.1.1"
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "prettier": "2.8.4",
+    "typescript": "^4.9.5"
   }
 }
