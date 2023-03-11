@@ -10,21 +10,27 @@
 <header>
   {{- partial "header.html" . -}}
 </header>
+<div class="overlay">
+  <section class="prev_section"></section>
+  <section class="close_section"></section>
+  <section class="next_section"></section>
+  <div class="overlay_cursor"></div>
+</div>
 <div id="main">
   {{ $sourcePath := "images" }}
   {{ $gallery := site.GetPage $sourcePath }}
-  {{ $images := $gallery.Resources.ByType "image" }}
-  {{ $index := len $images }}
-  <script type="text/javascript">
-    document.body.setAttribute('featuredPicNum', {{ $index }})
-  </script>
-  {{ range $images }}
-    {{ $index = sub $index 1}}
-    <div class="image inactive" data-index="{{ $index }}">
-      <img src="{{ .RelPermalink }}" height="{{ .Height }}" width="{{ .Width }}"/>
-    </div>
+  {{ with $gallery.Resources.ByType "image" }}
+    {{ $index := len . }}
+    {{ $.Scratch.Add "img" slice }}
+    {{ range . }}
+      {{ $index = sub $index 1}}
+      {{ $.Scratch.Add "img" (dict "link" .RelPermalink "height" .Height "width" .Width) }}
+      <div class="image_container" data-index="{{ $index }}" data-status="inactive">
+        <img src="{{ .RelPermalink }}" height="{{ .Height }}" width="{{ .Width }}"/>
+      </div>
+    {{ end }}
+    <script id="images_array" type="application/json">{{ $.Scratch.Get "img" | jsonify | safeJS }}</script>
   {{ end }}
-
 </div>
 <footer>
   {{ partial "footer.html" . }}
