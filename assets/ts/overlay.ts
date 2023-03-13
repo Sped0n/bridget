@@ -35,6 +35,7 @@ export function overlayEnable(): void {
 
 export function overlayDisable(): void {
   overlay.style.zIndex = '-1'
+  setCursorText('')
   disableListener()
 }
 
