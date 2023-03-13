@@ -4,5 +4,5 @@
 {{- $style = dict "Context" . "ToCSS" $options | merge $style -}}
 {{- partial "plugin/style.html" $style -}}
 
-{{ $js := resources.Get "js/theme.js" }}
-<script type="text/javascript" src="{{ $js.RelPermalink }}" defer></script>
+{{ $script := resources.Get "ts/main.ts" | js.Build }}
+<script type="text/javascript" src="{{ $script.RelPermalink }}" defer></script>

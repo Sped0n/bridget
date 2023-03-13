@@ -24,7 +24,7 @@
     {{ $.Scratch.Add "img" slice }}
     {{ range . }}
       {{ $index = sub $index 1}}
-      {{ $.Scratch.Add "img" (dict "index" (string $index) "url" (string .RelPermalink) "height" (string .Height) "width" (string .Width)) }}
+      {{ $.Scratch.Add "img" (dict "index" (string $index) "url" (string .RelPermalink) "imgH" (string .Height) "imgW" (string .Width)) }}
     {{ end }}
     <script id="images_array" type="application/json">{{ $.Scratch.Get "img" | jsonify | safeJS }}</script>
   {{ end }}
