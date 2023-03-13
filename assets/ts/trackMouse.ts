@@ -29,6 +29,7 @@ let globalIndex: number = 0
 // last position set as "activated"
 let last: position = { x: 0, y: 0 }
 
+// activate top image
 const activate = (index: number, x: number, y: number): void => {
   const img = document.createElement('img')
   img.setAttribute('src', imagesArray[index].url)
@@ -63,10 +64,12 @@ const activate = (index: number, x: number, y: number): void => {
   last = { x, y }
 }
 
+// Compare the current mouse position with the last activated position
 const distanceFromLast = (x: number, y: number): number => {
   return Math.hypot(x - last.x, y - last.y)
 }
 
+// handle mouse move
 export const handleOnMove = (e: MouseEvent): void => {
   // meet threshold
   if (
@@ -83,6 +86,7 @@ export const handleOnMove = (e: MouseEvent): void => {
   }
 }
 
+// initialization
 export function trackMouseInit(): void {
   window.addEventListener('mousemove', handleOnMove)
 }
