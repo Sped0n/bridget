@@ -1,5 +1,12 @@
 import { overlayEnable } from './overlay'
-import { posCache, FIFO, layersPosSet, center, type position } from './utils'
+import {
+  posCache,
+  FIFO,
+  layersPosSet,
+  center,
+  type position,
+  createImgElement
+} from './utils'
 import { thresholdSensitivityArray, thresholdIndex } from './thresholdCtl'
 import { imgIndexSpanUpdate } from './indexDisp'
 import { imagesArrayLen, imagesArray } from './dataFetch'
@@ -26,14 +33,9 @@ let last: position = { x: 0, y: 0 }
 
 // activate top image
 const activate = (index: number, x: number, y: number): void => {
-  const img = document.createElement('img')
-  img.setAttribute('src', imagesArray[index].url)
-  img.setAttribute('alt', imagesArray[index].index)
-  img.setAttribute('height', imagesArray[index].imgH)
-  img.setAttribute('width', imagesArray[index].imgW)
   posCache(x, y, posArray)
   layersPosSet(posArray, layers)
-  FIFO(img, layers)
+  FIFO(createImgElement(imagesArray[index]), layers)
   // top
   layer5.addEventListener(
     'click',

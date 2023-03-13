@@ -79,3 +79,12 @@ export const center = (e: HTMLDivElement): void => {
     e.style.top = 'calc((100% - 31px) / 2 + 31px)'
   }
 }
+
+export function createImgElement(input: ImageData): HTMLImageElement {
+  const img = document.createElement('img')
+  img.setAttribute('src', input.url)
+  img.setAttribute('alt', input.index)
+  img.setAttribute('height', input.imgH)
+  img.setAttribute('width', input.imgW)
+  return img
+}
