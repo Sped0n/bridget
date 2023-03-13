@@ -12,12 +12,13 @@ import { imgIndexSpanUpdate } from './indexDisp'
 import { imagesArrayLen, imagesArray } from './dataFetch'
 
 // get layer divs
-const layer5 = document.getElementById('layer5') as HTMLDivElement
-const layer4 = document.getElementById('layer4') as HTMLDivElement
-const layer3 = document.getElementById('layer3') as HTMLDivElement
-const layer2 = document.getElementById('layer2') as HTMLDivElement
-const layer1 = document.getElementById('layer1') as HTMLDivElement
-export const layers: HTMLDivElement[] = [layer1, layer2, layer3, layer4, layer5]
+export const layers: HTMLDivElement[] = [
+  document.getElementById('layer1') as HTMLDivElement,
+  document.getElementById('layer2') as HTMLDivElement,
+  document.getElementById('layer3') as HTMLDivElement,
+  document.getElementById('layer4') as HTMLDivElement,
+  document.getElementById('layer5') as HTMLDivElement
+]
 
 // layers position caching
 export const posArray: string[][] = [
@@ -37,18 +38,16 @@ const activate = (index: number, x: number, y: number): void => {
   layersPosSet(posArray, layers)
   FIFO(createImgElement(imagesArray[index]), layers)
   // top
-  layer5.addEventListener(
+  layers[4].addEventListener(
     'click',
     () => {
       // stop images animation
       window.removeEventListener('mousemove', handleOnMove)
       // set top image
-      center(layer5)
-      layer5.dataset.status = 't0'
-      layer4.dataset.status = 't1'
-      layer3.dataset.status = 't2'
-      layer2.dataset.status = 't3'
-      layer1.dataset.status = 't4'
+      center(layers[4])
+      for (let i = 4; i >= 0; i--) {
+        layers[i].dataset.status = `t${4 - i}`
+      }
       // overlay init
       overlayEnable()
     },
