@@ -1,3 +1,15 @@
+export interface ImageData {
+  index: string
+  url: string
+  imgH: string
+  imgW: string
+}
+
+export interface position {
+  x: number
+  y: number
+}
+
 // cache a xy position to array
 export const posCache = (x: number, y: number, xyArray: string[][]): void => {
   // pop element if length surpass limitation

@@ -1,13 +1,8 @@
 import { overlayEnable } from './overlay'
-import { posCache, FIFO, layersPosSet, center } from './utils'
+import { posCache, FIFO, layersPosSet, center, type position } from './utils'
 import { thresholdSensitivityArray, thresholdIndex } from './thresholdCtl'
 import { imgIndexSpanUpdate } from './indexDisp'
 import { imagesArrayLen, imagesArray } from './dataFetch'
-
-export interface position {
-  x: number
-  y: number
-}
 
 // get layer divs
 const layer5 = document.getElementById('layer5') as HTMLDivElement
