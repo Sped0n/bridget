@@ -21,6 +21,7 @@ const overlayCursor = (e: MouseEvent): void => {
   cursor.style.top = `${e.clientY}px`
 }
 
+// disable listeners
 function disableListener(): void {
   window.removeEventListener('mousemove', overlayCursor)
   closeSection = removeAllEventListeners(closeSection)
@@ -28,17 +29,20 @@ function disableListener(): void {
   nextSection = removeAllEventListeners(nextSection)
 }
 
+// enable overlay
 export function overlayEnable(): void {
   overlay.style.zIndex = '7'
   setListener()
 }
 
+// disable overlay
 export function overlayDisable(): void {
   overlay.style.zIndex = '-1'
   setCursorText('')
   disableListener()
 }
 
+// handle close click
 async function handleCloseClick(): Promise<void> {
   overlayDisable()
   layersPosSet(posArray, layers)
@@ -52,7 +56,7 @@ async function handleCloseClick(): Promise<void> {
   window.addEventListener('mousemove', handleOnMove)
 }
 
-// set hover event listener
+// set event listener
 function setListener(): void {
   window.addEventListener('mousemove', overlayCursor, { passive: true })
   closeSection.addEventListener(

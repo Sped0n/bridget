@@ -1,3 +1,4 @@
+// cache a xy position to array
 export const posCache = (x: number, y: number, xyArray: string[][]): void => {
   // pop element if length surpass limitation
   xyArray[0].shift()
@@ -7,10 +8,12 @@ export const posCache = (x: number, y: number, xyArray: string[][]): void => {
   xyArray[1].push(`${y}px`)
 }
 
+// 0 to 0001, 25 to 0025
 export function duper(num: number): string {
   return ('0000' + num.toString()).slice(-4)
 }
 
+// FIFO data array for image display
 export const FIFO = (
   element: HTMLImageElement,
   layersArray: HTMLDivElement[]
@@ -31,6 +34,7 @@ export const FIFO = (
   layersArray[4].appendChild(element)
 }
 
+// set position for 5 image display layers
 export const layersPosSet = (
   xyArray: string[][],
   layersArray: HTMLDivElement[]
@@ -49,10 +53,12 @@ export function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
+// remove all event listeners from a node
 export function removeAllEventListeners(e: Node): Node {
   return e.cloneNode(true)
 }
 
+// center top div
 export const center = (e: HTMLDivElement): void => {
   e.style.left = '50%'
   if (window.innerWidth > 768) {
