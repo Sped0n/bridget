@@ -76,7 +76,7 @@ export const handleOnMove = (e: MouseEvent): void => {
     distanceFromLast(e.clientX, e.clientY) >
     window.innerWidth / thresholdSensitivityArray[thresholdIndex]
   ) {
-    // images showing array
+    // calculate the actual index
     const imageIndex = globalIndex % imagesArrayLen
     // show top image and change index
     activate(imageIndex, e.clientX, e.clientY)
