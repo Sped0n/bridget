@@ -2,31 +2,12 @@ import { overlayEnable } from './overlay'
 import { posCache, FIFO, layersPosSet, center } from './utils'
 import { thresholdSensitivityArray, thresholdIndex } from './thresholdCtl'
 import { imgIndexSpanUpdate } from './indexDisp'
-
-interface ImageData {
-  index: string
-  url: string
-  imgH: string
-  imgW: string
-}
+import { imagesArrayLen, imagesArray } from './dataFetch'
 
 export interface position {
   x: number
   y: number
 }
-
-// get images info from JSON
-const imageArrayElement = document.getElementById('images_array') as HTMLElement
-const rawImageArray = imageArrayElement.textContent as string
-export const imagesArray: ImageData[] = JSON.parse(rawImageArray).sort(
-  (a: ImageData, b: ImageData) => {
-    if (a.index < b.index) {
-      return -1
-    }
-    return 1
-  }
-)
-export const imagesArrayLen: number = imagesArray.length
 
 // get layer divs
 const layer5 = document.getElementById('layer5') as HTMLDivElement
