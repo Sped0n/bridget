@@ -1,9 +1,4 @@
-interface ImageData {
-  index: string
-  url: string
-  imgH: string
-  imgW: string
-}
+import { type ImageData } from './utils'
 
 // fetch images info from JSON
 const imageArrayElement = document.getElementById('images_array') as HTMLScriptElement
