@@ -1,4 +1,4 @@
-import { delay, removeAllEventListeners, layersPosSet } from './utils'
+import { delay, removeAllEventListeners, layersPosSet, center } from './utils'
 import { posArray, layers, handleOnMove } from './trackMouse'
 
 // get components of overlay
@@ -80,6 +80,24 @@ function setListener(): void {
     'mouseover',
     () => {
       setCursorText('NEXT')
+    },
+    { passive: true }
+  )
+}
+
+export function vwRefreshInit(): void {
+  window.addEventListener(
+    'resize',
+    () => {
+      // reset footer height
+      const r = document.querySelector(':root') as HTMLStyleElement
+      if (window.innerWidth > 768) {
+        r.style.setProperty('--footer-height', '38px')
+      } else {
+        r.style.setProperty('--footer-height', '31px')
+      }
+      // recenter image
+      center(layers[4])
     },
     { passive: true }
   )

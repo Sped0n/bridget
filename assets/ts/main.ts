@@ -1,11 +1,11 @@
-import { footerHeightUpdateInit } from './utils'
 import { imgIndexSpanUpdate } from './indexDisp'
 import { trackMouseInit } from './trackMouse'
 import { thresholdCtlInit } from './thresholdCtl'
 import { imagesArrayLen } from './dataFetch'
+import { vwRefreshInit } from './overlay'
 
 function init(): void {
-  footerHeightUpdateInit()
+  vwRefreshInit()
   imgIndexSpanUpdate(0, imagesArrayLen)
   thresholdCtlInit()
   trackMouseInit()
