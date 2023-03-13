@@ -61,18 +61,3 @@ export const center = (e: HTMLDivElement): void => {
     e.style.top = 'calc((100% - 31px) / 2 + 31px)'
   }
 }
-
-export function footerHeightUpdateInit(): void {
-  window.addEventListener(
-    'resize',
-    () => {
-      const r = document.querySelector(':root') as HTMLElement
-      if (window.innerWidth > 768) {
-        r.style.setProperty('--footer-height', '38px')
-      } else {
-        r.style.setProperty('--footer-height', '31px')
-      }
-    },
-    { passive: true }
-  )
-}
