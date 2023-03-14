@@ -7,6 +7,8 @@
   opacity: 1;
   display: flex;
   align-items: center;
+  // prevent webkit from partly repainting the frame
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.05);
   
   img {
     max-height: 55vmin;
