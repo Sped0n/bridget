@@ -88,3 +88,11 @@ export function createImgElement(input: ImageData): HTMLImageElement {
   img.setAttribute('width', input.imgW)
   return img
 }
+
+export function calcImageIndex(index: number, imgCounts: number): number {
+  if (index >= 0) {
+    return index % imgCounts
+  } else {
+    return imgCounts + (index % imgCounts)
+  }
+}

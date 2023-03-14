@@ -5,7 +5,8 @@ import {
   layersPosSet,
   center,
   type position,
-  createImgElement
+  createImgElement,
+  calcImageIndex
 } from './utils'
 import { thresholdSensitivityArray, thresholdIndex } from './thresholdCtl'
 import { imgIndexSpanUpdate } from './indexDisp'
@@ -27,7 +28,7 @@ export const posArray: string[][] = [
 ]
 
 // global index for "activated"
-let globalIndex: number = 0
+export let globalIndex: number = 0
 
 // last position set as "activated"
 let last: position = { x: 0, y: 0 }
@@ -73,7 +74,7 @@ export const handleOnMove = (e: MouseEvent): void => {
     window.innerWidth / thresholdSensitivityArray[thresholdIndex]
   ) {
     // calculate the actual index
-    const imageIndex = globalIndex % imagesArrayLen
+    const imageIndex = calcImageIndex(globalIndex, imagesArrayLen)
     // show top image and change index
     activate(imageIndex, e.clientX, e.clientY)
     imgIndexSpanUpdate(imageIndex + 1, imagesArrayLen)
