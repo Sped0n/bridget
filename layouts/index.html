@@ -3,19 +3,14 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  {{- partial "head.html" . -}}
+  {{ partial "head.html" . }}
   <title>{{ .Title }}</title>
 </head>
 <body>
 <header>
-  {{- partial "header.html" . -}}
+  {{ partial "header.html" . }}
 </header>
-<div class="overlay">
-  <section class="prev_section"></section>
-  <section class="close_section"></section>
-  <section class="next_section"></section>
-  <div class="overlay_cursor"></div>
-</div>
+{{ partial "overlay.html" . }}
 <div id="main">
   {{ $sourcePath := "images" }}
   {{ $gallery := site.GetPage $sourcePath }}
@@ -24,7 +19,19 @@
     {{ $.Scratch.Add "img" slice }}
     {{ range . }}
       {{ $index = sub $index 1}}
-      {{ $.Scratch.Add "img" (dict "index" (string $index) "url" (string .RelPermalink) "imgH" (string .Height) "imgW" (string .Width)) }}
+      {{ $colors := .Colors }}
+      {{ $pColor := index $colors 0 }}
+      {{ $sColor := "#ccc" }}
+      {{ if gt (len $colors) 1 }}
+        {{ $sColor = index $colors 1 }}
+      {{ end }}
+      {{ $.Scratch.Add "img" (dict
+          "index" (string $index)
+          "url" (string .RelPermalink)
+          "imgH" (string .Height)
+          "imgW" (string .Width)
+          "pColor" (string $pColor)
+          "sColor" (string $sColor)) }}
     {{ end }}
     <script id="images_array" type="application/json">{{ $.Scratch.Get "img" | jsonify | safeJS }}</script>
   {{ end }}
