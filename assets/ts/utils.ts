@@ -93,6 +93,6 @@ export function calcImageIndex(index: number, imgCounts: number): number {
   if (index >= 0) {
     return index % imgCounts
   } else {
-    return imgCounts + (index % imgCounts)
+    return (imgCounts + (index % imgCounts)) % imgCounts
   }
 }
