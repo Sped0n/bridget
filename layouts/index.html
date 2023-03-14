@@ -10,7 +10,6 @@
 <header>
   {{ partial "header.html" . }}
 </header>
-{{ partial "overlay.html" . }}
 <div id="main">
   {{ $sourcePath := "images" }}
   {{ $gallery := site.GetPage $sourcePath }}
@@ -35,11 +34,7 @@
     {{ end }}
     <script id="images_array" type="application/json">{{ $.Scratch.Get "img" | jsonify | safeJS }}</script>
   {{ end }}
-  <div class="image_container" id="layer5" data-status="null"></div>
-  <div class="image_container" id="layer4" data-status="null"></div>
-  <div class="image_container" id="layer3" data-status="null"></div>
-  <div class="image_container" id="layer2" data-status="null"></div>
-  <div class="image_container" id="layer1" data-status="null"></div>
+  {{ partial "desktop_wrapper.html" . }}
 </div>
 <footer>
   {{ partial "footer.html" . }}
