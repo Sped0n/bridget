@@ -6,7 +6,8 @@ import {
   center,
   type position,
   createImgElement,
-  calcImageIndex
+  calcImageIndex,
+  delay
 } from './utils'
 import { thresholdSensitivityArray, thresholdIndex } from './thresholdCtl'
 import { imgIndexSpanUpdate } from './indexDisp'
@@ -63,23 +64,28 @@ export const handleOnMove = (e: MouseEvent): void => {
   }
 }
 
+async function enterOverlay(): Promise<void> {
+  // stop images animation
+  window.removeEventListener('mousemove', handleOnMove)
+  // set top image
+  center(layers[4])
+  for (let i = 4; i >= 0; i--) {
+    layers[i].dataset.status = `t${4 - i}`
+  }
+  await delay(2500)
+  // Offset previous self increment of global index (by handleOnMove)
+  globalIndexDec()
+  // overlay init
+  overlayEnable()
+}
+
 // initialization
 export function trackMouseInit(): void {
   window.addEventListener('mousemove', handleOnMove)
   layers[4].addEventListener(
     'click',
     () => {
-      // stop images animation
-      window.removeEventListener('mousemove', handleOnMove)
-      // set top image
-      center(layers[4])
-      for (let i = 4; i >= 0; i--) {
-        layers[i].dataset.status = `t${4 - i}`
-      }
-      // Offset previous self increment of global index (by handleOnMove)
-      globalIndexDec()
-      // overlay init
-      overlayEnable()
+      void enterOverlay()
     },
     {
       passive: true
