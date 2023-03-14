@@ -1,17 +1,19 @@
 import { overlayEnable } from './overlay'
 import {
-  posCache,
+  styleCache,
   FIFO,
-  layersPosSet,
+  layersStyleSet,
   center,
   type position,
   createImgElement,
   calcImageIndex,
-  delay
+  delay,
+  type imgElement
 } from './utils'
 import { thresholdSensitivityArray, thresholdIndex } from './thresholdCtl'
 import { imgIndexSpanUpdate } from './indexDisp'
 import { imagesArrayLen, imagesArray } from './dataFetch'
+import { preloader } from './imageCache'
 
 // get layer divs
 export const layers: HTMLDivElement[] = [
@@ -23,9 +25,10 @@ export const layers: HTMLDivElement[] = [
 ]
 
 // layers position caching
-export const posArray: string[][] = [
+export const layersStyleArray: string[][] = [
   ['0px', '0px', '0px', '0px', '0px'],
-  ['0px', '0px', '0px', '0px', '0px']
+  ['0px', '0px', '0px', '0px', '0px'],
+  ['', '', '', '', '']
 ]
 
 // global index for "activated"
@@ -36,9 +39,10 @@ let last: position = { x: 0, y: 0 }
 
 // activate top image
 const activate = (index: number, x: number, y: number): void => {
-  posCache(x, y, posArray)
-  layersPosSet(posArray, layers)
-  FIFO(createImgElement(imagesArray[index]), layers)
+  const imgElem: imgElement = createImgElement(imagesArray[index], true)
+  styleCache(x, y, imgElem.bgStyle, layersStyleArray)
+  layersStyleSet(layersStyleArray, layers)
+  FIFO(imgElem.image, layers)
   last = { x, y }
 }
 
@@ -60,11 +64,14 @@ export const handleOnMove = (e: MouseEvent): void => {
     activate(imageIndex, e.clientX, e.clientY)
     imgIndexSpanUpdate(imageIndex + 1, imagesArrayLen)
     // self increment
-    globalIndex++
+    globalIndexInc()
   }
 }
 
 async function enterOverlay(): Promise<void> {
+  layers[4].style.backgroundImage = ''
+  const topLayerImage = layers[4].lastElementChild as HTMLImageElement
+  topLayerImage.style.transition = ''
   // stop images animation
   window.removeEventListener('mousemove', handleOnMove)
   // set top image
@@ -95,8 +102,10 @@ export function trackMouseInit(): void {
 
 export function globalIndexDec(): void {
   globalIndex--
+  preloader(globalIndex)
 }
 
 export function globalIndexInc(): void {
   globalIndex++
+  preloader(globalIndex)
 }

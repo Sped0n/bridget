@@ -3,6 +3,8 @@ export interface ImageData {
   url: string
   imgH: string
   imgW: string
+  pColor: string
+  sColor: string
 }
 
 export interface position {
@@ -10,14 +12,26 @@ export interface position {
   y: number
 }
 
+export interface imgElement {
+  image: HTMLImageElement
+  bgStyle: string
+}
+
 // cache a xy position to array
-export const posCache = (x: number, y: number, xyArray: string[][]): void => {
+export const styleCache = (
+  x: number,
+  y: number,
+  bg: string,
+  styleArray: string[][]
+): void => {
   // pop element if length surpass limitation
-  xyArray[0].shift()
-  xyArray[1].shift()
+  styleArray[0].shift()
+  styleArray[1].shift()
+  styleArray[2].shift()
   // push new element
-  xyArray[0].push(`${x}px`)
-  xyArray[1].push(`${y}px`)
+  styleArray[0].push(`${x}px`)
+  styleArray[1].push(`${y}px`)
+  styleArray[2].push(bg)
 }
 
 // 0 to 0001, 25 to 0025
@@ -47,13 +61,18 @@ export const FIFO = (
 }
 
 // set position for 5 image display layers
-export const layersPosSet = (
-  xyArray: string[][],
-  layersArray: HTMLDivElement[]
+export const layersStyleSet = (
+  styleArray: string[][],
+  layersArray: HTMLDivElement[],
+  posOut: boolean = true,
+  styleOut: boolean = true
 ): void => {
   function posSet(layer: HTMLDivElement, index: number): void {
-    layer.style.left = xyArray[0][index]
-    layer.style.top = xyArray[1][index]
+    if (posOut) {
+      layer.style.left = styleArray[0][index]
+      layer.style.top = styleArray[1][index]
+    }
+    if (styleOut) layer.style.backgroundImage = styleArray[2][index]
   }
   for (let i = 4; i >= 0; i--) {
     posSet(layersArray[i], i)
@@ -80,13 +99,22 @@ export const center = (e: HTMLDivElement): void => {
   }
 }
 
-export function createImgElement(input: ImageData): HTMLImageElement {
+export function createImgElement(input: ImageData, returnBgStyle: boolean): imgElement {
   const img = document.createElement('img')
   img.setAttribute('src', input.url)
-  img.setAttribute('alt', input.index)
+  img.setAttribute('alt', '')
   img.setAttribute('height', input.imgH)
   img.setAttribute('width', input.imgW)
-  return img
+  img.setAttribute('loading', 'eager')
+  img.style.opacity = '0'
+  img.onload = async () => {
+    img.style.opacity = '1'
+    img.style.transition = 'opacity 0.5s ease-in'
+    await delay(500)
+    img.style.transition = ''
+  }
+  const style: string = `linear-gradient(15deg, ${input.pColor}, ${input.sColor})`
+  return returnBgStyle ? { image: img, bgStyle: style } : { image: img, bgStyle: '' }
 }
 
 export function calcImageIndex(index: number, imgCounts: number): number {
@@ -95,4 +123,9 @@ export function calcImageIndex(index: number, imgCounts: number): number {
   } else {
     return (imgCounts + (index % imgCounts)) % imgCounts
   }
+}
+
+export function preloadImage(src: string): void {
+  const cache = new Image()
+  cache.src = src
 }

@@ -1,14 +1,14 @@
 import {
   delay,
   removeAllEventListeners,
-  layersPosSet,
+  layersStyleSet,
   center,
   createImgElement,
   calcImageIndex,
   FIFO
 } from './utils'
 import {
-  posArray,
+  layersStyleArray,
   layers,
   handleOnMove,
   globalIndex,
@@ -64,7 +64,7 @@ export function overlayDisable(): void {
 // handle close click
 async function handleCloseClick(): Promise<void> {
   overlayDisable()
-  layersPosSet(posArray, layers)
+  layersStyleSet(layersStyleArray, layers, true, false)
   for (let i: number = 4; i >= 0; i--) {
     layers[i].dataset.status = `r${4 - i}`
   }
@@ -72,20 +72,21 @@ async function handleCloseClick(): Promise<void> {
   for (let i: number = 4; i >= 0; i--) {
     layers[i].dataset.status = 'null'
   }
+  layersStyleSet(layersStyleArray, layers, false, true)
   window.addEventListener('mousemove', handleOnMove)
 }
 
 function handlePrevClick(): void {
   globalIndexDec()
   const imgIndex = calcImageIndex(globalIndex, imagesArrayLen)
-  FIFO(createImgElement(imagesArray[imgIndex]), layers)
+  FIFO(createImgElement(imagesArray[imgIndex], false).image, layers)
   imgIndexSpanUpdate(imgIndex + 1, imagesArrayLen)
 }
 
 function handleNextClick(): void {
   globalIndexInc()
   const imgIndex = calcImageIndex(globalIndex, imagesArrayLen)
-  FIFO(createImgElement(imagesArray[imgIndex]), layers)
+  FIFO(createImgElement(imagesArray[imgIndex], false).image, layers)
   imgIndexSpanUpdate(imgIndex + 1, imagesArrayLen)
 }
 
