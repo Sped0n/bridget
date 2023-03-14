@@ -1,5 +1,22 @@
-import { delay, removeAllEventListeners, layersPosSet, center } from './utils'
-import { posArray, layers, handleOnMove } from './trackMouse'
+import {
+  delay,
+  removeAllEventListeners,
+  layersPosSet,
+  center,
+  createImgElement,
+  calcImageIndex,
+  FIFO
+} from './utils'
+import {
+  posArray,
+  layers,
+  handleOnMove,
+  globalIndex,
+  globalIndexDec,
+  globalIndexInc
+} from './trackMouse'
+import { imagesArray, imagesArrayLen } from './dataFetch'
+import { imgIndexSpanUpdate } from './indexDisp'
 
 // get components of overlay
 const overlay = document.getElementsByClassName('overlay').item(0) as HTMLDivElement
@@ -40,6 +57,8 @@ export function overlayDisable(): void {
   overlay.style.zIndex = '-1'
   setCursorText('')
   disableListener()
+  // Add back previous self increment of global index (by handleOnMove)
+  globalIndexInc()
 }
 
 // handle close click
@@ -54,6 +73,20 @@ async function handleCloseClick(): Promise<void> {
     layers[i].dataset.status = 'null'
   }
   window.addEventListener('mousemove', handleOnMove)
+}
+
+function handlePrevClick(): void {
+  globalIndexDec()
+  const imgIndex = calcImageIndex(globalIndex, imagesArrayLen)
+  FIFO(createImgElement(imagesArray[imgIndex]), layers)
+  imgIndexSpanUpdate(imgIndex + 1, imagesArrayLen)
+}
+
+function handleNextClick(): void {
+  globalIndexInc()
+  const imgIndex = calcImageIndex(globalIndex, imagesArrayLen)
+  FIFO(createImgElement(imagesArray[imgIndex]), layers)
+  imgIndexSpanUpdate(imgIndex + 1, imagesArrayLen)
 }
 
 // set event listener
@@ -80,10 +113,24 @@ function setListener(): void {
     },
     { passive: true }
   )
+  prevSection.addEventListener(
+    'click',
+    () => {
+      handlePrevClick()
+    },
+    { passive: true }
+  )
   nextSection.addEventListener(
     'mouseover',
     () => {
       setCursorText('NEXT')
+    },
+    { passive: true }
+  )
+  nextSection.addEventListener(
+    'click',
+    () => {
+      handleNextClick()
     },
     { passive: true }
   )

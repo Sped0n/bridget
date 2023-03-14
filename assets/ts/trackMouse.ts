@@ -38,26 +38,6 @@ const activate = (index: number, x: number, y: number): void => {
   posCache(x, y, posArray)
   layersPosSet(posArray, layers)
   FIFO(createImgElement(imagesArray[index]), layers)
-  // top
-  layers[4].addEventListener(
-    'click',
-    () => {
-      // stop images animation
-      window.removeEventListener('mousemove', handleOnMove)
-      // set top image
-      center(layers[4])
-      for (let i = 4; i >= 0; i--) {
-        layers[i].dataset.status = `t${4 - i}`
-      }
-      // overlay init
-      overlayEnable()
-    },
-    {
-      passive: true,
-      once: true
-    }
-  )
-
   last = { x, y }
 }
 
@@ -86,4 +66,31 @@ export const handleOnMove = (e: MouseEvent): void => {
 // initialization
 export function trackMouseInit(): void {
   window.addEventListener('mousemove', handleOnMove)
+  layers[4].addEventListener(
+    'click',
+    () => {
+      // stop images animation
+      window.removeEventListener('mousemove', handleOnMove)
+      // set top image
+      center(layers[4])
+      for (let i = 4; i >= 0; i--) {
+        layers[i].dataset.status = `t${4 - i}`
+      }
+      // Offset previous self increment of global index (by handleOnMove)
+      globalIndexDec()
+      // overlay init
+      overlayEnable()
+    },
+    {
+      passive: true
+    }
+  )
+}
+
+export function globalIndexDec(): void {
+  globalIndex--
+}
+
+export function globalIndexInc(): void {
+  globalIndex++
 }
