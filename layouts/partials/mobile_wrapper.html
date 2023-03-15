@@ -1,0 +1,6 @@
+<div class='mobileWrapper'>
+  {{ $sourcePath := "images" }}
+  {{ $gallery := site.GetPage $sourcePath }}
+  {{ with $gallery.Resources.ByType "image" }}
+  {{ end }}
+</div>
