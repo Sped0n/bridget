@@ -14,7 +14,7 @@ import {
   globalIndex,
   globalIndexDec,
   globalIndexInc
-} from './trackMouse'
+} from './desktop'
 import { imagesArray, imagesArrayLen } from './dataFetch'
 import { imgIndexSpanUpdate } from './indexDisp'
 
