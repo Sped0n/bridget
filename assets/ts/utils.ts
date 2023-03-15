@@ -17,6 +17,12 @@ export interface imgElement {
   bgStyle: string
 }
 
+export interface deviceType {
+  mobile: boolean
+  tablet: boolean
+  desktop: boolean
+}
+
 // cache a xy position to array
 export const styleCache = (
   x: number,
@@ -128,4 +134,20 @@ export function calcImageIndex(index: number, imgCounts: number): number {
 export function preloadImage(src: string): void {
   const cache = new Image()
   cache.src = src
+}
+
+export const getDeviceType = (): deviceType => {
+  const ua: string = navigator.userAgent
+  const result: deviceType = { mobile: false, tablet: false, desktop: false }
+  if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+    result.mobile = true
+    result.tablet = true
+  } else if (
+    /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
+      ua
+    )
+  ) {
+    result.mobile = true
+  } else result.desktop = true
+  return result
 }

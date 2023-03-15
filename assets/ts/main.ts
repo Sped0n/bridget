@@ -1,11 +1,12 @@
 import { imgIndexSpanUpdate } from './indexDisp'
-import { trackMouseInit } from './trackMouse'
+import { trackMouseInit } from './desktop'
 import { thresholdCtlInit } from './thresholdCtl'
 import { imagesArrayLen } from './dataFetch'
 import { vwRefreshInit } from './overlay'
 import { preloader } from './imageCache'
+import { getDeviceType } from './utils'
 
-function init(): void {
+function desktopInit(): void {
   preloader(0)
   vwRefreshInit()
   imgIndexSpanUpdate(0, imagesArrayLen)
@@ -13,4 +14,8 @@ function init(): void {
   trackMouseInit()
 }
 
-init()
+function mobileInit(): void {
+  console.log('mobile')
+}
+
+getDeviceType().mobile ? mobileInit() : desktopInit()
