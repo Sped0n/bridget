@@ -12,11 +12,6 @@ export interface position {
   y: number
 }
 
-export interface imgElement {
-  image: HTMLImageElement
-  bgStyle: string
-}
-
 export interface deviceType {
   mobile: boolean
   tablet: boolean
@@ -24,24 +19,17 @@ export interface deviceType {
 }
 
 // cache a xy position to array
-export const styleCache = (
-  x: number,
-  y: number,
-  bg: string,
-  styleArray: string[][]
-): void => {
+export const styleCache = (x: number, y: number, styleArray: string[][]): void => {
   // pop element if length surpass limitation
   styleArray[0].shift()
   styleArray[1].shift()
-  styleArray[2].shift()
   // push new element
   styleArray[0].push(`${x}px`)
   styleArray[1].push(`${y}px`)
-  styleArray[2].push(bg)
 }
 
 // 0 to 0001, 25 to 0025
-export function duper(num: number): string {
+export const duper = (num: number): string => {
   return ('0000' + num.toString()).slice(-4)
 }
 
@@ -66,19 +54,17 @@ export const FIFO = (
   layersArray[4].appendChild(element)
 }
 
+export const mouseToTransform = (x: string, y: string): string => {
+  return `translate(calc(${x} - 50%), calc(${y} - 50%))`
+}
+
 // set position for 5 image display layers
 export const layersStyleSet = (
   styleArray: string[][],
-  layersArray: HTMLDivElement[],
-  posOut: boolean = true,
-  styleOut: boolean = true
+  layersArray: HTMLDivElement[]
 ): void => {
   function posSet(layer: HTMLDivElement, index: number): void {
-    if (posOut) {
-      layer.style.left = styleArray[0][index]
-      layer.style.top = styleArray[1][index]
-    }
-    if (styleOut) layer.style.backgroundImage = styleArray[2][index]
+    layer.style.transform = mouseToTransform(styleArray[0][index], styleArray[1][index])
   }
   for (let i = 4; i >= 0; i--) {
     posSet(layersArray[i], i)
@@ -91,39 +77,35 @@ export function delay(ms: number): Promise<void> {
 }
 
 // remove all event listeners from a node
-export function removeAllEventListeners(e: Node): Node {
+export const removeAllEventListeners = (e: Node): Node => {
   return e.cloneNode(true)
 }
 
 // center top div
 export const center = (e: HTMLDivElement): void => {
-  e.style.left = '50%'
+  const x: number = window.innerWidth / 2
+  let y: number
   if (window.innerWidth > 768) {
-    e.style.top = 'calc((100% - 38px) / 2)'
+    y = (window.innerHeight - 38) / 2
   } else {
-    e.style.top = 'calc((100% - 31px) / 2 + 31px)'
+    y = (window.innerHeight - 31) / 2 + 31
   }
+  e.style.transform = mouseToTransform(`${x}px`, `${y}px`)
 }
 
-export function createImgElement(input: ImageData, returnBgStyle: boolean): imgElement {
+export const createImgElement = (input: ImageData): HTMLImageElement => {
   const img = document.createElement('img')
   img.setAttribute('src', input.url)
   img.setAttribute('alt', '')
   img.setAttribute('height', input.imgH)
   img.setAttribute('width', input.imgW)
-  img.setAttribute('loading', 'eager')
-  img.style.opacity = '0'
-  img.onload = async () => {
-    img.style.opacity = '1'
-    img.style.transition = 'opacity 0.5s ease-in'
-    await delay(500)
-    img.style.transition = ''
-  }
-  const style: string = `linear-gradient(15deg, ${input.pColor}, ${input.sColor})`
-  return returnBgStyle ? { image: img, bgStyle: style } : { image: img, bgStyle: '' }
+  img.className = 'innerImg'
+  img.style.background = `linear-gradient(15deg, ${input.pColor}, ${input.sColor})`
+  img.style.height = 'auto'
+  return img
 }
 
-export function calcImageIndex(index: number, imgCounts: number): number {
+export const calcImageIndex = (index: number, imgCounts: number): number => {
   if (index >= 0) {
     return index % imgCounts
   } else {
@@ -131,7 +113,7 @@ export function calcImageIndex(index: number, imgCounts: number): number {
   }
 }
 
-export function preloadImage(src: string): void {
+export const preloadImage = (src: string): void => {
   const cache = new Image()
   cache.src = src
 }
