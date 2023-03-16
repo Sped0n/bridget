@@ -1,7 +1,7 @@
 import { duper } from './utils'
 
 // update index of displaying image
-export function imgIndexSpanUpdate(numOne: number, numTwo: number): void {
+export const imgIndexSpanUpdate = (numOne: number, numTwo: number): void => {
   // footer index number display module
   const footerIndexDisp = document.getElementsByClassName('ftid')
   const numOneString: string = duper(numOne)

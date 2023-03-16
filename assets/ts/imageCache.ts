@@ -3,7 +3,7 @@ import { preloadImage, calcImageIndex } from './utils'
 
 let lastIndex: number = 0
 
-export function preloader(index: number): void {
+export const preloader = (index: number): void => {
   if (lastIndex === index) {
     for (let i: number = -2; i <= 1; i++)
       preloadImage(imagesArray[calcImageIndex(index + i, imagesArrayLen)].url)

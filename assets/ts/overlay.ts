@@ -28,7 +28,7 @@ const cursor = document
   .item(0) as HTMLDivElement
 
 // set cursor text
-function setCursorText(text: string): void {
+const setCursorText = (text: string): void => {
   cursor.innerText = text
 }
 
@@ -39,7 +39,7 @@ const overlayCursor = (e: MouseEvent): void => {
 }
 
 // disable listeners
-function disableListener(): void {
+const disableListener = (): void => {
   window.removeEventListener('mousemove', overlayCursor)
   closeSection = removeAllEventListeners(closeSection)
   prevSection = removeAllEventListeners(prevSection)
@@ -47,13 +47,13 @@ function disableListener(): void {
 }
 
 // enable overlay
-export function overlayEnable(): void {
+export const overlayEnable = (): void => {
   overlay.style.zIndex = '7'
   setListener()
 }
 
 // disable overlay
-export function overlayDisable(): void {
+export const overlayDisable = (): void => {
   overlay.style.zIndex = '-1'
   setCursorText('')
   disableListener()
@@ -76,14 +76,14 @@ async function handleCloseClick(): Promise<void> {
   window.addEventListener('mousemove', handleOnMove)
 }
 
-function handlePrevClick(): void {
+const handlePrevClick = (): void => {
   globalIndexDec()
   const imgIndex = calcImageIndex(globalIndex, imagesArrayLen)
   FIFO(createImgElement(imagesArray[imgIndex], false).image, layers)
   imgIndexSpanUpdate(imgIndex + 1, imagesArrayLen)
 }
 
-function handleNextClick(): void {
+const handleNextClick = (): void => {
   globalIndexInc()
   const imgIndex = calcImageIndex(globalIndex, imagesArrayLen)
   FIFO(createImgElement(imagesArray[imgIndex], false).image, layers)
@@ -91,7 +91,7 @@ function handleNextClick(): void {
 }
 
 // set event listener
-function setListener(): void {
+const setListener = (): void => {
   window.addEventListener('mousemove', overlayCursor, { passive: true })
   closeSection.addEventListener(
     'mouseover',
@@ -137,7 +137,7 @@ function setListener(): void {
   )
 }
 
-export function vwRefreshInit(): void {
+export const vwRefreshInit = (): void => {
   window.addEventListener(
     'resize',
     () => {

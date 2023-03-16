@@ -87,7 +87,7 @@ async function enterOverlay(): Promise<void> {
 }
 
 // initialization
-export function trackMouseInit(): void {
+export const trackMouseInit = (): void => {
   window.addEventListener('mousemove', handleOnMove)
   layers[4].addEventListener(
     'click',
@@ -100,12 +100,12 @@ export function trackMouseInit(): void {
   )
 }
 
-export function globalIndexDec(): void {
+export const globalIndexDec = (): void => {
   globalIndex--
   preloader(globalIndex)
 }
 
-export function globalIndexInc(): void {
+export const globalIndexInc = (): void => {
   globalIndex++
   preloader(globalIndex)
 }

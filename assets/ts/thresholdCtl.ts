@@ -9,12 +9,12 @@ export const thresholdSensitivityArray: number[] = [100, 40, 18, 14, 9, 5]
 export let thresholdIndex: number = 2
 
 // update inner text of threshold display element
-function thresholdUpdate(): void {
+const thresholdUpdate = (): void => {
   thresholdDisp.innerText = duper(threshold[thresholdIndex])
 }
 
 // threshold control initialization
-export function thresholdCtlInit(): void {
+export const thresholdCtlInit = (): void => {
   thresholdUpdate()
   const dec = document.getElementById('thresholdDec') as HTMLButtonElement
   dec.addEventListener(
