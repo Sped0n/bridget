@@ -7,8 +7,7 @@ import {
   type position,
   createImgElement,
   calcImageIndex,
-  delay,
-  type imgElement
+  delay
 } from './utils'
 import { thresholdSensitivityArray, thresholdIndex } from './thresholdCtl'
 import { imgIndexSpanUpdate } from './indexDisp'
@@ -27,8 +26,7 @@ export const layers: HTMLDivElement[] = [
 // layers position caching
 export const layersStyleArray: string[][] = [
   ['0px', '0px', '0px', '0px', '0px'],
-  ['0px', '0px', '0px', '0px', '0px'],
-  ['', '', '', '', '']
+  ['0px', '0px', '0px', '0px', '0px']
 ]
 
 // global index for "activated"
@@ -39,10 +37,10 @@ let last: position = { x: 0, y: 0 }
 
 // activate top image
 const activate = (index: number, x: number, y: number): void => {
-  const imgElem: imgElement = createImgElement(imagesArray[index], true)
-  styleCache(x, y, imgElem.bgStyle, layersStyleArray)
+  const imgElem: HTMLImageElement = createImgElement(imagesArray[index])
+  styleCache(x, y, layersStyleArray)
   layersStyleSet(layersStyleArray, layers)
-  FIFO(imgElem.image, layers)
+  FIFO(imgElem, layers)
   last = { x, y }
 }
 
