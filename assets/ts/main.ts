@@ -6,7 +6,7 @@ import { vwRefreshInit } from './overlay'
 import { preloader } from './imageCache'
 import { getDeviceType } from './utils'
 
-function desktopInit(): void {
+const desktopInit = (): void => {
   preloader(0)
   vwRefreshInit()
   imgIndexSpanUpdate(0, imagesArrayLen)
@@ -14,7 +14,7 @@ function desktopInit(): void {
   trackMouseInit()
 }
 
-function mobileInit(): void {
+const mobileInit = (): void => {
   console.log('mobile')
 }
 
