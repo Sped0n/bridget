@@ -1,11 +1,11 @@
 import {
   delay,
-  removeAllEventListeners,
   layersStyleSet,
   center,
   createImgElement,
   calcImageIndex,
-  FIFO
+  FIFO,
+  mouseToTransform
 } from './utils'
 import {
   layersStyleArray,
@@ -19,42 +19,45 @@ import { imagesArray, imagesArrayLen } from './dataFetch'
 import { imgIndexSpanUpdate } from './indexDisp'
 
 // get components of overlay
-const overlay = document.getElementsByClassName('overlay').item(0) as HTMLDivElement
-let closeSection = document.getElementsByClassName('close_section').item(0) as Node
-let prevSection = document.getElementsByClassName('prev_section').item(0) as Node
-let nextSection = document.getElementsByClassName('next_section').item(0) as Node
-const cursor = document
+const overlayCursor = document
   .getElementsByClassName('overlay_cursor')
+  .item(0) as HTMLDivElement
+const innerContent = document
+  .getElementsByClassName('cursor_innerText')
   .item(0) as HTMLDivElement
 
 // set cursor text
 const setCursorText = (text: string): void => {
-  cursor.innerText = text
+  innerContent.innerText = text
 }
 
 // overlay cursor event handler
-const overlayCursor = (e: MouseEvent): void => {
-  cursor.style.left = `${e.clientX}px`
-  cursor.style.top = `${e.clientY}px`
+const setTextPos = (e: MouseEvent): void => {
+  // overlayCursor.style.left = `${e.clientX}px`
+  // overlayCursor.style.top = `${e.clientY}px`
+  overlayCursor.style.transform = mouseToTransform(
+    `${e.clientX}px`,
+    `${e.clientY}px`,
+    false,
+    true
+  )
 }
 
 // disable listeners
 const disableListener = (): void => {
-  window.removeEventListener('mousemove', overlayCursor)
-  closeSection = removeAllEventListeners(closeSection)
-  prevSection = removeAllEventListeners(prevSection)
-  nextSection = removeAllEventListeners(nextSection)
+  window.removeEventListener('mousemove', handleOverlayMouseMove)
+  overlayCursor.removeEventListener('click', handleOverlayClick)
 }
 
 // enable overlay
 export const overlayEnable = (): void => {
-  overlay.style.zIndex = '7'
+  overlayCursor.style.zIndex = '7'
   setListener()
 }
 
 // disable overlay
 export const overlayDisable = (): void => {
-  overlay.style.zIndex = '-1'
+  overlayCursor.style.zIndex = '-1'
   setCursorText('')
   disableListener()
   // Add back previous self increment of global index (by handleOnMove)
@@ -90,51 +93,38 @@ const handleNextClick = (): void => {
   imgIndexSpanUpdate(imgIndex + 1, imagesArrayLen)
 }
 
+const handleOverlayMouseMove = (e: MouseEvent): void => {
+  setTextPos(e)
+  const oneThird: number = Math.round(window.innerWidth / 3)
+  if (e.clientX < oneThird) {
+    setCursorText('PREV')
+    overlayCursor.dataset.status = 'PREV'
+  } else if (e.clientX < oneThird * 2) {
+    setCursorText('CLOSE')
+    overlayCursor.dataset.status = 'CLOSE'
+  } else {
+    setCursorText('NEXT')
+    overlayCursor.dataset.status = 'NEXT'
+  }
+}
+const handleOverlayClick = (): void => {
+  switch (overlayCursor.dataset.status) {
+    case 'PREV':
+      handlePrevClick()
+      break
+    case 'CLOSE':
+      void handleCloseClick()
+      break
+    case 'NEXT':
+      handleNextClick()
+      break
+  }
+}
+
 // set event listener
 const setListener = (): void => {
-  window.addEventListener('mousemove', overlayCursor, { passive: true })
-  closeSection.addEventListener(
-    'mouseover',
-    () => {
-      setCursorText('CLOSE')
-    },
-    { passive: true }
-  )
-  closeSection.addEventListener(
-    'click',
-    () => {
-      void handleCloseClick()
-    },
-    { passive: true }
-  )
-  prevSection.addEventListener(
-    'mouseover',
-    () => {
-      setCursorText('PREV')
-    },
-    { passive: true }
-  )
-  prevSection.addEventListener(
-    'click',
-    () => {
-      handlePrevClick()
-    },
-    { passive: true }
-  )
-  nextSection.addEventListener(
-    'mouseover',
-    () => {
-      setCursorText('NEXT')
-    },
-    { passive: true }
-  )
-  nextSection.addEventListener(
-    'click',
-    () => {
-      handleNextClick()
-    },
-    { passive: true }
-  )
+  window.addEventListener('mousemove', handleOverlayMouseMove, { passive: true })
+  overlayCursor.addEventListener('click', handleOverlayClick, { passive: true })
 }
 
 export const vwRefreshInit = (): void => {
