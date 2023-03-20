@@ -27,9 +27,9 @@
       {{ $resize := .Resize "x2000 webp Lanczos q70" }}
       {{ $.Scratch.Add "img" (dict
           "index" (string $index)
-          "url" (string $resize.RelPermalink)
-          "imgH" (string $resize.Height)
-          "imgW" (string $resize.Width)
+          "url" (string .RelPermalink)
+          "imgH" (string .Height)
+          "imgW" (string .Width)
           "pColor" (string $pColor)
           "sColor" (string $sColor)) }}
     {{ end }}
