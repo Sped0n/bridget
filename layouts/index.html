@@ -24,11 +24,12 @@
       {{ if gt (len $colors) 1 }}
         {{ $sColor = index $colors 1 }}
       {{ end }}
+      {{ $resize := .Resize "x2000 webp Lanczos q70" }}
       {{ $.Scratch.Add "img" (dict
           "index" (string $index)
-          "url" (string .RelPermalink)
-          "imgH" (string .Height)
-          "imgW" (string .Width)
+          "url" (string $resize.RelPermalink)
+          "imgH" (string $resize.Height)
+          "imgW" (string $resize.Width)
           "pColor" (string $pColor)
           "sColor" (string $sColor)) }}
     {{ end }}

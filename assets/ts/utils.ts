@@ -18,57 +18,20 @@ export interface deviceType {
   desktop: boolean
 }
 
-// cache a xy position to array
-export const styleCache = (x: number, y: number, styleArray: string[][]): void => {
-  // pop element if length surpass limitation
-  styleArray[0].shift()
-  styleArray[1].shift()
-  // push new element
-  styleArray[0].push(`${x}px`)
-  styleArray[1].push(`${y}px`)
-}
-
 // 0 to 0001, 25 to 0025
 export const duper = (num: number): string => {
   return ('0000' + num.toString()).slice(-4)
 }
 
-// FIFO data array for image display
-export const FIFO = (
-  element: HTMLImageElement,
-  layersArray: HTMLDivElement[]
-): void => {
-  function layerProcess(layerL: HTMLDivElement, layerH: HTMLDivElement): void {
-    if (layerL.childElementCount !== 0)
-      layerL.removeChild(layerL.lastElementChild as HTMLImageElement)
-    if (layerH.childElementCount !== 0) {
-      const layerHNode = layerH.lastElementChild as HTMLImageElement
-      layerL.appendChild(layerHNode.cloneNode(true))
-    }
-  }
-  for (let i: number = 0; i <= 3; i++) {
-    layerProcess(layersArray[i], layersArray[i + 1])
-  }
-  if (layersArray[4].childElementCount !== 0)
-    layersArray[4].removeChild(layersArray[4].lastElementChild as HTMLImageElement)
-  layersArray[4].appendChild(element)
-}
-
-export const mouseToTransform = (x: string, y: string): string => {
-  return `translate(calc(${x} - 50%), calc(${y} - 50%))`
-}
-
-// set position for 5 image display layers
-export const layersStyleSet = (
-  styleArray: string[][],
-  layersArray: HTMLDivElement[]
-): void => {
-  function posSet(layer: HTMLDivElement, index: number): void {
-    layer.style.transform = mouseToTransform(styleArray[0][index], styleArray[1][index])
-  }
-  for (let i = 4; i >= 0; i--) {
-    posSet(layersArray[i], i)
-  }
+export const mouseToTransform = (
+  x: number,
+  y: number,
+  centerCorrection: boolean = true,
+  accelerate: boolean = false
+): string => {
+  return `translate${accelerate ? '3d' : ''}(${
+    centerCorrection ? `calc(${x}px - 50%)` : `${x}px`
+  }, ${centerCorrection ? `calc(${y}px - 50%)` : `${y}px`}${accelerate ? ', 0' : ''})`
 }
 
 // eslint-disable-next-line @typescript-eslint/promise-function-async
@@ -90,7 +53,7 @@ export const center = (e: HTMLDivElement): void => {
   } else {
     y = (window.innerHeight - 31) / 2 + 31
   }
-  e.style.transform = mouseToTransform(`${x}px`, `${y}px`)
+  e.style.transform = mouseToTransform(x, y)
 }
 
 export const createImgElement = (input: ImageData): HTMLImageElement => {
@@ -99,9 +62,7 @@ export const createImgElement = (input: ImageData): HTMLImageElement => {
   img.setAttribute('alt', '')
   img.setAttribute('height', input.imgH)
   img.setAttribute('width', input.imgW)
-  img.className = 'innerImg'
-  img.style.background = `linear-gradient(15deg, ${input.pColor}, ${input.sColor})`
-  img.style.height = 'auto'
+  img.style.display = 'none'
   return img
 }
 

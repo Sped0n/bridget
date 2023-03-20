@@ -1,20 +1,5 @@
-import {
-  delay,
-  layersStyleSet,
-  center,
-  createImgElement,
-  calcImageIndex,
-  FIFO,
-  mouseToTransform
-} from './utils'
-import {
-  layersStyleArray,
-  layers,
-  handleOnMove,
-  globalIndex,
-  globalIndexDec,
-  globalIndexInc
-} from './desktop'
+import { delay, calcImageIndex, mouseToTransform } from './utils'
+import { handleOnMove, globalIndex, globalIndexDec, globalIndexInc } from './desktop'
 import { imagesArray, imagesArrayLen } from './dataFetch'
 import { imgIndexSpanUpdate } from './indexDisp'
 
@@ -35,12 +20,7 @@ const setCursorText = (text: string): void => {
 const setTextPos = (e: MouseEvent): void => {
   // overlayCursor.style.left = `${e.clientX}px`
   // overlayCursor.style.top = `${e.clientY}px`
-  overlayCursor.style.transform = mouseToTransform(
-    `${e.clientX}px`,
-    `${e.clientY}px`,
-    false,
-    true
-  )
+  overlayCursor.style.transform = mouseToTransform(e.clientX, e.clientY, false, true)
 }
 
 // disable listeners
@@ -67,29 +47,19 @@ export const overlayDisable = (): void => {
 // handle close click
 async function handleCloseClick(): Promise<void> {
   overlayDisable()
-  layersStyleSet(layersStyleArray, layers)
-  for (let i: number = 4; i >= 0; i--) {
-    layers[i].dataset.status = `r${4 - i}`
-  }
   await delay(2500)
-  for (let i: number = 4; i >= 0; i--) {
-    layers[i].dataset.status = 'null'
-  }
-  layersStyleSet(layersStyleArray, layers)
   window.addEventListener('mousemove', handleOnMove)
 }
 
 const handlePrevClick = (): void => {
   globalIndexDec()
   const imgIndex = calcImageIndex(globalIndex, imagesArrayLen)
-  FIFO(createImgElement(imagesArray[imgIndex]), layers)
   imgIndexSpanUpdate(imgIndex + 1, imagesArrayLen)
 }
 
 const handleNextClick = (): void => {
   globalIndexInc()
   const imgIndex = calcImageIndex(globalIndex, imagesArrayLen)
-  FIFO(createImgElement(imagesArray[imgIndex]), layers)
   imgIndexSpanUpdate(imgIndex + 1, imagesArrayLen)
 }
 
@@ -139,7 +109,6 @@ export const vwRefreshInit = (): void => {
         r.style.setProperty('--footer-height', '31px')
       }
       // recenter image (only in overlay)
-      if (layers[4].dataset.status === 't0') center(layers[4])
     },
     { passive: true }
   )
