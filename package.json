@@ -7,8 +7,8 @@
     "lint": "eslint . --ext .vue,.js,.ts,.jsx,.tsx --fix",
     "build": "hugo -v --source=exampleSite --themesDir ../.. --gc",
     "build:preview": "hugo -v --source=exampleSite --themesDir ../.. -D --gc",
-    "server": "hugo server --source=exampleSite -D --disableFastRender --watch --verbose",
-    "server:production": "hugo server --source=exampleSite --disableFastRender -e production --watch --verbose"
+    "server": "hugo server --source=exampleSite --gc -D --disableFastRender --watch --verbose",
+    "server:production": "hugo server --source=exampleSite --gc --disableFastRender -e production --watch --verbose"
   },
   "repository": {
     "type": "git",
