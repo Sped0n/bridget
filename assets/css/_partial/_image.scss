@@ -5,10 +5,9 @@
   opacity: 1;
   display: flex;
   align-items: center;
-  will-change: transform;
   
   img {
-    max-height: 55vmin;
+    max-height: 50vmin;
     max-width: 100vw;
     height: auto;
     width: auto;
@@ -16,62 +15,66 @@
   }
   
   &[data-status='t0'] {
-    transition: all 0.5s ease-in-out 1.5s;
+    transition: all 0.5s ease-in-out 0.6s;
     max-height: calc(100vh - var(--footer-height));
   
     img {
-      transition: all 0.5s ease-in-out 2s;
+      transition: all 0.5s ease-in-out 1.1s;
       max-height: calc(100vh - var(--footer-height));
     }
   }
   
   &[data-status='t1'] {
-    transition: opacity 0.5s ease-out 1s;
+    transition: all 0.2s ease-out 0.4s;
     opacity: 0;
+    margin-top: 30px;
   }
   
   &[data-status='t2'] {
-    transition: opacity 0.5s ease-out 0.75s;
+    transition: all 0.2s ease-out 0.3s;
     opacity: 0;
+    margin-top: 30px;
   }
   
   &[data-status='t3'] {
-    transition: opacity 0.5s ease-out 0.5s;
+    transition: all 0.2s ease-out 0.2s;
     opacity: 0;
+    margin-top: 30px;
   }
   
   &[data-status='t4'] {
-    transition: opacity 0.5s ease-out 0.25s;
+    transition: all 0.2s ease-out 0.1s;
     opacity: 0;
+    margin-top: 30px;
   }
   
   &[data-status='r0'] {
-    transition: all 0.5s ease-in-out 1s;
+    transition: all 0.5s ease-in-out 0.8s;
     opacity: 1;
   
     img {
-      transition: all 1s ease-in-out 0s;
-      max-height: 55vmin;
+      transition: all 0.8s ease-in-out 0s;
+      max-height: 50vmin;
     }
   }
   
   &[data-status='r1'] {
-    transition: opacity 0.25s ease-out 1.5s;
+    transition: all 0.2s ease-out 1.3s;
     opacity: 1;
   }
   
   &[data-status='r2'] {
-    transition: opacity 0.25s ease-out 1.75s;
+    transition: all 0.2s ease-out 1.4s;
     opacity: 1;
   }
   
   &[data-status='r3'] {
-    transition: opacity 0.25s ease-out 2s;
+    transition: all 0.2s ease-out 1.5s;
     opacity: 1;
   }
   
   &[data-status='r4'] {
-    transition: opacity 0.25s ease-out 2.25s;
+    transition: all 0.2s ease-out 1.6s;
     opacity: 1;
   }
   
@@ -93,18 +96,5 @@
   
   &#layer1 {
     z-index: 1;
-  }
-}
-
-.images {
-  
-  img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    object-fit: contain;
-    max-height: 55vmin;
-    max-width: 100vw;
-    transform-origin: center;
   }
 }
