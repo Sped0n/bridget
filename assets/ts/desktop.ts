@@ -21,9 +21,10 @@ export const layers: HTMLDivElement[] = [
   document.getElementById('layer5') as HTMLDivElement
 ]
 
-// layers position caching
+// top layer position caching
 let topLayerPos: number[] = [0, 0]
 
+// set top layer position
 export const topLayerPosSet = (): void => {
   layerPosSet(topLayerPos[0], topLayerPos[1], layers[4])
 }
