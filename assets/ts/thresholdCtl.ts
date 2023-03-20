@@ -5,7 +5,7 @@ const thresholdDisp = document.getElementsByClassName('thid').item(0) as HTMLSpa
 
 // threshold data
 const threshold: number[] = [0, 40, 80, 120, 160, 200]
-export const thresholdSensitivityArray: number[] = [200, 40, 18, 14, 9, 5]
+export const thresholdSensitivityArray: number[] = [100, 40, 18, 14, 9, 5]
 export let thresholdIndex: number = 2
 
 // update inner text of threshold display element

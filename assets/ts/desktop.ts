@@ -1,31 +1,32 @@
 import { overlayEnable } from './overlay'
 import {
+  styleCache,
+  FIFO,
+  layersStyleSet,
+  center,
   type position,
   createImgElement,
   calcImageIndex,
-  delay,
-  mouseToTransform
+  delay
 } from './utils'
 import { thresholdSensitivityArray, thresholdIndex } from './thresholdCtl'
 import { imgIndexSpanUpdate } from './indexDisp'
 import { imagesArrayLen, imagesArray } from './dataFetch'
-import { preloader } from './imageCache'
 
-const imagesDiv = document.getElementsByClassName('images').item(0) as HTMLDivElement
-
-let imagesDivNodes: NodeListOf<HTMLImageElement>
-
-export const desktopImagesInit = (): void => {
-  for (let i = 0; i < imagesArrayLen; i++) {
-    imagesDiv.appendChild(createImgElement(imagesArray[i]))
-  }
-  imagesDivNodes = imagesDiv.childNodes as NodeListOf<HTMLImageElement>
-}
-
-export const trailingImageIndexes: number[] = []
+// get layer divs
+export const layers: HTMLDivElement[] = [
+  document.getElementById('layer1') as HTMLDivElement,
+  document.getElementById('layer2') as HTMLDivElement,
+  document.getElementById('layer3') as HTMLDivElement,
+  document.getElementById('layer4') as HTMLDivElement,
+  document.getElementById('layer5') as HTMLDivElement
+]
 
 // layers position caching
-export const layersStyleArray: number[][] = [[], []]
+export const layersStyleArray: string[][] = [
+  ['0px', '0px', '0px', '0px', '0px'],
+  ['0px', '0px', '0px', '0px', '0px']
+]
 
 // global index for "activated"
 export let globalIndex: number = 0
@@ -33,37 +34,13 @@ export let globalIndex: number = 0
 // last position set as "activated"
 let last: position = { x: 0, y: 0 }
 
-let EnterOverlayController = new AbortController()
-
 // activate top image
-const activate = (index: number, mouseX: number, mouseY: number): void => {
-  EnterOverlayController.abort()
-  EnterOverlayController = new AbortController()
-  trailingImageIndexes.push(index)
-  let indexesNum: number = trailingImageIndexes.length
-  // push the tail index out and hide the image
-  if (indexesNum > 10) {
-    imagesDivNodes[trailingImageIndexes.shift() as number].style.display = 'none'
-    indexesNum = 10
-  }
-  // set img position
-  imagesDivNodes[index].style.transform = mouseToTransform(mouseX, mouseY, true, true)
-  // reset z index
-  for (let i = 0; i < indexesNum; i++) {
-    imagesDivNodes[trailingImageIndexes[i]].style.zIndex = `${i}`
-  }
-  imagesDivNodes[index].style.display = 'block'
-  imagesDivNodes[index].addEventListener(
-    'click',
-    () => {
-      void enterOverlay()
-    },
-    {
-      passive: true,
-      signal: EnterOverlayController.signal
-    }
-  )
-  last = { x: mouseX, y: mouseY }
+const activate = (index: number, x: number, y: number): void => {
+  const imgElem: HTMLImageElement = createImgElement(imagesArray[index])
+  styleCache(x, y, layersStyleArray)
+  layersStyleSet(layersStyleArray, layers)
+  FIFO(imgElem, layers)
+  last = { x, y }
 }
 
 // Compare the current mouse position with the last activated position
@@ -89,11 +66,17 @@ export const handleOnMove = (e: MouseEvent): void => {
 }
 
 async function enterOverlay(): Promise<void> {
+  layers[4].style.backgroundImage = ''
+  const topLayerImage = layers[4].lastElementChild as HTMLImageElement
+  topLayerImage.style.transition = ''
   // stop images animation
   window.removeEventListener('mousemove', handleOnMove)
   // set top image
-  alert('center')
-  await delay(2500)
+  center(layers[4])
+  for (let i = 4; i >= 0; i--) {
+    layers[i].dataset.status = `t${4 - i}`
+  }
+  await delay(1600)
   // Offset previous self increment of global index (by handleOnMove)
   globalIndexDec()
   // overlay init
@@ -102,16 +85,22 @@ async function enterOverlay(): Promise<void> {
 
 // initialization
 export const trackMouseInit = (): void => {
-  desktopImagesInit()
-  window.addEventListener('mousemove', handleOnMove, { passive: true })
+  window.addEventListener('mousemove', handleOnMove)
+  layers[4].addEventListener(
+    'click',
+    () => {
+      void enterOverlay()
+    },
+    {
+      passive: true
+    }
+  )
 }
 
 export const globalIndexDec = (): void => {
   globalIndex--
-  preloader(globalIndex)
 }
 
 export const globalIndexInc = (): void => {
   globalIndex++
-  preloader(globalIndex)
 }
