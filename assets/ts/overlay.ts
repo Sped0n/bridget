@@ -1,6 +1,5 @@
 import {
   delay,
-  layersStyleSet,
   center,
   createImgElement,
   calcImageIndex,
@@ -8,12 +7,12 @@ import {
   mouseToTransform
 } from './utils'
 import {
-  layersStyleArray,
   layers,
   handleOnMove,
   globalIndex,
   globalIndexDec,
-  globalIndexInc
+  globalIndexInc,
+  topLayerPosSet
 } from './desktop'
 import { imagesArray, imagesArrayLen } from './dataFetch'
 import { imgIndexSpanUpdate } from './indexDisp'
@@ -33,14 +32,7 @@ const setCursorText = (text: string): void => {
 
 // overlay cursor event handler
 const setTextPos = (e: MouseEvent): void => {
-  // overlayCursor.style.left = `${e.clientX}px`
-  // overlayCursor.style.top = `${e.clientY}px`
-  overlayCursor.style.transform = mouseToTransform(
-    `${e.clientX}px`,
-    `${e.clientY}px`,
-    false,
-    true
-  )
+  overlayCursor.style.transform = mouseToTransform(e.clientX, e.clientY, false, true)
 }
 
 // disable listeners
@@ -67,7 +59,7 @@ export const overlayDisable = (): void => {
 // handle close click
 async function handleCloseClick(): Promise<void> {
   overlayDisable()
-  layersStyleSet(layersStyleArray, layers)
+  topLayerPosSet()
   for (let i: number = 4; i >= 0; i--) {
     layers[i].dataset.status = `r${4 - i}`
   }
@@ -81,14 +73,14 @@ async function handleCloseClick(): Promise<void> {
 const handlePrevClick = (): void => {
   globalIndexDec()
   const imgIndex = calcImageIndex(globalIndex, imagesArrayLen)
-  FIFO(createImgElement(imagesArray[imgIndex]), layers)
+  FIFO(createImgElement(imagesArray[imgIndex]), layers, false)
   imgIndexSpanUpdate(imgIndex + 1, imagesArrayLen)
 }
 
 const handleNextClick = (): void => {
   globalIndexInc()
   const imgIndex = calcImageIndex(globalIndex, imagesArrayLen)
-  FIFO(createImgElement(imagesArray[imgIndex]), layers)
+  FIFO(createImgElement(imagesArray[imgIndex]), layers, false)
   imgIndexSpanUpdate(imgIndex + 1, imagesArrayLen)
 }
 

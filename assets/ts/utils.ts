@@ -18,16 +18,6 @@ export interface deviceType {
   desktop: boolean
 }
 
-// cache a xy position to array
-export const styleCache = (x: number, y: number, styleArray: string[][]): void => {
-  // pop element if length surpass limitation
-  styleArray[0].shift()
-  styleArray[1].shift()
-  // push new element
-  styleArray[0].push(`${x}px`)
-  styleArray[1].push(`${y}px`)
-}
-
 // 0 to 0001, 25 to 0025
 export const duper = (num: number): string => {
   return ('0000' + num.toString()).slice(-4)
@@ -37,7 +27,7 @@ export const duper = (num: number): string => {
 export const FIFO = (
   element: HTMLImageElement,
   layersArray: HTMLDivElement[],
-  fifoPosition: boolean = true
+  passPosition: boolean = true
 ): void => {
   function layerProcess(layerL: HTMLDivElement, layerH: HTMLDivElement): void {
     if (layerL.childElementCount !== 0)
@@ -45,7 +35,7 @@ export const FIFO = (
     if (layerH.childElementCount !== 0) {
       const layerHNode = layerH.lastElementChild as HTMLImageElement
       layerL.appendChild(layerHNode.cloneNode(true))
-      if (fifoPosition) layerL.style.transform = layerH.style.transform
+      if (passPosition) layerL.style.transform = layerH.style.transform
     }
   }
   for (let i: number = 0; i <= 3; i++) {
@@ -57,27 +47,19 @@ export const FIFO = (
 }
 
 export const mouseToTransform = (
-  x: string,
-  y: string,
+  x: number,
+  y: number,
   centerCorrection: boolean = true,
   accelerate: boolean = false
 ): string => {
   return `translate${accelerate ? '3d' : ''}(${
-    centerCorrection ? `calc(${x} - 50%)` : `${x}`
-  }, ${centerCorrection ? `calc(${y} - 50%)` : `${y}`}${accelerate ? ', 0' : ''})`
+    centerCorrection ? `calc(${x}px - 50%)` : `${x}px`
+  }, ${centerCorrection ? `calc(${y}px - 50%)` : `${y}px`}${accelerate ? ', 0' : ''})`
 }
 
-// set position for 5 image display layers
-export const layersStyleSet = (
-  styleArray: string[][],
-  layersArray: HTMLDivElement[]
-): void => {
-  function posSet(layer: HTMLDivElement, index: number): void {
-    layer.style.transform = mouseToTransform(styleArray[0][index], styleArray[1][index])
-  }
-  for (let i = 4; i >= 0; i--) {
-    posSet(layersArray[i], i)
-  }
+// set position for layer
+export const layerPosSet = (x: number, y: number, layer: HTMLDivElement): void => {
+  layer.style.transform = mouseToTransform(x, y)
 }
 
 // eslint-disable-next-line @typescript-eslint/promise-function-async
@@ -99,7 +81,7 @@ export const center = (e: HTMLDivElement): void => {
   } else {
     y = (window.innerHeight - 31) / 2 + 31
   }
-  e.style.transform = mouseToTransform(`${x}px`, `${y}px`)
+  e.style.transform = mouseToTransform(x, y)
 }
 
 export const createImgElement = (input: ImageData): HTMLImageElement => {
