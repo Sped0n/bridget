@@ -1,8 +1,7 @@
 import { overlayEnable } from './overlay'
 import {
-  styleCache,
   FIFO,
-  layersStyleSet,
+  layerPosSet,
   center,
   type position,
   createImgElement,
@@ -23,10 +22,11 @@ export const layers: HTMLDivElement[] = [
 ]
 
 // layers position caching
-export const layersStyleArray: string[][] = [
-  ['0px', '0px', '0px', '0px', '0px'],
-  ['0px', '0px', '0px', '0px', '0px']
-]
+let topLayerPos: number[] = [0, 0]
+
+export const topLayerPosSet = (): void => {
+  layerPosSet(topLayerPos[0], topLayerPos[1], layers[4])
+}
 
 // global index for "activated"
 export let globalIndex: number = 0
@@ -37,9 +37,9 @@ let last: position = { x: 0, y: 0 }
 // activate top image
 const activate = (index: number, x: number, y: number): void => {
   const imgElem: HTMLImageElement = createImgElement(imagesArray[index])
-  styleCache(x, y, layersStyleArray)
-  layersStyleSet(layersStyleArray, layers)
-  FIFO(imgElem, layers)
+  topLayerPos = [x, y]
+  FIFO(imgElem, layers, true)
+  topLayerPosSet()
   last = { x, y }
 }
 
@@ -66,9 +66,6 @@ export const handleOnMove = (e: MouseEvent): void => {
 }
 
 async function enterOverlay(): Promise<void> {
-  layers[4].style.backgroundImage = ''
-  const topLayerImage = layers[4].lastElementChild as HTMLImageElement
-  topLayerImage.style.transition = ''
   // stop images animation
   window.removeEventListener('mousemove', handleOnMove)
   // set top image
