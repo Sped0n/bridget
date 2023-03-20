@@ -90,11 +90,7 @@ export const createImgElement = (input: ImageData): HTMLImageElement => {
   img.setAttribute('alt', '')
   img.setAttribute('height', input.imgH)
   img.setAttribute('width', input.imgW)
-  img.style.zIndex = '0'
-  img.style.opacity = '1'
   img.style.backgroundImage = `linear-gradient(15deg, ${input.pColor}, ${input.sColor})`
-  img.style.backgroundSize = `${input.imgW}px ${input.imgH}px`
-  img.dataset.status = 'null'
   return img
 }
 
