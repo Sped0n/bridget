@@ -35,7 +35,6 @@
     {{ end }}
     <script id="images_array" type="application/json">{{ $.Scratch.Get "img" | jsonify | safeJS }}</script>
   {{ end }}
-  {{ partial "desktop_wrapper.html" . }}
 </div>
 <footer>
   {{ partial "footer.html" . }}

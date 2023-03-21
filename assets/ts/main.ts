@@ -1,3 +1,4 @@
+import { createDesktopElements } from './elemGen'
 import { imgIndexSpanUpdate } from './indexDisp'
 import { trackMouseInit } from './desktop'
 import { thresholdCtlInit } from './thresholdCtl'
@@ -7,6 +8,7 @@ import { preloader } from './imageCache'
 import { getDeviceType } from './utils'
 
 const desktopInit = (): void => {
+  createDesktopElements()
   preloader(0)
   vwRefreshInit()
   imgIndexSpanUpdate(0, imagesArrayLen)
