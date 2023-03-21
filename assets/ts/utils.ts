@@ -38,12 +38,12 @@ export const FIFO = (
       if (passPosition) layerL.style.transform = layerH.style.transform
     }
   }
-  for (let i: number = 0; i <= 3; i++) {
-    layerProcess(layersArray[i], layersArray[i + 1])
+  for (let i: number = 4; i >= 1; i--) {
+    layerProcess(layersArray[i], layersArray[i - 1])
   }
-  if (layersArray[4].childElementCount !== 0)
-    layersArray[4].removeChild(layersArray[4].lastElementChild as HTMLImageElement)
-  layersArray[4].appendChild(element)
+  if (layersArray[0].childElementCount !== 0)
+    layersArray[0].removeChild(layersArray[0].lastElementChild as HTMLImageElement)
+  layersArray[0].appendChild(element)
 }
 
 export const mouseToTransform = (

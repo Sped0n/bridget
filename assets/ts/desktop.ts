@@ -18,7 +18,7 @@ let topLayerPos: number[] = [0, 0]
 
 // set top layer position
 export const topLayerPosSet = (): void => {
-  layerPosSet(topLayerPos[0], topLayerPos[1], layers[4])
+  layerPosSet(topLayerPos[0], topLayerPos[1], layers[0])
 }
 
 // global index for "activated"
@@ -62,9 +62,9 @@ async function enterOverlay(): Promise<void> {
   // stop images animation
   window.removeEventListener('mousemove', handleOnMove)
   // set top image
-  center(layers[4])
-  for (let i = 4; i >= 0; i--) {
-    layers[i].dataset.status = `t${4 - i}`
+  center(layers[0])
+  for (let i = 0; i <= 4; i++) {
+    layers[i].dataset.status = `t${i}`
   }
   await delay(1600)
   // Offset previous self increment of global index (by handleOnMove)
@@ -76,7 +76,7 @@ async function enterOverlay(): Promise<void> {
 // initialization
 export const trackMouseInit = (): void => {
   window.addEventListener('mousemove', handleOnMove)
-  layers[4].addEventListener(
+  layers[0].addEventListener(
     'click',
     () => {
       void enterOverlay()
