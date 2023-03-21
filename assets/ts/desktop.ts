@@ -1,25 +1,17 @@
 import { overlayEnable } from './overlay'
 import {
+  calcImageIndex,
+  center,
+  createImgElement,
+  delay,
   FIFO,
   layerPosSet,
-  center,
-  type position,
-  createImgElement,
-  calcImageIndex,
-  delay
+  type position
 } from './utils'
-import { thresholdSensitivityArray, thresholdIndex } from './thresholdCtl'
+import { thresholdIndex, thresholdSensitivityArray } from './thresholdCtl'
 import { imgIndexSpanUpdate } from './indexDisp'
-import { imagesArrayLen, imagesArray } from './dataFetch'
-
-// get layer divs
-export const layers: HTMLDivElement[] = [
-  document.getElementById('layer1') as HTMLDivElement,
-  document.getElementById('layer2') as HTMLDivElement,
-  document.getElementById('layer3') as HTMLDivElement,
-  document.getElementById('layer4') as HTMLDivElement,
-  document.getElementById('layer5') as HTMLDivElement
-]
+import { imagesArray, imagesArrayLen } from './dataFetch'
+import { layers } from './elemGen'
 
 // top layer position caching
 let topLayerPos: number[] = [0, 0]

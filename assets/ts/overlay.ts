@@ -7,7 +7,6 @@ import {
   mouseToTransform
 } from './utils'
 import {
-  layers,
   handleOnMove,
   globalIndex,
   globalIndexDec,
@@ -16,18 +15,11 @@ import {
 } from './desktop'
 import { imagesArray, imagesArrayLen } from './dataFetch'
 import { imgIndexSpanUpdate } from './indexDisp'
-
-// get components of overlay
-const overlayCursor = document
-  .getElementsByClassName('overlay_cursor')
-  .item(0) as HTMLDivElement
-const innerContent = document
-  .getElementsByClassName('cursor_innerText')
-  .item(0) as HTMLDivElement
+import { overlayCursor, cursorInnerContent, layers } from './elemGen'
 
 // set cursor text
 const setCursorText = (text: string): void => {
-  innerContent.innerText = text
+  cursorInnerContent.innerText = text
 }
 
 // overlay cursor event handler
