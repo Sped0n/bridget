@@ -52,11 +52,11 @@ export const overlayDisable = (): void => {
 async function handleCloseClick(): Promise<void> {
   overlayDisable()
   topLayerPosSet()
-  for (let i: number = 4; i >= 0; i--) {
-    layers[i].dataset.status = `r${4 - i}`
+  for (let i: number = 0; i <= 4; i++) {
+    layers[i].dataset.status = `r${i}`
   }
   await delay(1700)
-  for (let i: number = 4; i >= 0; i--) {
+  for (let i: number = 0; i <= 4; i++) {
     layers[i].dataset.status = 'null'
   }
   window.addEventListener('mousemove', handleOnMove, { passive: true })
@@ -122,7 +122,7 @@ export const vwRefreshInit = (): void => {
         r.style.setProperty('--footer-height', '31px')
       }
       // recenter image (only in overlay)
-      if (layers[4].dataset.status === 't0') center(layers[4])
+      if (layers[0].dataset.status === 't0') center(layers[0])
     },
     { passive: true }
   )
