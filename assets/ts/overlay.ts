@@ -1,4 +1,4 @@
-import { delay, center, calcImageIndex, mouseToTransform } from './utils'
+import { delay, center, calcImageIndex, mouseToTransform, pushIndex } from './utils'
 import {
   handleOnMove,
   globalIndex,
@@ -6,7 +6,6 @@ import {
   globalIndexInc,
   trailingImageIndexes,
   transformCache,
-  pushIndex,
   emptyTransformCache,
   emptyTrailingImageIndexes,
   stackDepth
@@ -78,7 +77,15 @@ const handlePrevClick = (): void => {
   const imgIndex: number = calcImageIndex(globalIndex, imagesArrayLen)
   globalIndexDec()
   const prevImgIndex = calcImageIndex(globalIndex, imagesArrayLen)
-  pushIndex(prevImgIndex, true, false)
+  pushIndex(
+    prevImgIndex,
+    trailingImageIndexes,
+    stackDepth,
+    images,
+    imagesArrayLen,
+    true,
+    false
+  )
   images[imgIndex].style.display = 'none'
   center(images[prevImgIndex])
   images[prevImgIndex].dataset.status = 'top'
@@ -90,7 +97,15 @@ const handleNextClick = (): void => {
   const imgIndex: number = calcImageIndex(globalIndex, imagesArrayLen)
   globalIndexInc()
   const nextImgIndex = calcImageIndex(globalIndex, imagesArrayLen)
-  pushIndex(nextImgIndex, false, false)
+  pushIndex(
+    nextImgIndex,
+    trailingImageIndexes,
+    stackDepth,
+    images,
+    imagesArrayLen,
+    false,
+    false
+  )
   images[imgIndex].style.display = 'none'
   center(images[nextImgIndex])
   images[nextImgIndex].dataset.status = 'top'

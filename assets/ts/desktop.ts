@@ -1,5 +1,12 @@
 import { overlayEnable } from './overlay'
-import { calcImageIndex, center, delay, mouseToTransform, type position } from './utils'
+import {
+  calcImageIndex,
+  center,
+  delay,
+  mouseToTransform,
+  pushIndex,
+  type position
+} from './utils'
 import { thresholdIndex, thresholdSensitivityArray } from './thresholdCtl'
 import { imgIndexSpanUpdate } from './indexDisp'
 import { imagesArrayLen } from './dataFetch'
@@ -19,51 +26,17 @@ let EnterOverlayClickAbCtl = new AbortController()
 
 export const stackDepth: number = 5
 
-export const pushIndex = (
-  index: number,
-  invert: boolean = false,
-  autoHide: boolean = true
-): number => {
-  let indexesNum: number = trailingImageIndexes.length
-  let overflow: number
-  if (!invert) {
-    // push the tail index out and hide the image
-    if (indexesNum === stackDepth) {
-      trailingImageIndexes.push(index)
-      overflow = trailingImageIndexes.shift() as number
-      if (autoHide) {
-        images[overflow].style.display = 'none'
-        images[overflow].dataset.status = 'trail'
-      }
-    } else {
-      trailingImageIndexes.push(index)
-      indexesNum += 1
-    }
-  } else {
-    if (indexesNum === stackDepth) {
-      trailingImageIndexes.unshift(
-        calcImageIndex(index - stackDepth + 1, imagesArrayLen)
-      )
-      overflow = trailingImageIndexes.pop() as number
-      if (autoHide) {
-        images[overflow].style.display = 'none'
-        images[overflow].dataset.status = 'trail'
-      }
-    } else {
-      trailingImageIndexes.unshift(
-        calcImageIndex(index - indexesNum + 1, imagesArrayLen)
-      )
-      indexesNum += 1
-    }
-  }
-  return indexesNum
-}
-
 // activate top image
 const activate = (index: number, mouseX: number, mouseY: number): void => {
   EnterOverlayClickAbCtl.abort()
   EnterOverlayClickAbCtl = new AbortController()
-  const indexesNum: number = pushIndex(index)
+  const indexesNum: number = pushIndex(
+    index,
+    trailingImageIndexes,
+    stackDepth,
+    images,
+    imagesArrayLen
+  )
   // set img position
   images[index].style.transform = mouseToTransform(mouseX, mouseY, true, true)
   images[index].dataset.status = 'null'
