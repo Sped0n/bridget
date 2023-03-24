@@ -23,29 +23,6 @@ export const duper = (num: number): string => {
   return ('0000' + num.toString()).slice(-4)
 }
 
-// FIFO data array for image display
-export const FIFO = (
-  element: HTMLImageElement,
-  layersArray: HTMLDivElement[],
-  passPosition: boolean = true
-): void => {
-  function layerProcess(layerL: HTMLDivElement, layerH: HTMLDivElement): void {
-    if (layerL.childElementCount !== 0)
-      layerL.removeChild(layerL.lastElementChild as HTMLImageElement)
-    if (layerH.childElementCount !== 0) {
-      const layerHNode = layerH.lastElementChild as HTMLImageElement
-      layerL.appendChild(layerHNode.cloneNode(true))
-      if (passPosition) layerL.style.transform = layerH.style.transform
-    }
-  }
-  for (let i: number = 4; i >= 1; i--) {
-    layerProcess(layersArray[i], layersArray[i - 1])
-  }
-  if (layersArray[0].childElementCount !== 0)
-    layersArray[0].removeChild(layersArray[0].lastElementChild as HTMLImageElement)
-  layersArray[0].appendChild(element)
-}
-
 export const mouseToTransform = (
   x: number,
   y: number,
@@ -55,11 +32,6 @@ export const mouseToTransform = (
   return `translate${accelerate ? '3d' : ''}(${
     centerCorrection ? `calc(${x}px - 50%)` : `${x}px`
   }, ${centerCorrection ? `calc(${y}px - 50%)` : `${y}px`}${accelerate ? ', 0' : ''})`
-}
-
-// set position for layer
-export const layerPosSet = (x: number, y: number, layer: HTMLDivElement): void => {
-  layer.style.transform = mouseToTransform(x, y)
 }
 
 // eslint-disable-next-line @typescript-eslint/promise-function-async
@@ -73,7 +45,7 @@ export const removeAllEventListeners = (e: Node): Node => {
 }
 
 // center top div
-export const center = (e: HTMLDivElement): void => {
+export const center = (e: HTMLElement): void => {
   const x: number = window.innerWidth / 2
   let y: number
   if (window.innerWidth > 768) {
@@ -90,7 +62,9 @@ export const createImgElement = (input: ImageData): HTMLImageElement => {
   img.setAttribute('alt', '')
   img.setAttribute('height', input.imgH)
   img.setAttribute('width', input.imgW)
-  img.style.backgroundImage = `linear-gradient(15deg, ${input.pColor}, ${input.sColor})`
+  img.style.display = 'none'
+  img.dataset.status = 'trail'
+  // img.style.backgroundImage = `linear-gradient(15deg, ${input.pColor}, ${input.sColor})`
   return img
 }
 
