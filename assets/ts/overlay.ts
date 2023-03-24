@@ -8,7 +8,8 @@ import {
   transformCache,
   pushIndex,
   emptyTransformCache,
-  emptyTrailingImageIndexes
+  emptyTrailingImageIndexes,
+  stackDepth
 } from './desktop'
 import { imagesArrayLen } from './dataFetch'
 import { imgIndexSpanUpdate } from './indexDisp'
@@ -63,7 +64,7 @@ async function handleCloseClick(): Promise<void> {
     e.style.zIndex = `${indexesNum - i - 1}`
     e.dataset.status = i === 0 ? 'resumeTop' : 'resume'
   }
-  await delay(1700)
+  await delay(1200 + stackDepth * 100 + 100)
   for (let i: number = 0; i < indexesNum; i++) {
     images[calcImageIndex(globalIndex - i, imagesArrayLen)].dataset.status = 'null'
   }

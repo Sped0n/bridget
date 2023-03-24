@@ -124,7 +124,7 @@ async function enterOverlay(): Promise<void> {
       e.style.transitionDelay = `${0.1 * i}s`
     }
   }
-  await delay(1600)
+  await delay(stackDepth * 100 + 100 + 1000)
   // Offset previous self increment of global index (by handleOnMove)
   globalIndexDec()
   // overlay init
