@@ -96,3 +96,43 @@ export const getDeviceType = (): deviceType => {
   } else result.desktop = true
   return result
 }
+
+export const pushIndex = (
+  index: number,
+  indexesArray: number[],
+  stackDepth: number,
+  imagesArray: NodeListOf<HTMLImageElement>,
+  imagesArrayLen: number,
+  invert: boolean = false,
+  autoHide: boolean = true
+): number => {
+  let indexesNum: number = indexesArray.length
+  let overflow: number
+  if (!invert) {
+    // push the tail index out and hide the image
+    if (indexesNum === stackDepth) {
+      indexesArray.push(index)
+      overflow = indexesArray.shift() as number
+      if (autoHide) {
+        imagesArray[overflow].style.display = 'none'
+        imagesArray[overflow].dataset.status = 'trail'
+      }
+    } else {
+      indexesArray.push(index)
+      indexesNum += 1
+    }
+  } else {
+    if (indexesNum === stackDepth) {
+      indexesArray.unshift(calcImageIndex(index - stackDepth + 1, imagesArrayLen))
+      overflow = indexesArray.pop() as number
+      if (autoHide) {
+        imagesArray[overflow].style.display = 'none'
+        imagesArray[overflow].dataset.status = 'trail'
+      }
+    } else {
+      indexesArray.unshift(calcImageIndex(index - indexesNum + 1, imagesArrayLen))
+      indexesNum += 1
+    }
+  }
+  return indexesNum
+}
