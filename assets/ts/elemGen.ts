@@ -1,7 +1,10 @@
+import { imagesArray, imagesArrayLen } from './dataFetch'
+import { createImgElement } from './utils'
+
 // get components of overlay
 export let overlayCursor: HTMLDivElement
 export let cursorInnerContent: HTMLDivElement
-export let layers: HTMLDivElement[]
+export let imagesDivNodes: NodeListOf<HTMLImageElement>
 
 const passDesktopElements = (): void => {
   overlayCursor = document
@@ -10,21 +13,8 @@ const passDesktopElements = (): void => {
   cursorInnerContent = document
     .getElementsByClassName('cursor_innerText')
     .item(0) as HTMLDivElement
-  layers = [
-    document.getElementById('layer1') as HTMLDivElement,
-    document.getElementById('layer2') as HTMLDivElement,
-    document.getElementById('layer3') as HTMLDivElement,
-    document.getElementById('layer4') as HTMLDivElement,
-    document.getElementById('layer5') as HTMLDivElement
-  ]
-}
-
-const createLayerDiv = (layerID: number): HTMLDivElement => {
-  const layerDiv: HTMLDivElement = document.createElement('div')
-  layerDiv.className = 'image_container'
-  layerDiv.id = `layer${layerID}`
-  layerDiv.dataset.status = 'null'
-  return layerDiv
+  imagesDivNodes = document.getElementsByClassName('images')[0]
+    .childNodes as NodeListOf<HTMLImageElement>
 }
 
 const createCursorDiv = (): HTMLDivElement => {
@@ -39,11 +29,11 @@ const createCursorDiv = (): HTMLDivElement => {
 export const createDesktopElements = (): void => {
   const mainDiv = document.getElementById('main') as HTMLDivElement
   mainDiv.appendChild(createCursorDiv())
-  const desktopWrapper: HTMLDivElement = document.createElement('div')
-  desktopWrapper.className = 'desktopWrapper'
-  for (let i = 0; i < 15; i++) {
-    desktopWrapper.appendChild(createLayerDiv(i))
+  const imagesDiv: HTMLDivElement = document.createElement('div')
+  imagesDiv.className = 'images'
+  for (let i = 0; i < imagesArrayLen; i++) {
+    imagesDiv.appendChild(createImgElement(imagesArray[i]))
   }
-  mainDiv.appendChild(desktopWrapper)
+  mainDiv.appendChild(imagesDiv)
   passDesktopElements()
 }

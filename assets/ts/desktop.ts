@@ -1,25 +1,9 @@
 import { overlayEnable } from './overlay'
-import {
-  calcImageIndex,
-  center,
-  createImgElement,
-  delay,
-  FIFO,
-  layerPosSet,
-  type position
-} from './utils'
+import { calcImageIndex, center, delay, mouseToTransform, type position } from './utils'
 import { thresholdIndex, thresholdSensitivityArray } from './thresholdCtl'
 import { imgIndexSpanUpdate } from './indexDisp'
-import { imagesArray, imagesArrayLen } from './dataFetch'
-import { layers } from './elemGen'
-
-// top layer position caching
-let topLayerPos: number[] = [0, 0]
-
-// set top layer position
-export const topLayerPosSet = (): void => {
-  layerPosSet(topLayerPos[0], topLayerPos[1], layers[0])
-}
+import { imagesArrayLen } from './dataFetch'
+import { imagesDivNodes as images } from './elemGen'
 
 // global index for "activated"
 export let globalIndex: number = 0
@@ -27,13 +11,79 @@ export let globalIndex: number = 0
 // last position set as "activated"
 let last: position = { x: 0, y: 0 }
 
+export let trailingImageIndexes: number[] = []
+
+export let transformCache: string[] = []
+
+let EnterOverlayClickAbCtl = new AbortController()
+
+export const stackDepth: number = 5
+
+export const pushIndex = (
+  index: number,
+  invert: boolean = false,
+  autoHide: boolean = true
+): number => {
+  let indexesNum: number = trailingImageIndexes.length
+  let overflow: number
+  if (!invert) {
+    // push the tail index out and hide the image
+    if (indexesNum === stackDepth) {
+      trailingImageIndexes.push(index)
+      overflow = trailingImageIndexes.shift() as number
+      if (autoHide) {
+        images[overflow].style.display = 'none'
+        images[overflow].dataset.status = 'trail'
+      }
+    } else {
+      trailingImageIndexes.push(index)
+      indexesNum += 1
+    }
+  } else {
+    if (indexesNum === stackDepth) {
+      trailingImageIndexes.unshift(
+        calcImageIndex(index - stackDepth + 1, imagesArrayLen)
+      )
+      overflow = trailingImageIndexes.pop() as number
+      if (autoHide) {
+        images[overflow].style.display = 'none'
+        images[overflow].dataset.status = 'trail'
+      }
+    } else {
+      trailingImageIndexes.unshift(
+        calcImageIndex(index - indexesNum + 1, imagesArrayLen)
+      )
+      indexesNum += 1
+    }
+  }
+  return indexesNum
+}
+
 // activate top image
-const activate = (index: number, x: number, y: number): void => {
-  const imgElem: HTMLImageElement = createImgElement(imagesArray[index])
-  topLayerPos = [x, y]
-  FIFO(imgElem, layers, true)
-  topLayerPosSet()
-  last = { x, y }
+const activate = (index: number, mouseX: number, mouseY: number): void => {
+  EnterOverlayClickAbCtl.abort()
+  EnterOverlayClickAbCtl = new AbortController()
+  const indexesNum: number = pushIndex(index)
+  // set img position
+  images[index].style.transform = mouseToTransform(mouseX, mouseY, true, true)
+  images[index].dataset.status = 'null'
+  // reset z index
+  for (let i = 0; i < indexesNum; i++) {
+    images[trailingImageIndexes[i]].style.zIndex = `${i}`
+  }
+  images[index].style.display = 'block'
+  images[index].addEventListener(
+    'click',
+    () => {
+      void enterOverlay()
+    },
+    {
+      passive: true,
+      once: true,
+      signal: EnterOverlayClickAbCtl.signal
+    }
+  )
+  last = { x: mouseX, y: mouseY }
 }
 
 // Compare the current mouse position with the last activated position
@@ -61,10 +111,18 @@ export const handleOnMove = (e: MouseEvent): void => {
 async function enterOverlay(): Promise<void> {
   // stop images animation
   window.removeEventListener('mousemove', handleOnMove)
-  // set top image
-  center(layers[0])
-  for (let i = 0; i <= 4; i++) {
-    layers[i].dataset.status = `t${i}`
+  const indexesNum: number = trailingImageIndexes.length
+  for (let i = 0; i < indexesNum; i++) {
+    const e: HTMLImageElement = images[trailingImageIndexes[i]]
+    transformCache.push(e.style.transform)
+    if (i === indexesNum - 1) {
+      e.style.transitionDelay = `${0.1 * i + 0.2}s, ${0.1 * i + 0.2 + 0.5}s`
+      e.dataset.status = 'top'
+      center(e)
+    } else {
+      e.dataset.status = 'trail'
+      e.style.transitionDelay = `${0.1 * i}s`
+    }
   }
   await delay(1600)
   // Offset previous self increment of global index (by handleOnMove)
@@ -76,15 +134,6 @@ async function enterOverlay(): Promise<void> {
 // initialization
 export const trackMouseInit = (): void => {
   window.addEventListener('mousemove', handleOnMove)
-  layers[0].addEventListener(
-    'click',
-    () => {
-      void enterOverlay()
-    },
-    {
-      passive: true
-    }
-  )
 }
 
 export const globalIndexDec = (): void => {
@@ -93,4 +142,12 @@ export const globalIndexDec = (): void => {
 
 export const globalIndexInc = (): void => {
   globalIndex++
+}
+
+export const emptyTransformCache = (): void => {
+  transformCache = []
+}
+
+export const emptyTrailingImageIndexes = (): void => {
+  trailingImageIndexes = []
 }
