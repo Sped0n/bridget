@@ -26,10 +26,25 @@ let EnterOverlayClickAbCtl = new AbortController()
 
 export const stackDepth: number = 5
 
-// activate top image
-const activate = (index: number, mouseX: number, mouseY: number): void => {
+export const addEnterOverlayEL = (e: HTMLImageElement): void => {
   EnterOverlayClickAbCtl.abort()
   EnterOverlayClickAbCtl = new AbortController()
+  e.addEventListener(
+    'click',
+    () => {
+      void enterOverlay()
+    },
+    {
+      passive: true,
+      once: true,
+      signal: EnterOverlayClickAbCtl.signal
+    }
+  )
+}
+
+// activate top image
+const activate = (index: number, mouseX: number, mouseY: number): void => {
+  addEnterOverlayEL(images[index])
   const indexesNum: number = pushIndex(
     index,
     trailingImageIndexes,
@@ -45,17 +60,6 @@ const activate = (index: number, mouseX: number, mouseY: number): void => {
     images[trailingImageIndexes[i]].style.zIndex = `${i}`
   }
   images[index].style.display = 'block'
-  images[index].addEventListener(
-    'click',
-    () => {
-      void enterOverlay()
-    },
-    {
-      passive: true,
-      once: true,
-      signal: EnterOverlayClickAbCtl.signal
-    }
-  )
   last = { x: mouseX, y: mouseY }
 }
 

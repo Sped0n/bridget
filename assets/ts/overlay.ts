@@ -8,7 +8,8 @@ import {
   transformCache,
   emptyTransformCache,
   emptyTrailingImageIndexes,
-  stackDepth
+  stackDepth,
+  addEnterOverlayEL
 } from './desktop'
 import { imagesArrayLen } from './dataFetch'
 import { imgIndexSpanUpdate } from './indexDisp'
@@ -55,15 +56,17 @@ async function handleCloseClick(): Promise<void> {
     trailingImageIndexes.unshift(calcImageIndex(globalIndex - i, imagesArrayLen))
     if (i === 0) {
       e.style.transitionDelay = '0s, 0.7s'
+      e.dataset.status = 'resumeTop'
     } else {
       e.style.transitionDelay = `${1.2 + 0.1 * i - 0.1}s`
       e.style.display = 'block'
+      e.dataset.status = 'resume'
     }
     e.style.transform = transformCache[indexesNum - i - 1]
     e.style.zIndex = `${indexesNum - i - 1}`
-    e.dataset.status = i === 0 ? 'resumeTop' : 'resume'
   }
   await delay(1200 + stackDepth * 100 + 100)
+  addEnterOverlayEL(images[calcImageIndex(globalIndex, imagesArrayLen)])
   for (let i: number = 0; i < indexesNum; i++) {
     images[calcImageIndex(globalIndex - i, imagesArrayLen)].dataset.status = 'null'
   }
