@@ -62,7 +62,7 @@ export const createImgElement = (input: ImageData): HTMLImageElement => {
   img.setAttribute('alt', '')
   img.setAttribute('height', input.imgH)
   img.setAttribute('width', input.imgW)
-  img.style.display = 'none'
+  img.style.visibility = 'hidden'
   img.dataset.status = 'trail'
   // img.style.backgroundImage = `linear-gradient(15deg, ${input.pColor}, ${input.sColor})`
   return img
@@ -107,14 +107,18 @@ export const pushIndex = (
   autoHide: boolean = true
 ): number => {
   let indexesNum: number = indexesArray.length
+  // create variable overflow to store the tail index
   let overflow: number
   if (!invert) {
     // push the tail index out and hide the image
     if (indexesNum === stackDepth) {
+      // insert
       indexesArray.push(index)
+      // pop out
       overflow = indexesArray.shift() as number
+      // auto hide tail image
       if (autoHide) {
-        imagesArray[overflow].style.display = 'none'
+        imagesArray[overflow].style.visibility = 'hidden'
         imagesArray[overflow].dataset.status = 'trail'
       }
     } else {
@@ -123,10 +127,13 @@ export const pushIndex = (
     }
   } else {
     if (indexesNum === stackDepth) {
+      // insert
       indexesArray.unshift(calcImageIndex(index - stackDepth + 1, imagesArrayLen))
+      // pop out
       overflow = indexesArray.pop() as number
+      // auto hide tail image
       if (autoHide) {
-        imagesArray[overflow].style.display = 'none'
+        imagesArray[overflow].style.visibility = 'hidden'
         imagesArray[overflow].dataset.status = 'trail'
       }
     } else {

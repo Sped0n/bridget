@@ -43,5 +43,10 @@
       transition-timing-function: ease-out;
       transition-duration: 0.2s;
     }
+    
+    &[data-status='overlay'] {
+      opacity: 1;
+      max-height: calc(100vh - var(--footer-height));
+    }
   }
 }
