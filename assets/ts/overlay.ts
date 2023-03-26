@@ -55,38 +55,51 @@ export const overlayDisable = (): void => {
 async function handleCloseClick(): Promise<void> {
   // disable overlay
   overlayDisable()
+  // get length of indexes and empty indexes array
   const indexesNum = trailingImageIndexes.length
-  // empty trail images indexes
   emptyTrailingImageIndexes()
+  // prepare animation
   for (let i: number = 0; i < indexesNum; i++) {
     // get element from index and store the index
     const index: number = calcImageIndex(globalIndex - i, imagesArrayLen)
     const e: HTMLImageElement = images[index]
     trailingImageIndexes.unshift(index)
-    e.style.display = 'block'
+    // set z index for the image element
     e.style.zIndex = `${indexesNum - i - 1}`
     // set different style for trailing and top image
     if (i === 0) {
+      // set position
+      e.style.transform = transformCache[indexesNum - i - 1]
+      // set transition delay
       e.style.transitionDelay = '0s, 0.7s'
+      // set status for css
       e.dataset.status = 'resumeTop'
-      e.style.transform = transformCache[indexesNum - i - 1]
     } else {
+      // set position
       e.style.transform = transformCache[indexesNum - i - 1]
-      // e.style.transitionDelay = `${1.2 + 0.1 * i - 0.1}s`
-      e.style.transitionDelay = '1.5s'
+      // set transition delay
+      e.style.transitionDelay = `${1.2 + 0.1 * i - 0.1}s`
+      // set status for css
       e.dataset.status = 'resume'
     }
+    // style process complete, show the image
+    e.style.visibility = 'visible'
   }
   // halt the function while animation is running
   await delay(1200 + stackDepth * 100 + 100)
   // add back enter overlay event listener to top image
   addEnterOverlayEL(images[calcImageIndex(globalIndex, imagesArrayLen)])
+  // clear unused status and transition delay
   for (let i: number = 0; i < indexesNum; i++) {
-    images[calcImageIndex(globalIndex - i, imagesArrayLen)].dataset.status = 'null'
+    const index: number = calcImageIndex(globalIndex - i, imagesArrayLen)
+    images[index].dataset.status = 'null'
+    images[index].style.transitionDelay = ''
   }
   // Add back previous self increment of global index (by handleOnMove)
   globalIndexInc()
+  // add back mousemove event listener
   window.addEventListener('mousemove', handleOnMove, { passive: true })
+  // empty the position array cache
   emptyTransformCache()
 }
 
@@ -107,12 +120,13 @@ const handlePrevClick = (): void => {
     false
   )
   // hide last displayed image
-  images[imgIndex].style.display = 'none'
+  images[imgIndex].style.visibility = 'hidden'
   images[imgIndex].dataset.status = 'trail'
+  // process the image going to display
   center(images[prevImgIndex])
-  images[prevImgIndex].dataset.status = 'top'
+  images[prevImgIndex].dataset.status = 'overlay'
   // process complete, show the image
-  images[prevImgIndex].style.display = 'block'
+  images[prevImgIndex].style.visibility = 'visible'
   // change index display
   imgIndexSpanUpdate(prevImgIndex + 1, imagesArrayLen)
 }
@@ -134,13 +148,13 @@ const handleNextClick = (): void => {
     false
   )
   // hide last displayed image
-  images[imgIndex].style.display = 'none'
+  images[imgIndex].style.visibility = 'hidden'
   images[imgIndex].dataset.status = 'trail'
   // process the image going to display
   center(images[nextImgIndex])
-  images[nextImgIndex].dataset.status = 'top'
+  images[nextImgIndex].dataset.status = 'overlay'
   // process complete, show the image
-  images[nextImgIndex].style.display = 'block'
+  images[nextImgIndex].style.visibility = 'visible'
   // change index display
   imgIndexSpanUpdate(nextImgIndex + 1, imagesArrayLen)
 }
@@ -198,7 +212,9 @@ export const vwRefreshInit = (): void => {
         r.style.setProperty('--footer-height', '31px')
       }
       // recenter image (only in overlay)
-      if (images[calcImageIndex(globalIndex, imagesArrayLen)].dataset.status === 'top')
+      if (
+        images[calcImageIndex(globalIndex, imagesArrayLen)].dataset.status === 'overlay'
+      )
         center(images[calcImageIndex(globalIndex, imagesArrayLen)])
     },
     { passive: true }

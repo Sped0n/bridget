@@ -14,16 +14,14 @@ import { imagesDivNodes as images } from './elemGen'
 
 // global index for "activated"
 export let globalIndex: number = 0
-
 // last position set as "activated"
 let last: position = { x: 0, y: 0 }
-
 export let trailingImageIndexes: number[] = []
-
+// only used in overlay disable, for storing positions temporarily
 export let transformCache: string[] = []
-
+// abort controller for enter overlay event listener
 let EnterOverlayClickAbCtl = new AbortController()
-
+// stack depth of images array
 export const stackDepth: number = 5
 
 export const addEnterOverlayEL = (e: HTMLImageElement): void => {
@@ -56,10 +54,10 @@ const activate = (index: number, mouseX: number, mouseY: number): void => {
   images[index].style.transform = mouseToTransform(mouseX, mouseY, true, true)
   images[index].dataset.status = 'null'
   // reset z index
-  for (let i = 0; i < indexesNum; i++) {
-    images[trailingImageIndexes[i]].style.zIndex = `${i}`
+  for (let i = indexesNum; i > 0; i--) {
+    images[trailingImageIndexes[i - 1]].style.zIndex = `${i}`
   }
-  images[index].style.display = 'block'
+  images[index].style.visibility = 'visible'
   last = { x: mouseX, y: mouseY }
 }
 
@@ -97,11 +95,19 @@ async function enterOverlay(): Promise<void> {
       e.dataset.status = 'top'
       center(e)
     } else {
-      e.dataset.status = 'trail'
       e.style.transitionDelay = `${0.1 * i}s`
+      e.dataset.status = 'trail'
     }
   }
   await delay(stackDepth * 100 + 100 + 1000)
+  for (let i = 0; i < indexesNum; i++) {
+    images[trailingImageIndexes[i]].style.transitionDelay = ''
+    if (i === indexesNum - 1) {
+      images[trailingImageIndexes[i]].dataset.status = 'overlay'
+    } else {
+      images[trailingImageIndexes[i]].style.visibility = 'hidden'
+    }
+  }
   // Offset previous self increment of global index (by handleOnMove)
   globalIndexDec()
   // overlay init
