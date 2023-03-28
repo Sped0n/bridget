@@ -5,7 +5,8 @@ import {
   delay,
   mouseToTransform,
   pushIndex,
-  type position
+  type position,
+  hideImage
 } from './utils'
 import { thresholdIndex, thresholdSensitivityArray } from './thresholdCtl'
 import { imgIndexSpanUpdate } from './indexDisp'
@@ -22,7 +23,8 @@ export let transformCache: string[] = []
 // abort controller for enter overlay event listener
 let EnterOverlayClickAbCtl = new AbortController()
 // stack depth of images array
-export const stackDepth: number = 5
+export let stackDepth: number = 5
+export let lastStackDepth: number = 5
 
 export const addEnterOverlayEL = (e: HTMLImageElement): void => {
   EnterOverlayClickAbCtl.abort()
@@ -43,6 +45,11 @@ export const addEnterOverlayEL = (e: HTMLImageElement): void => {
 // activate top image
 const activate = (index: number, mouseX: number, mouseY: number): void => {
   addEnterOverlayEL(images[index])
+  if (stackDepth !== lastStackDepth) {
+    trailingImageIndexes.push(index)
+    refreshStack()
+    lastStackDepth = stackDepth
+  }
   const indexesNum: number = pushIndex(
     index,
     trailingImageIndexes,
@@ -139,4 +146,20 @@ export const emptyTransformCache = (): void => {
 
 export const emptyTrailingImageIndexes = (): void => {
   trailingImageIndexes = []
+}
+
+export const setStackDepth = (newStackDepth: number): void => {
+  if (stackDepth !== newStackDepth) {
+    lastStackDepth = stackDepth
+    stackDepth = newStackDepth
+  }
+}
+
+export const refreshStack = (): void => {
+  const l: number = trailingImageIndexes.length
+  if (stackDepth < lastStackDepth && l > stackDepth) {
+    const times: number = l - stackDepth
+    for (let i = 0; i < times; i++)
+      hideImage(images[trailingImageIndexes.shift() as number])
+  }
 }
