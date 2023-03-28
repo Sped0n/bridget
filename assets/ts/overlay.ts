@@ -103,60 +103,42 @@ async function handleCloseClick(): Promise<void> {
   emptyTransformCache()
 }
 
-const handlePrevClick = (): void => {
+const handleSideClick = (CLD: boolean): void => {
   // get last displayed image's index
   const imgIndex: number = calcImageIndex(globalIndex, imagesArrayLen)
   // change global index and get current displayed image's index
-  globalIndexDec()
-  const prevImgIndex: number = calcImageIndex(globalIndex, imagesArrayLen)
+  CLD ? globalIndexInc() : globalIndexDec()
+  const currImgIndex: number = calcImageIndex(globalIndex, imagesArrayLen)
   // store current displayed image's index
-  pushIndex(
-    prevImgIndex,
-    trailingImageIndexes,
-    stackDepth,
-    images,
-    imagesArrayLen,
-    true,
-    false
-  )
+  CLD
+    ? pushIndex(
+        currImgIndex,
+        trailingImageIndexes,
+        stackDepth,
+        images,
+        imagesArrayLen,
+        false,
+        false
+      )
+    : pushIndex(
+        currImgIndex,
+        trailingImageIndexes,
+        stackDepth,
+        images,
+        imagesArrayLen,
+        true,
+        false
+      )
   // hide last displayed image
   images[imgIndex].style.visibility = 'hidden'
   images[imgIndex].dataset.status = 'trail'
   // process the image going to display
-  center(images[prevImgIndex])
-  images[prevImgIndex].dataset.status = 'overlay'
+  center(images[currImgIndex])
+  images[currImgIndex].dataset.status = 'overlay'
   // process complete, show the image
-  images[prevImgIndex].style.visibility = 'visible'
+  images[currImgIndex].style.visibility = 'visible'
   // change index display
-  imgIndexSpanUpdate(prevImgIndex + 1, imagesArrayLen)
-}
-
-const handleNextClick = (): void => {
-  // get last displayed image's index
-  const imgIndex: number = calcImageIndex(globalIndex, imagesArrayLen)
-  // change global index and get current displayed image's index
-  globalIndexInc()
-  const nextImgIndex: number = calcImageIndex(globalIndex, imagesArrayLen)
-  // store current displayed image's index
-  pushIndex(
-    nextImgIndex,
-    trailingImageIndexes,
-    stackDepth,
-    images,
-    imagesArrayLen,
-    false,
-    false
-  )
-  // hide last displayed image
-  images[imgIndex].style.visibility = 'hidden'
-  images[imgIndex].dataset.status = 'trail'
-  // process the image going to display
-  center(images[nextImgIndex])
-  images[nextImgIndex].dataset.status = 'overlay'
-  // process complete, show the image
-  images[nextImgIndex].style.visibility = 'visible'
-  // change index display
-  imgIndexSpanUpdate(nextImgIndex + 1, imagesArrayLen)
+  imgIndexSpanUpdate(currImgIndex + 1, imagesArrayLen)
 }
 
 // change text and position of overlay cursor
@@ -179,13 +161,13 @@ const handleOverlayMouseMove = (e: MouseEvent): void => {
 const handleOverlayClick = (): void => {
   switch (overlayCursor.dataset.status) {
     case 'PREV':
-      handlePrevClick()
+      handleSideClick(false)
       break
     case 'CLOSE':
       void handleCloseClick()
       break
     case 'NEXT':
-      handleNextClick()
+      handleSideClick(true)
       break
   }
 }
