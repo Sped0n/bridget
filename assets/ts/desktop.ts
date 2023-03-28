@@ -86,10 +86,14 @@ export const handleOnMove = (e: MouseEvent): void => {
 async function enterOverlay(): Promise<void> {
   // stop images animation
   window.removeEventListener('mousemove', handleOnMove)
+  // get index array length
   const indexesNum: number = trailingImageIndexes.length
   for (let i = 0; i < indexesNum; i++) {
+    // create image element
     const e: HTMLImageElement = images[trailingImageIndexes[i]]
+    // cache images' position
     transformCache.push(e.style.transform)
+    // set style for the images
     if (i === indexesNum - 1) {
       e.style.transitionDelay = `${0.1 * i + 0.2}s, ${0.1 * i + 0.2 + 0.5}s`
       e.dataset.status = 'top'
@@ -99,7 +103,9 @@ async function enterOverlay(): Promise<void> {
       e.dataset.status = 'trail'
     }
   }
+  // sleep
   await delay(stackDepth * 100 + 100 + 1000)
+  // post process
   for (let i = 0; i < indexesNum; i++) {
     images[trailingImageIndexes[i]].style.transitionDelay = ''
     if (i === indexesNum - 1) {
