@@ -97,7 +97,7 @@ export const getDeviceType = (): deviceType => {
   return result
 }
 
-const autoHide = (e: HTMLImageElement): void => {
+export const hideImage = (e: HTMLImageElement): void => {
   e.style.visibility = 'hidden'
   e.dataset.status = 'trail'
 }
@@ -122,7 +122,7 @@ export const pushIndex = (
       // pop out
       overflow = indexesArray.shift() as number
       // auto hide tail image
-      if (autoHideFlag) autoHide(imagesArray[overflow])
+      if (autoHideFlag) hideImage(imagesArray[overflow])
     } else {
       indexesArray.push(index)
       indexesNum += 1
@@ -135,7 +135,7 @@ export const pushIndex = (
       // pop out
       overflow = indexesArray.pop() as number
       // auto hide tail image
-      if (autoHideFlag) autoHide(imagesArray[overflow])
+      if (autoHideFlag) hideImage(imagesArray[overflow])
     } else {
       indexesArray.unshift(calcImageIndex(index - indexesNum + 1, imagesArrayLen))
       indexesNum += 1
