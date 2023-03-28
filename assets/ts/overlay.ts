@@ -36,7 +36,7 @@ const disableListener = (): void => {
 // enable overlay
 export const overlayEnable = (): void => {
   // show the overlay components
-  overlayCursor.style.zIndex = '100'
+  overlayCursor.style.zIndex = '21'
   // set overlay event listeners
   setListener()
 }
