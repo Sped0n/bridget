@@ -97,45 +97,45 @@ export const getDeviceType = (): deviceType => {
   return result
 }
 
+const autoHide = (e: HTMLImageElement): void => {
+  e.style.visibility = 'hidden'
+  e.dataset.status = 'trail'
+}
+
 export const pushIndex = (
   index: number,
   indexesArray: number[],
   stackDepth: number,
   imagesArray: NodeListOf<HTMLImageElement>,
   imagesArrayLen: number,
-  invert: boolean = false,
-  autoHide: boolean = true
+  invertFlag: boolean = false,
+  autoHideFlag: boolean = true
 ): number => {
   let indexesNum: number = indexesArray.length
   // create variable overflow to store the tail index
   let overflow: number
-  if (!invert) {
-    // push the tail index out and hide the image
+  if (!invertFlag) {
+    // if stack is full, push the tail index out and hide the image
     if (indexesNum === stackDepth) {
       // insert
       indexesArray.push(index)
       // pop out
       overflow = indexesArray.shift() as number
       // auto hide tail image
-      if (autoHide) {
-        imagesArray[overflow].style.visibility = 'hidden'
-        imagesArray[overflow].dataset.status = 'trail'
-      }
+      if (autoHideFlag) autoHide(imagesArray[overflow])
     } else {
       indexesArray.push(index)
       indexesNum += 1
     }
   } else {
+    // if stack is full, push the tail index out and hide the image
     if (indexesNum === stackDepth) {
       // insert
       indexesArray.unshift(calcImageIndex(index - stackDepth + 1, imagesArrayLen))
       // pop out
       overflow = indexesArray.pop() as number
       // auto hide tail image
-      if (autoHide) {
-        imagesArray[overflow].style.visibility = 'hidden'
-        imagesArray[overflow].dataset.status = 'trail'
-      }
+      if (autoHideFlag) autoHide(imagesArray[overflow])
     } else {
       indexesArray.unshift(calcImageIndex(index - indexesNum + 1, imagesArrayLen))
       indexesNum += 1
