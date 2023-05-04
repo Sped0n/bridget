@@ -6,6 +6,8 @@ export let overlayCursor: HTMLDivElement
 export let cursorInnerContent: HTMLDivElement
 export let imagesDivNodes: NodeListOf<HTMLImageElement>
 
+const mainDiv = document.getElementById('main') as HTMLDivElement
+
 const passDesktopElements = (): void => {
   overlayCursor = document
     .getElementsByClassName('overlay_cursor')
@@ -13,7 +15,12 @@ const passDesktopElements = (): void => {
   cursorInnerContent = document
     .getElementsByClassName('cursor_innerText')
     .item(0) as HTMLDivElement
-  imagesDivNodes = document.getElementsByClassName('images')[0]
+  imagesDivNodes = document.getElementsByClassName('imagesDesktop')[0]
+    .childNodes as NodeListOf<HTMLImageElement>
+}
+
+const passMobileElements = (): void => {
+  imagesDivNodes = document.getElementsByClassName('imagesMobile')[0]
     .childNodes as NodeListOf<HTMLImageElement>
 }
 
@@ -27,13 +34,22 @@ const createCursorDiv = (): HTMLDivElement => {
 }
 
 export const createDesktopElements = (): void => {
-  const mainDiv = document.getElementById('main') as HTMLDivElement
   mainDiv.appendChild(createCursorDiv())
   const imagesDiv: HTMLDivElement = document.createElement('div')
-  imagesDiv.className = 'images'
+  imagesDiv.className = 'imagesDesktop'
   for (let i = 0; i < imagesArrayLen; i++) {
     imagesDiv.appendChild(createImgElement(imagesArray[i]))
   }
   mainDiv.appendChild(imagesDiv)
   passDesktopElements()
+}
+
+export const createMobileElements = (): void => {
+  const imagesDiv: HTMLDivElement = document.createElement('div')
+  imagesDiv.className = 'imagesMobile'
+  for (let i = 0; i < imagesArrayLen; i++) {
+    imagesDiv.appendChild(createImgElement(imagesArray[i]))
+  }
+  mainDiv.appendChild(imagesDiv)
+  passMobileElements()
 }
