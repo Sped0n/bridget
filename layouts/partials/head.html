@@ -6,3 +6,4 @@
 
 {{ $script := resources.Get "ts/main.ts" | js.Build }}
 <script type="text/javascript" src="{{ $script.RelPermalink }}" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12/dist/gsap.min.js"></script>

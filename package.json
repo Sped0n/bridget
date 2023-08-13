@@ -38,5 +38,8 @@
     "eslint-plugin-promise": "^6.1.1",
     "prettier": "3.0.1",
     "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "gsap": "^3.12.2"
   }
 }
