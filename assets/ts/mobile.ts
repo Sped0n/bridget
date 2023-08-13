@@ -1,5 +1,5 @@
 import { imagesDivNodes as images } from './elemGen'
-import { imagesArrayLen } from './dataFetch'
+import { imagesLen } from './dataFetch'
 
 export const renderImages = (): void => {
   images.forEach((img: HTMLImageElement, idx: number): void => {
@@ -11,7 +11,7 @@ export const renderImages = (): void => {
       randomY = 68
     } else if (idx === 1) {
       randomY = 44
-    } else if (idx === imagesArrayLen - 1) {
+    } else if (idx === imagesLen - 1) {
       randomY = 100
     } else {
       randomY = Math.floor(Math.random() * 51) + 2

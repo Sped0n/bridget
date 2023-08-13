@@ -10,7 +10,7 @@ import {
 } from './utils'
 import { thresholdIndex, thresholdSensitivityArray } from './thresholdCtl'
 import { imgIndexSpanUpdate } from './indexDisp'
-import { imagesArrayLen } from './dataFetch'
+import { imagesLen } from './dataFetch'
 import { imagesDivNodes as images } from './elemGen'
 
 // global index for "activated"
@@ -55,7 +55,7 @@ const activate = (index: number, mouseX: number, mouseY: number): void => {
     trailingImageIndexes,
     stackDepth,
     images,
-    imagesArrayLen
+    imagesLen
   )
   // set img position
   images[index].style.transform = mouseToTransform(mouseX, mouseY, true, true)
@@ -81,10 +81,10 @@ export const handleOnMove = (e: MouseEvent): void => {
     window.innerWidth / thresholdSensitivityArray[thresholdIndex]
   ) {
     // calculate the actual index
-    const imageIndex = calcImageIndex(globalIndex, imagesArrayLen)
+    const imageIndex = calcImageIndex(globalIndex, imagesLen)
     // show top image and change index
     activate(imageIndex, e.clientX, e.clientY)
-    imgIndexSpanUpdate(imageIndex + 1, imagesArrayLen)
+    imgIndexSpanUpdate(imageIndex + 1, imagesLen)
     // self increment
     globalIndexInc()
   }

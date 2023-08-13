@@ -33,7 +33,7 @@
           "pColor" (string $pColor)
           "sColor" (string $sColor)) }}
     {{ end }}
-    <script id="images_array" type="application/json">{{ $.Scratch.Get "img" | jsonify | safeJS }}</script>
+    <script id="images_info" type="application/json">{{ $.Scratch.Get "img" | jsonify | safeJS }}</script>
   {{ end }}
 </div>
 <footer>

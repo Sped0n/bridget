@@ -1,4 +1,4 @@
-import { imagesArray, imagesArrayLen } from './dataFetch'
+import { imagesInfo, imagesLen } from './dataFetch'
 import { createImgElement } from './utils'
 
 // get components of overlay
@@ -37,8 +37,8 @@ export const createDesktopElements = (): void => {
   mainDiv.appendChild(createCursorDiv())
   const imagesDiv: HTMLDivElement = document.createElement('div')
   imagesDiv.className = 'imagesDesktop'
-  for (let i = 0; i < imagesArrayLen; i++) {
-    imagesDiv.appendChild(createImgElement(imagesArray[i]))
+  for (let i = 0; i < imagesLen; i++) {
+    imagesDiv.appendChild(createImgElement(imagesInfo[i]))
   }
   mainDiv.appendChild(imagesDiv)
   passDesktopElements()
@@ -47,8 +47,8 @@ export const createDesktopElements = (): void => {
 export const createMobileElements = (): void => {
   const imagesDiv: HTMLDivElement = document.createElement('div')
   imagesDiv.className = 'imagesMobile'
-  for (let i = 0; i < imagesArrayLen; i++) {
-    imagesDiv.appendChild(createImgElement(imagesArray[i]))
+  for (let i = 0; i < imagesLen; i++) {
+    imagesDiv.appendChild(createImgElement(imagesInfo[i]))
   }
   mainDiv.appendChild(imagesDiv)
   passMobileElements()

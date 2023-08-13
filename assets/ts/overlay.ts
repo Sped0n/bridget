@@ -11,7 +11,7 @@ import {
   stackDepth,
   addEnterOverlayEL
 } from './desktop'
-import { imagesArrayLen } from './dataFetch'
+import { imagesLen } from './dataFetch'
 import { imgIndexSpanUpdate } from './indexDisp'
 import { overlayCursor, cursorInnerContent, imagesDivNodes as images } from './elemGen'
 
@@ -61,7 +61,7 @@ async function handleCloseClick(): Promise<void> {
   // prepare animation
   for (let i: number = 0; i < indexesNum; i++) {
     // get element from index and store the index
-    const index: number = calcImageIndex(globalIndex - i, imagesArrayLen)
+    const index: number = calcImageIndex(globalIndex - i, imagesLen)
     const e: HTMLImageElement = images[index]
     trailingImageIndexes.unshift(index)
     // set z index for the image element
@@ -88,10 +88,10 @@ async function handleCloseClick(): Promise<void> {
   // halt the function while animation is running
   await delay(1200 + stackDepth * 100 + 100)
   // add back enter overlay event listener to top image
-  addEnterOverlayEL(images[calcImageIndex(globalIndex, imagesArrayLen)])
+  addEnterOverlayEL(images[calcImageIndex(globalIndex, imagesLen)])
   // clear unused status and transition delay
   for (let i: number = 0; i < indexesNum; i++) {
-    const index: number = calcImageIndex(globalIndex - i, imagesArrayLen)
+    const index: number = calcImageIndex(globalIndex - i, imagesLen)
     images[index].dataset.status = 'null'
     images[index].style.transitionDelay = ''
   }
@@ -105,10 +105,10 @@ async function handleCloseClick(): Promise<void> {
 
 const handleSideClick = (CLD: boolean): void => {
   // get last displayed image's index
-  const imgIndex: number = calcImageIndex(globalIndex, imagesArrayLen)
+  const imgIndex: number = calcImageIndex(globalIndex, imagesLen)
   // change global index and get current displayed image's index
   CLD ? globalIndexInc() : globalIndexDec()
-  const currImgIndex: number = calcImageIndex(globalIndex, imagesArrayLen)
+  const currImgIndex: number = calcImageIndex(globalIndex, imagesLen)
   // store current displayed image's index
   CLD
     ? pushIndex(
@@ -116,7 +116,7 @@ const handleSideClick = (CLD: boolean): void => {
         trailingImageIndexes,
         stackDepth,
         images,
-        imagesArrayLen,
+        imagesLen,
         false,
         false
       )
@@ -125,7 +125,7 @@ const handleSideClick = (CLD: boolean): void => {
         trailingImageIndexes,
         stackDepth,
         images,
-        imagesArrayLen,
+        imagesLen,
         true,
         false
       )
@@ -138,7 +138,7 @@ const handleSideClick = (CLD: boolean): void => {
   // process complete, show the image
   images[currImgIndex].style.visibility = 'visible'
   // change index display
-  imgIndexSpanUpdate(currImgIndex + 1, imagesArrayLen)
+  imgIndexSpanUpdate(currImgIndex + 1, imagesLen)
 }
 
 // change text and position of overlay cursor
@@ -195,9 +195,9 @@ export const vwRefreshInit = (): void => {
       }
       // recenter image (only in overlay)
       if (
-        images[calcImageIndex(globalIndex, imagesArrayLen)].dataset.status === 'overlay'
+        images[calcImageIndex(globalIndex, imagesLen)].dataset.status === 'overlay'
       )
-        center(images[calcImageIndex(globalIndex, imagesArrayLen)])
+        center(images[calcImageIndex(globalIndex, imagesLen)])
     },
     { passive: true }
   )
