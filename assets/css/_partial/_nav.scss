@@ -1,0 +1,44 @@
+@import '../_core/mixins';
+$tablet: map-get($breakpoints, 'tablet') - 1;
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+  height: var(--nav-height);
+  padding: 0 var(--space-standard);
+
+  position: fixed;
+  bottom: 0;
+  background: white;
+
+  z-index: var(--z-nav);
+
+  // Maintain functionality while container is locked
+  pointer-events: all;
+}
+
+.num {
+  width: 0.625em;
+  display: inline-block;
+  text-align: center;
+}
+
+.current {
+  font-style: italic;
+  text-decoration: underline;
+}
+
+@media (max-width: $tablet), (hover: none) {
+  nav {
+    top: 0;
+    position: sticky;
+  }
+
+  .index,
+  .threshold {
+    display: none;
+  }
+}
