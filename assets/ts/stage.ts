@@ -6,37 +6,29 @@ export type HistoryItem = { i: number; x: number; y: number }
 
 let imgs: HTMLImageElement[] = []
 
-class CordHist {
-  private obj: HistoryItem[] = []
+class watchable<T> {
+  constructor(private obj: T) {}
+  private watchers: (() => void)[] = []
 
-  get(): HistoryItem[] {
+  get(): T {
     return this.obj
   }
 
-  set(e: HistoryItem[]): void {
+  set(e: T): void {
     this.obj = e
-    setPositions()
-  }
-}
-
-class IsOpen {
-  private obj = false
-
-  get(): boolean {
-    return this.obj
+    this.watchers.forEach((watcher) => watcher())
   }
 
-  set(e: boolean): void {
-    this.obj = e
-    activeCallbacks.forEach((callback) => callback(getActive()))
+  addWatcher(watcher: () => void): void {
+    this.watchers.push(watcher)
   }
 }
 
 let last = { x: 0, y: 0 }
-export let cordHist = new CordHist()
-export let isOpen = new IsOpen()
-let isAnimating = false
-let activeCallbacks: ((active: boolean) => void)[] = []
+export const cordHist = new watchable<HistoryItem[]>([])
+export const isOpen = new watchable<boolean>(false)
+export const isAnimating = new watchable<boolean>(false)
+export const active = new watchable<boolean>(false)
 
 // getter
 
@@ -58,30 +50,11 @@ function getElCurrent(): HTMLImageElement {
   return elTrail[elTrail.length - 1]
 }
 
-export function getIsAnimating(): boolean {
-  return isAnimating
-}
-
-export function getActive(): boolean {
-  return isOpen.get() && !getIsAnimating()
-}
-
-// setter
-
-export function addActiveCallback(callback: (active: boolean) => void): void {
-  activeCallbacks.push(callback)
-}
-
-export function setIsAnimating(e: boolean): void {
-  isAnimating = e
-  activeCallbacks.forEach((callback) => callback(getActive()))
-}
-
 // main functions
 
 // on mouse
 function onMouse(e: MouseEvent): void {
-  if (isOpen.get() || getIsAnimating()) return
+  if (isOpen.get() || isAnimating.get()) return
   const cord = { x: e.clientX, y: e.clientY }
   const travelDist = Math.hypot(cord.x - last.x, cord.y - last.y)
 
@@ -116,10 +89,10 @@ function setPositions(): void {
 
 // open image into navigation
 function expandImage(): void {
-  if (getIsAnimating()) return
+  if (isAnimating.get()) return
 
   isOpen.set(true)
-  setIsAnimating(true)
+  isAnimating.set(true)
 
   const tl = gsap.timeline()
   // move down and hide trail inactive
@@ -147,16 +120,16 @@ function expandImage(): void {
   })
   // finished
   tl.then(() => {
-    setIsAnimating(false)
+    isAnimating.set(false)
   })
 }
 
 // close navigation and back to stage
 export function minimizeImage(): void {
-  if (isAnimating) return
+  if (isAnimating.get()) return
 
   isOpen.set(false)
-  setIsAnimating(true)
+  isAnimating.set(true)
 
   const tl = gsap.timeline()
   // shrink current
@@ -183,7 +156,7 @@ export function minimizeImage(): void {
   })
   // finished
   tl.then(() => {
-    setIsAnimating(false)
+    isAnimating.set(false)
   })
 }
 
@@ -196,6 +169,9 @@ export function initStage(ijs: ImageJSON[]): void {
   stage.addEventListener('click', () => expandImage())
   stage.addEventListener('keydown', () => expandImage())
   window.addEventListener('mousemove', onMouse)
+  isOpen.addWatcher(() => active.set(isOpen.get() && !isAnimating.get()))
+  isAnimating.addWatcher(() => active.set(isOpen.get() && !isAnimating.get()))
+  cordHist.addWatcher(() => setPositions())
 }
 
 // hepler
