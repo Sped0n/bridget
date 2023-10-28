@@ -1,13 +1,7 @@
 import { setCustomCursor } from './customCursor'
 import { decIndex, incIndex, getState } from './state'
 import { increment, decrement } from './utils'
-import {
-  cordHist,
-  isOpen,
-  getIsAnimating,
-  minimizeImage,
-  addActiveCallback
-} from './stage'
+import { cordHist, isOpen, isAnimating, active, minimizeImage } from './stage'
 
 type NavItem = (typeof navItems)[number]
 const navItems = ['prev', 'close', 'next'] as const
@@ -29,7 +23,7 @@ function handleClick(type: NavItem) {
 }
 
 function handleKey(e: KeyboardEvent) {
-  if (isOpen.get() || getIsAnimating()) return
+  if (isOpen.get() || isAnimating.get()) return
   switch (e.key) {
     case 'ArrowLeft':
       prevImage()
@@ -57,8 +51,8 @@ export function initStageNav() {
     overlay.addEventListener('focus', () => setCustomCursor(navItem))
     navOverlay.append(overlay)
   }
-  addActiveCallback((active) => {
-    if (active) {
+  active.addWatcher(() => {
+    if (active.get()) {
       navOverlay.classList.add('active')
     } else {
       navOverlay.classList.remove('active')
@@ -71,7 +65,7 @@ export function initStageNav() {
 // hepler
 
 function nextImage() {
-  if (getIsAnimating()) return
+  if (isAnimating.get()) return
   cordHist.set(
     cordHist.get().map((item) => {
       return { ...item, i: increment(item.i, getState().length) }
@@ -82,7 +76,7 @@ function nextImage() {
 }
 
 function prevImage() {
-  if (getIsAnimating()) return
+  if (isAnimating.get()) return
   cordHist.set(
     cordHist.get().map((item) => {
       return { ...item, i: decrement(item.i, getState().length) }

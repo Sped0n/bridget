@@ -1,4 +1,4 @@
-import { addActiveCallback } from './stage'
+import { active } from './stage'
 
 let cursor: HTMLDivElement
 
@@ -24,8 +24,8 @@ export function initCustomCursor(): void {
   // bind mousemove event to window
   window.addEventListener('mousemove', onMouse)
   // add active callback
-  addActiveCallback((active) => {
-    if (active) {
+  active.addWatcher(() => {
+    if (active.get()) {
       cursor.classList.add('active')
     } else {
       cursor.classList.remove('active')
