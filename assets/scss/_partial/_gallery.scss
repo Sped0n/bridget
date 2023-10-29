@@ -1,0 +1,56 @@
+.gallery {
+  pointer-events: all;
+
+  position: fixed;
+  top: var(--nav-height);
+  z-index: var(--z-nav-gallery);
+
+  display: flex;
+  flex-direction: column;
+
+  width: 100vw;
+  height: calc(var(--window-height) - var(--nav-height));
+  background: white;
+  transform: translate3d(0, 100%, 0);
+
+  .galleryInner {
+    flex: 1;
+    height: 0;
+
+    .swiper-slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+  }
+
+  .nav {
+    height: var(--nav-height);
+    padding: var(--space-standard);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.curtain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-curtain);
+
+  width: 100vw;
+  height: var(--window-height);
+
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+
+  pointer-events: none;
+}
