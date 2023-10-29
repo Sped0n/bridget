@@ -1,0 +1,22 @@
+.stage {
+  position: relative;
+  overflow: hidden;
+  width: 100vw;
+  height: calc(var(--window-height) - var(--nav-height));
+
+  cursor: pointer;
+
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: var(--window-height);
+    object-fit: contain;
+
+    transform: scale(0.6);
+    opacity: 0;
+    pointer-events: none;
+  }
+}

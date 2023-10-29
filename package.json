@@ -37,6 +37,10 @@
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-promise": "^6.1.1",
     "prettier": "3.0.3",
+    "prettier-plugin-go-template": "^0.0.15",
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "gsap": "^3.12.2"
   }
 }
