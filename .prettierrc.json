@@ -1,9 +1,18 @@
 {
-"useTabs": false,
-"tabWidth": 2,
-"printWidth": 88,
-"singleQuote": true,
-"trailingComma": "none",
-"bracketSpacing": true,
-"semi": false
+  "useTabs": false,
+  "tabWidth": 2,
+  "printWidth": 88,
+  "singleQuote": true,
+  "trailingComma": "none",
+  "bracketSpacing": true,
+  "semi": false,
+  "plugins": ["prettier-plugin-go-template"],
+  "overrides": [
+    {
+      "files": ["*.html"],
+      "options": {
+        "parser": "go-template"
+      }
+    }
+  ]
 }
