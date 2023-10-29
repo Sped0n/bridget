@@ -1,6 +1,6 @@
 import { setCustomCursor } from './customCursor'
-import { decIndex, incIndex, getState } from './state'
-import { increment, decrement } from './utils'
+import { decIndex, incIndex, getState } from '../state'
+import { increment, decrement } from '../utils'
 import { cordHist, isOpen, isAnimating, active, minimizeImage } from './stage'
 
 type NavItem = (typeof navItems)[number]
