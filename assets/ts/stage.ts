@@ -1,34 +1,20 @@
 import { incIndex, getState } from './state'
 import { gsap, Power3 } from 'gsap'
 import { ImageJSON } from './resources'
+import { Watchable } from './utils'
+
+// types
 
 export type HistoryItem = { i: number; x: number; y: number }
 
+// variables
+
 let imgs: HTMLImageElement[] = []
-
-class watchable<T> {
-  constructor(private obj: T) {}
-  private watchers: (() => void)[] = []
-
-  get(): T {
-    return this.obj
-  }
-
-  set(e: T): void {
-    this.obj = e
-    this.watchers.forEach((watcher) => watcher())
-  }
-
-  addWatcher(watcher: () => void): void {
-    this.watchers.push(watcher)
-  }
-}
-
 let last = { x: 0, y: 0 }
-export const cordHist = new watchable<HistoryItem[]>([])
-export const isOpen = new watchable<boolean>(false)
-export const isAnimating = new watchable<boolean>(false)
-export const active = new watchable<boolean>(false)
+export const cordHist = new Watchable<HistoryItem[]>([])
+export const isOpen = new Watchable<boolean>(false)
+export const isAnimating = new Watchable<boolean>(false)
+export const active = new Watchable<boolean>(false)
 
 // getter
 
@@ -163,12 +149,17 @@ export function minimizeImage(): void {
 // init
 
 export function initStage(ijs: ImageJSON[]): void {
+  // create stage element
   createStage(ijs)
+  // get stage
   const stage = document.getElementsByClassName('stage').item(0) as HTMLDivElement
+  // get image elements
   imgs = Array.from(stage.getElementsByTagName('img'))
+  // event listeners
   stage.addEventListener('click', () => expandImage())
   stage.addEventListener('keydown', () => expandImage())
   window.addEventListener('mousemove', onMouse)
+  // watchers
   isOpen.addWatcher(() => active.set(isOpen.get() && !isAnimating.get()))
   isAnimating.addWatcher(() => active.set(isOpen.get() && !isAnimating.get()))
   cordHist.addWatcher(() => setPositions())
