@@ -1,3 +1,7 @@
+/**
+ * custom helpers
+ */
+
 export function increment(num: number, length: number): number {
   return (num + 1) % length
 }
@@ -13,6 +17,14 @@ export function expand(num: number): string {
 export function isMobile(): boolean {
   return window.matchMedia('(hover: none)').matches
 }
+
+export function getRandom(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+/**
+ * custom types
+ */
 
 export class Watchable<T> {
   constructor(private obj: T) {}
