@@ -1,0 +1,29 @@
+.collection {
+  display: flex;
+  flex-direction: column;
+  gap: 20vh;
+
+  padding-top: 50vh;
+  margin-top: calc(var(--nav-height) * -1);
+
+  img {
+    position: sticky;
+    top: 50vh;
+
+    width: 60vw;
+    height: 20vh;
+
+    object-fit: contain;
+
+    transform: translate3d(0, -50%, 0);
+    align-self: center;
+
+    &:last-child {
+      margin-bottom: 20vh;
+    }
+  }
+}
+
+.hidden {
+  display: none;
+}

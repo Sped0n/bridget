@@ -32,15 +32,18 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-config-standard-with-typescript": "^39.1.1",
+    "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-n": "^16.2.0",
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-promise": "^6.1.1",
     "prettier": "3.0.3",
     "prettier-plugin-go-template": "^0.0.15",
+    "prettier-plugin-organize-imports": "^3.2.3",
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "gsap": "^3.12.2"
+    "gsap": "^3.12.2",
+    "swiper": "^11.0.3"
   }
 }
