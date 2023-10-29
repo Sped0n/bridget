@@ -1,16 +1,15 @@
 import { active } from './stage'
 
-let cursor: HTMLDivElement
+/**
+ * variables
+ */
 
-// create cursor
-cursor = document.createElement('div')
-cursor.className = 'cursor'
-cursor.classList.add('active')
-// create cursor inner
+const cursor = document.createElement('div')
 const cursorInner = document.createElement('div')
-cursorInner.className = 'cursorInner'
-// append cursor inner to cursor
-cursor.append(cursorInner)
+
+/**
+ * main functions
+ */
 
 function onMouse(e: MouseEvent) {
   const x = e.clientX
@@ -18,7 +17,20 @@ function onMouse(e: MouseEvent) {
   cursor.style.transform = `translate3d(${x}px, ${y}px, 0)`
 }
 
+export function setCustomCursor(text: string): void {
+  cursorInner.innerText = text
+}
+
+/**
+ * init
+ */
 export function initCustomCursor(): void {
+  // cursor class name
+  cursor.className = 'cursor'
+  // cursor inner class name
+  cursorInner.className = 'cursorInner'
+  // append cursor inner to cursor
+  cursor.append(cursorInner)
   // append cursor to main
   document.getElementById('main')!.append(cursor)
   // bind mousemove event to window
@@ -31,8 +43,4 @@ export function initCustomCursor(): void {
       cursor.classList.remove('active')
     }
   })
-}
-
-export function setCustomCursor(text: string): void {
-  cursorInner.innerText = text
 }

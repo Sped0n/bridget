@@ -1,6 +1,10 @@
 import { getState, incThreshold, decThreshold } from './state'
 import { expand } from './utils'
 
+/**
+ * variables
+ */
+
 // threshold div
 const thresholdDiv = document
   .getElementsByClassName('threshold')
@@ -26,6 +30,10 @@ const indexDiv = document.getElementsByClassName('index').item(0) as HTMLDivElem
 const indexDispNums = Array.from(
   indexDiv.getElementsByClassName('num')
 ) as HTMLSpanElement[]
+
+/**
+ * init
+ */
 
 export function initNav() {
   // init threshold text

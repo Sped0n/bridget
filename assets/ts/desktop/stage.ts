@@ -3,11 +3,15 @@ import { gsap, Power3 } from 'gsap'
 import { ImageJSON } from '../resources'
 import { Watchable } from '../utils'
 
-// types
+/**
+ * types
+ */
 
 export type HistoryItem = { i: number; x: number; y: number }
 
-// variables
+/**
+ * variables
+ */
 
 let imgs: HTMLImageElement[] = []
 let last = { x: 0, y: 0 }
@@ -16,7 +20,9 @@ export const isOpen = new Watchable<boolean>(false)
 export const isAnimating = new Watchable<boolean>(false)
 export const active = new Watchable<boolean>(false)
 
-// getter
+/**
+ * getter
+ */
 
 function getElTrail(): HTMLImageElement[] {
   return cordHist.get().map((item) => imgs[item.i])
@@ -36,7 +42,9 @@ function getElCurrent(): HTMLImageElement {
   return elTrail[elTrail.length - 1]
 }
 
-// main functions
+/**
+ * main functions
+ */
 
 // on mouse
 function onMouse(e: MouseEvent): void {
@@ -146,7 +154,9 @@ export function minimizeImage(): void {
   })
 }
 
-// init
+/**
+ * init
+ */
 
 export function initStage(ijs: ImageJSON[]): void {
   // create stage element
@@ -165,7 +175,9 @@ export function initStage(ijs: ImageJSON[]): void {
   cordHist.addWatcher(() => setPositions())
 }
 
-// hepler
+/**
+ * hepler
+ */
 
 function createStage(ijs: ImageJSON[]): void {
   // create container for images

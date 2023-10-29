@@ -3,10 +3,21 @@ import { decIndex, incIndex, getState } from '../state'
 import { increment, decrement } from '../utils'
 import { cordHist, isOpen, isAnimating, active, minimizeImage } from './stage'
 
+/**
+ * types
+ */
+
 type NavItem = (typeof navItems)[number]
+
+/**
+ * variables
+ */
+
 const navItems = ['prev', 'close', 'next'] as const
 
-// main functions
+/**
+ * main functions
+ */
 
 function handleClick(type: NavItem) {
   switch (type) {
@@ -37,7 +48,9 @@ function handleKey(e: KeyboardEvent) {
   }
 }
 
-// init
+/**
+ * init
+ */
 
 export function initStageNav() {
   const navOverlay = document.createElement('div')
@@ -62,7 +75,9 @@ export function initStageNav() {
   window.addEventListener('keydown', handleKey)
 }
 
-// hepler
+/**
+ * hepler
+ */
 
 function nextImage() {
   if (isAnimating.get()) return
