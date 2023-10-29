@@ -37,6 +37,6 @@
     <script id="imagesSource" type="application/json">{{ $.Scratch.Get "img" | jsonify | safeJS }}</script>
       {{ end }}
     </div>
-    {{ partial "nav.html" . }}
+    <div class="container">{{ partial "nav.html" . }}</div>
   </body>
 </html>
