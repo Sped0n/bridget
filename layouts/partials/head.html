@@ -3,6 +3,7 @@
 {{- $options := dict "targetPath" "css/style.min.css" "enableSourceMap" true -}}
 {{- $style = dict "Context" . "ToCSS" $options | merge $style -}}
 {{- partial "plugin/style.html" $style -}}
+{{- $esBuildOpts := dict "minify" hugo.IsProduction -}}
 
-{{ $script := resources.Get "ts/main.ts" | js.Build }}
+{{- $script := resources.Get "ts/main.ts" | js.Build $esBuildOpts -}}
 <script type="text/javascript" src="{{ $script.RelPermalink }}" defer></script>

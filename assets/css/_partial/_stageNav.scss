@@ -1,0 +1,21 @@
+.navOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-nav-gallery);
+
+  width: 100vw;
+  height: calc(var(--window-height) - var(--nav-height));
+
+  display: flex;
+  cursor: none;
+
+  &:not(.active) {
+    pointer-events: none;
+    display: none;
+  }
+
+  .overlay {
+    flex: 1;
+  }
+}

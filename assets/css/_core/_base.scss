@@ -1,14 +1,20 @@
-html {
-  font-family: $global-font-family;
-  overflow: hidden;
-  position: relative;
-  scroll-behavior: smooth;
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background-color: white;
-  height: 100vh;
-  margin: 0;
-  overflow: hidden;
-  line-height: 1.5;
+  user-select: none;
+  background: white;
 }
+
+html,
+body {
+  overscroll-behavior-y: none;
+}
+
+a,
+button {
+  cursor: pointer;
+}
+
