@@ -1,5 +1,5 @@
-import { increment, decrement } from './utils'
 import { updateIndexText, updateThresholdText } from './nav'
+import { Watchable, decrement, increment } from './utils'
 
 const thresholds = [
   { threshold: 20, trailLength: 20 },
@@ -18,43 +18,46 @@ const defaultState = {
 
 export type State = typeof defaultState
 
-let state = defaultState
-
-export function getState(): State {
-  // return a copy of state
-  return Object.create(
-    Object.getPrototypeOf(state),
-    Object.getOwnPropertyDescriptors(state)
-  )
-}
+export const state = new Watchable<State>(defaultState)
 
 export function initState(length: number): void {
-  state.length = length
+  const s = state.get()
+  s.length = length
+  state.set(s)
+  state.addWatcher(() => {
+    updateIndexText()
+    updateThresholdText()
+  })
 }
 
 export function setIndex(index: number): void {
-  state.index = index
-  updateIndexText()
+  const s = state.get()
+  s.index = index
+  state.set(s)
 }
 
 export function incIndex(): void {
-  state.index = increment(state.index, state.length)
-  updateIndexText()
+  const s = state.get()
+  s.index = increment(s.index, s.length)
+  state.set(s)
 }
 
 export function decIndex(): void {
-  state.index = decrement(state.index, state.length)
-  updateIndexText()
+  const s = state.get()
+  s.index = decrement(s.index, s.length)
+  state.set(s)
 }
 
 export function incThreshold(): void {
-  state = updateThreshold(state, 1)
-  updateThresholdText()
+  let s = state.get()
+  s = updateThreshold(s, 1)
+  state.set(s)
 }
 
 export function decThreshold(): void {
-  state = updateThreshold(state, -1)
-  updateThresholdText()
+  let s = state.get()
+  s = updateThreshold(s, 1)
+  state.set(s)
 }
 
 // helper

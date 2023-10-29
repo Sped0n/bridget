@@ -1,5 +1,9 @@
-import { getState, incThreshold, decThreshold } from './state'
+import { decThreshold, incThreshold, state } from './state'
 import { expand } from './utils'
+
+/**
+ * variables
+ */
 
 // threshold div
 const thresholdDiv = document
@@ -27,6 +31,10 @@ const indexDispNums = Array.from(
   indexDiv.getElementsByClassName('num')
 ) as HTMLSpanElement[]
 
+/**
+ * init
+ */
+
 export function initNav() {
   // init threshold text
   updateThresholdText()
@@ -40,15 +48,15 @@ export function initNav() {
 // helper
 
 export function updateThresholdText(): void {
-  const thresholdValue: string = expand(getState().threshold)
+  const thresholdValue: string = expand(state.get().threshold)
   thresholdDispNums.forEach((e: HTMLSpanElement, i: number) => {
     e.innerText = thresholdValue[i]
   })
 }
 
 export function updateIndexText(): void {
-  const indexValue: string = expand(getState().index + 1)
-  const indexLength: string = expand(getState().length)
+  const indexValue: string = expand(state.get().index + 1)
+  const indexLength: string = expand(state.get().length)
   indexDispNums.forEach((e: HTMLSpanElement, i: number) => {
     if (i < 4) {
       e.innerText = indexValue[i]

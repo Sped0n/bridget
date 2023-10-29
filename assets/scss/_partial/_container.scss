@@ -1,0 +1,19 @@
+.container {
+  position: fixed;
+  top: 0;
+  z-index: 0;
+
+  width: 100vw;
+  height: var(--window-height);
+
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background: white;
+
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: none;
+}
+
+.disableScroll {
+  pointer-events: none;
+}

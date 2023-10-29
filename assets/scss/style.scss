@@ -7,7 +7,11 @@
 @import '_variables';
 @import '_core/base';
 
-@import '_partial/customCursor';
 @import '_partial/nav';
+
+@import '_partial/customCursor';
 @import '_partial/stage';
 @import '_partial/stageNav';
+
+@import '_partial/collection';
+@import '_partial/gallery';
