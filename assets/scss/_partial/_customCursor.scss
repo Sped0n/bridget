@@ -1,0 +1,21 @@
+.cursor {
+  position: fixed;
+  z-index: var(--z-cursor);
+  top: 0;
+  left: 0;
+
+  display: none;
+  cursor: none;
+  pointer-events: none;
+
+  color: white;
+  mix-blend-mode: difference;
+}
+
+.active {
+  display: block;
+}
+
+.cursorInner {
+  transform: translate3d(-50%, -50%, 0);
+}

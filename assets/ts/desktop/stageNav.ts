@@ -1,8 +1,8 @@
-import { setCustomCursor } from './customCursor'
-import { decIndex, incIndex, state } from '../state'
-import { increment, decrement } from '../utils'
-import { cordHist, isOpen, isAnimating, active, minimizeImage } from './stage'
 import { container } from '../container'
+import { decIndex, incIndex, state } from '../state'
+import { decrement, increment } from '../utils'
+import { setCustomCursor } from './customCursor'
+import { active, cordHist, isAnimating, isOpen, minimizeImage } from './stage'
 
 /**
  * types
