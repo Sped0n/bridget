@@ -1,7 +1,7 @@
-import { incIndex, getState } from './state'
+import { incIndex, getState } from '../state'
 import { gsap, Power3 } from 'gsap'
-import { ImageJSON } from './resources'
-import { Watchable } from './utils'
+import { ImageJSON } from '../resources'
+import { Watchable } from '../utils'
 
 // types
 
