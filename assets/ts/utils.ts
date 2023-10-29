@@ -13,3 +13,21 @@ export function expand(num: number): string {
 export function isMobile(): boolean {
   return window.matchMedia('(hover: none)').matches
 }
+
+export class Watchable<T> {
+  constructor(private obj: T) {}
+  private watchers: (() => void)[] = []
+
+  get(): T {
+    return this.obj
+  }
+
+  set(e: T): void {
+    this.obj = e
+    this.watchers.forEach((watcher) => watcher())
+  }
+
+  addWatcher(watcher: () => void): void {
+    this.watchers.push(watcher)
+  }
+}
