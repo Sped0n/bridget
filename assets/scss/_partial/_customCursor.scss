@@ -10,12 +10,12 @@
 
   color: white;
   mix-blend-mode: difference;
+
+  .cursorInner {
+    transform: translate3d(-50%, -50%, 0);
+  }
 }
 
 .active {
   display: block;
-}
-
-.cursorInner {
-  transform: translate3d(-50%, -50%, 0);
 }
