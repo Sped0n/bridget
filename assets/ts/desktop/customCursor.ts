@@ -1,4 +1,5 @@
 import { active } from './stage'
+import { container } from '../container'
 
 /**
  * variables
@@ -32,7 +33,7 @@ export function initCustomCursor(): void {
   // append cursor inner to cursor
   cursor.append(cursorInner)
   // append cursor to main
-  document.getElementById('main')!.append(cursor)
+  container.append(cursor)
   // bind mousemove event to window
   window.addEventListener('mousemove', onMouse)
   // add active callback

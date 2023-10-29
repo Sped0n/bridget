@@ -1,7 +1,8 @@
 import { setCustomCursor } from './customCursor'
-import { decIndex, incIndex, getState } from '../state'
+import { decIndex, incIndex, state } from '../state'
 import { increment, decrement } from '../utils'
 import { cordHist, isOpen, isAnimating, active, minimizeImage } from './stage'
+import { container } from '../container'
 
 /**
  * types
@@ -71,7 +72,7 @@ export function initStageNav() {
       navOverlay.classList.remove('active')
     }
   })
-  document.getElementById('main')!.append(navOverlay)
+  container.append(navOverlay)
   window.addEventListener('keydown', handleKey)
 }
 
@@ -83,7 +84,7 @@ function nextImage() {
   if (isAnimating.get()) return
   cordHist.set(
     cordHist.get().map((item) => {
-      return { ...item, i: increment(item.i, getState().length) }
+      return { ...item, i: increment(item.i, state.get().length) }
     })
   )
 
@@ -94,7 +95,7 @@ function prevImage() {
   if (isAnimating.get()) return
   cordHist.set(
     cordHist.get().map((item) => {
-      return { ...item, i: decrement(item.i, getState().length) }
+      return { ...item, i: decrement(item.i, state.get().length) }
     })
   )
 

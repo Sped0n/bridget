@@ -1,7 +1,8 @@
-import { incIndex, getState } from '../state'
+import { incIndex, state } from '../state'
 import { gsap, Power3 } from 'gsap'
 import { ImageJSON } from '../resources'
 import { Watchable } from '../utils'
+import { container } from '../container'
 
 /**
  * types
@@ -29,7 +30,7 @@ function getElTrail(): HTMLImageElement[] {
 }
 
 function getElTrailCurrent(): HTMLImageElement[] {
-  return getElTrail().slice(-getState().trailLength)
+  return getElTrail().slice(-state.get().trailLength)
 }
 
 function getElTrailInactive(): HTMLImageElement[] {
@@ -52,12 +53,12 @@ function onMouse(e: MouseEvent): void {
   const cord = { x: e.clientX, y: e.clientY }
   const travelDist = Math.hypot(cord.x - last.x, cord.y - last.y)
 
-  if (travelDist > getState().threshold) {
+  if (travelDist > state.get().threshold) {
     last = cord
     incIndex()
 
-    const newHist = { i: getState().index, ...cord }
-    cordHist.set([...cordHist.get(), newHist].slice(-getState().length))
+    const newHist = { i: state.get().index, ...cord }
+    cordHist.set([...cordHist.get(), newHist].slice(-state.get().length))
   }
 }
 
@@ -70,7 +71,7 @@ function setPositions(): void {
     x: (i: number) => cordHist.get()[i].x - window.innerWidth / 2,
     y: (i: number) => cordHist.get()[i].y - window.innerHeight / 2,
     opacity: (i: number) =>
-      i + 1 + getState().trailLength <= cordHist.get().length ? 0 : 1,
+      i + 1 + state.get().trailLength <= cordHist.get().length ? 0 : 1,
     zIndex: (i: number) => i,
     scale: 0.6
   })
@@ -192,5 +193,5 @@ function createStage(ijs: ImageJSON[]): void {
     e.alt = 'image'
     stage.append(e)
   }
-  document.getElementById('main')!.append(stage)
+  container.append(stage)
 }
