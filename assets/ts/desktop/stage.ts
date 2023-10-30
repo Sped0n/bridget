@@ -43,6 +43,10 @@ function getElCurrent(): HTMLImageElement {
   return elTrail[elTrail.length - 1]
 }
 
+function getElNextFive(): HTMLImageElement[] {
+  return state.get().nextFive.map((i) => imgs[i])
+}
+
 /**
  * main functions
  */
@@ -67,6 +71,9 @@ function setPositions(): void {
   const elTrail = getElTrail()
   if (!elTrail.length) return
 
+  // preload
+  lores(getElNextFive())
+
   gsap.set(elTrail, {
     x: (i: number) => cordHist.get()[i].x - window.innerWidth / 2,
     y: (i: number) => cordHist.get()[i].y - window.innerHeight / 2,
@@ -77,6 +84,7 @@ function setPositions(): void {
   })
 
   if (isOpen.get()) {
+    lores(getElTrail())
     hires([getElCurrent()])
     gsap.set(imgs, { opacity: 0 })
     gsap.set(getElCurrent(), { opacity: 1, x: 0, y: 0, scale: 1 })
@@ -129,8 +137,6 @@ export function minimizeImage(): void {
   isOpen.set(false)
   isAnimating.set(true)
 
-  lores(imgs)
-
   const tl = gsap.timeline()
   // shrink current
   tl.to(getElCurrent(), {
@@ -179,6 +185,8 @@ export function initStage(ijs: ImageJSON[]): void {
   isOpen.addWatcher(() => active.set(isOpen.get() && !isAnimating.get()))
   isAnimating.addWatcher(() => active.set(isOpen.get() && !isAnimating.get()))
   cordHist.addWatcher(() => setPositions())
+  // preload
+  lores(getElNextFive())
 }
 
 /**
@@ -192,7 +200,6 @@ function createStage(ijs: ImageJSON[]): void {
   // append images to container
   for (let ij of ijs) {
     const e = document.createElement('img')
-    e.src = ij.loUrl
     e.height = ij.loImgH
     e.width = ij.loImgW
     // set data attributes
