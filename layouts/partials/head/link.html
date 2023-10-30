@@ -3,8 +3,8 @@
 
 {{/* main style */}}
 {{- $style := dict "Source" "scss/style.scss" "Fingerprint" $fingerprint -}}
-{{- $options := dict "targetPath" "css/style.min.css" "enableSourceMap" true -}}
-{{- $style = dict "Context" . "ToCSS" $options | merge $style -}}
+{{- $options := dict "targetPath" "css/style.css" "enableSourceMap" true -}}
+{{- $style = dict "Context" . "ToCSS" $options "Minify" hugo.IsProduction | merge $style -}}
 {{- partial "plugin/style.html" $style -}}
 
 {{/* swiper css */}}
@@ -12,9 +12,9 @@
 {{- partial "plugin/style.html" $style -}}
 
 {{/* main js */}}
-{{- $esBuildOpts := dict "minify" hugo.IsProduction -}}
-{{- $js := resources.Get "ts/main.ts" | js.Build $esBuildOpts -}}
-{{- $script := dict "Source" $js.Permalink "Fingerprint" $fingerprint "Defer" true -}}
+{{- $esBuildOpts := dict "minify" hugo.IsProduction "targetPath" "js/main.js" -}}
+{{- $script := dict "Source" "ts/main.ts" "Fingerprint" $fingerprint "Defer" true -}}
+{{- $script = dict "ToESBuild" $esBuildOpts "Minify" hugo.IsProduction | merge $script -}}
 {{- partial "plugin/script.html" $script -}}
 
 {{/* fonts */}}
