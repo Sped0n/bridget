@@ -9,7 +9,10 @@ export interface ImageJSON {
 }
 
 export function initResources(): ImageJSON[] {
-  const imagesJson = document.getElementById('imagesSource') as HTMLScriptElement
+  const imagesJson = document.getElementById('imagesSource')
+  if (!imagesJson) {
+    return []
+  }
   return JSON.parse(imagesJson.textContent as string).sort(
     (a: ImageJSON, b: ImageJSON) => {
       if (a.index < b.index) {

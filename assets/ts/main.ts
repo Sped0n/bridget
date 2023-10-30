@@ -16,10 +16,12 @@ initState(ijs.length)
 
 initNav()
 
-if (!isMobile()) {
-  initStage(ijs)
-  initStageNav()
-} else {
-  initCollection(ijs)
-  initGallery(ijs)
+if (ijs.length > 0) {
+  if (!isMobile()) {
+    initStage(ijs)
+    initStageNav()
+  } else {
+    initCollection(ijs)
+    initGallery(ijs)
+  }
 }
