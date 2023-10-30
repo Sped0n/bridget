@@ -40,3 +40,10 @@
     margin: 1.2rem 0;
   }
 }
+
+@media (max-width: $tablet), (hover: none) {
+  .info {
+    top: var(--nav-height);
+    position: fixed;
+  }
+}
