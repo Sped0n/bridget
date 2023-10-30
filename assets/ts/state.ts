@@ -56,7 +56,7 @@ export function incThreshold(): void {
 
 export function decThreshold(): void {
   let s = state.get()
-  s = updateThreshold(s, 1)
+  s = updateThreshold(s, -1)
   state.set(s)
 }
 
