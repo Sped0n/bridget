@@ -3,7 +3,7 @@ import Swiper from 'swiper'
 import { container } from '../container'
 import { ImageJSON } from '../resources'
 import { setIndex, state } from '../state'
-import { Watchable, expand, onVisible } from '../utils'
+import { Watchable, expand } from '../utils'
 import { imgs, mounted } from './collection'
 import { scrollable } from './scroll'
 
@@ -18,6 +18,7 @@ let swiper: Swiper
 const isAnimating = new Watchable<boolean>(false)
 let lastIndex = -1
 let indexDispNums: HTMLSpanElement[] = []
+let galleryImages: HTMLImageElement[] = []
 
 /**
  * main functions
@@ -26,6 +27,9 @@ let indexDispNums: HTMLSpanElement[] = []
 export function slideUp(): void {
   if (isAnimating.get()) return
   isAnimating.set(true)
+
+  // load active image
+  loadImages()
 
   gsap.to(curtain, {
     opacity: 1,
@@ -42,6 +46,7 @@ export function slideUp(): void {
   setTimeout(() => {
     scrollable.set(false)
     isAnimating.set(false)
+    console.log(swiper.activeIndex)
   }, 1200)
 }
 
@@ -76,6 +81,7 @@ export function initGallery(ijs: ImageJSON[]): void {
   swiperNode = document.getElementsByClassName('galleryInner').item(0) as HTMLDivElement
   gallery = document.getElementsByClassName('gallery').item(0) as HTMLDivElement
   curtain = document.getElementsByClassName('curtain').item(0) as HTMLDivElement
+  galleryImages = Array.from(gallery.getElementsByTagName('img'))
   // state watcher
   state.addWatcher(() => {
     const s = state.get()
@@ -104,6 +110,7 @@ export function initGallery(ijs: ImageJSON[]): void {
  */
 
 function changeSlide(slide: number): void {
+  loadImages()
   swiper!.slideTo(slide, 0)
 }
 
@@ -153,9 +160,6 @@ function createGallery(ijs: ImageJSON[]): void {
     e.height = ij.hiImgH
     e.width = ij.hiImgW
     e.alt = 'image'
-    onVisible(e, (e) => {
-      e.src = e.dataset.src!
-    })
     // append
     _swiperSlide.append(e)
     _swiperWrapper.append(_swiperSlide)
@@ -199,4 +203,21 @@ function createGallery(ijs: ImageJSON[]): void {
    * |- curtain
    */
   container.append(_gallery, _curtain)
+}
+
+/**
+ * helper
+ */
+
+function loadImages(): void {
+  const activeImages = new Array()
+  // load current, next, prev image
+  activeImages.push(galleryImages[swiper.activeIndex])
+  activeImages.push(
+    galleryImages[Math.min(swiper.activeIndex + 1, swiper.slides.length)]
+  )
+  activeImages.push(galleryImages[Math.max(swiper.activeIndex - 1, 0)])
+  for (let e of activeImages) {
+    e.src = e.dataset.src!
+  }
 }
