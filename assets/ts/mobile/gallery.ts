@@ -3,7 +3,7 @@ import Swiper from 'swiper'
 import { container } from '../container'
 import { ImageJSON } from '../resources'
 import { setIndex, state } from '../state'
-import { Watchable, expand } from '../utils'
+import { Watchable, expand, onVisible } from '../utils'
 import { imgs, mounted } from './collection'
 import { scrollable } from './scroll'
 
@@ -104,8 +104,7 @@ export function initGallery(ijs: ImageJSON[]): void {
  */
 
 function changeSlide(slide: number): void {
-  console.log(slide)
-  swiper?.slideTo(slide, 0)
+  swiper!.slideTo(slide, 0)
 }
 
 function scrollToActive(): void {
@@ -150,8 +149,13 @@ function createGallery(ijs: ImageJSON[]): void {
     _swiperSlide.className = 'swiper-slide'
     // img
     const e = document.createElement('img')
-    e.src = ij.url
+    e.dataset.src = ij.hiUrl
+    e.height = ij.hiImgH
+    e.width = ij.hiImgW
     e.alt = 'image'
+    onVisible(e, (e) => {
+      e.src = e.dataset.src!
+    })
     // append
     _swiperSlide.append(e)
     _swiperWrapper.append(_swiperSlide)

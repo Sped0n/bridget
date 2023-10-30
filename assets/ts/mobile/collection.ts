@@ -62,9 +62,9 @@ function createCollection(ijs: ImageJSON[]): void {
     const y = i !== 0 ? getRandom(-30, 30) : 0
     // element
     const e = document.createElement('img')
-    e.src = ij.url
-    e.height = ij.imgH
-    e.width = ij.imgW
+    e.src = ij.loUrl
+    e.height = ij.loImgH
+    e.width = ij.loImgW
     e.alt = 'image'
     e.style.transform = `translate3d(${x}%, ${y - 50}%, 0)`
     collection.append(e)

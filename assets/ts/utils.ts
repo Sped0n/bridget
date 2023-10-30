@@ -22,6 +22,21 @@ export function getRandom(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
+export function onVisible(
+  element: HTMLImageElement,
+  callback: (arg0: HTMLImageElement) => void
+) {
+  new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.intersectionRatio > 0) {
+        callback(element)
+        observer.disconnect()
+      }
+    })
+  }).observe(element)
+  if (!callback) return new Promise((r) => (callback = r))
+}
+
 /**
  * custom types
  */
