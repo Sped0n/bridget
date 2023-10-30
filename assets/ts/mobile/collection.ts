@@ -27,19 +27,19 @@ function handleClick(i: number): void {
 export function initCollection(ijs: ImageJSON[]): void {
   createCollection(ijs)
   // get container
-  const container = document
+  const collection = document
     .getElementsByClassName('collection')
     .item(0) as HTMLDivElement
   // add watcher
   mounted.addWatcher(() => {
     if (mounted.get()) {
-      container.classList.remove('hidden')
+      collection.classList.remove('hidden')
     } else {
-      container.classList.add('hidden')
+      collection.classList.add('hidden')
     }
   })
   // get image elements
-  imgs = Array.from(container.getElementsByTagName('img'))
+  imgs = Array.from(collection.getElementsByTagName('img'))
   // add event listeners
   imgs.forEach((img, i) => {
     img.addEventListener('click', () => handleClick(i))
