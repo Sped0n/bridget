@@ -1,0 +1,28 @@
+[[main]]
+identifier = "Featured"
+pre = ""
+post = ""
+url = "/"
+title = ""
+weight = 1
+[[main]]
+identifier = "iPhone"
+pre = ""
+post = ""
+url = "/iphone/"
+title = ""
+weight = 2
+[[main]]
+identifier = "Film"
+pre = ""
+post = ""
+url = "/film/"
+title = ""
+weight = 3
+[[main]]
+identifier = "Info"
+pre = ""
+post = ""
+url = "/info/"
+title = ""
+weight = 4
