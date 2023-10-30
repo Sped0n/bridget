@@ -1,0 +1,18 @@
+{{- $Page := .Page -}}
+
+{{ $gallery := site.GetPage .Path }}
+{{ with $gallery.Resources.ByType "image" }}
+  {{ $index := len . }}
+  {{ $Page.Scratch.Add "img" slice }}
+  {{ range . }}
+    {{ $index = sub $index 1 }}
+    {{ $resize := .Resize "x2000 webp Lanczos q70" }}
+    {{ $Page.Scratch.Add "img" (dict
+      "index" (int $index)
+      "url" (string .RelPermalink)
+      "imgH" (int .Height)
+      "imgW" (int .Width))
+    }}
+  {{- end -}}
+    <script id="imagesSource" type="application/json">{{ $Page.Scratch.Get "img" | jsonify | safeJS }}</script>
+{{- end -}}
