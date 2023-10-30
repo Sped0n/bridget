@@ -1,0 +1,15 @@
+{{- $currentPage := . -}}
+
+{{- $name := "" -}}
+{{- $id := -1 -}}
+
+{{- range site.Menus.main -}}
+  {{ $menu_item_url := .URL | relLangURL }}
+  {{ $page_url:= $currentPage.RelPermalink | relLangURL }}
+  {{ if eq $menu_item_url $page_url }}
+    {{- $name = .Identifier -}}
+    {{- $id = .Weight -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return (dict "Name" $name "ID" $id) -}}
