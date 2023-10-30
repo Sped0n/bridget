@@ -6,12 +6,17 @@
   {{ $Page.Scratch.Add "img" slice }}
   {{ range . }}
     {{ $index = sub $index 1 }}
-    {{ $resize := .Resize "x2000 webp Lanczos q70" }}
+    {{ $lores := .Resize "1000x webp Lanczos q70" }}
+    {{ $hires := .Resize "2500x webp Lanczos q75" }}
     {{ $Page.Scratch.Add "img" (dict
       "index" (int $index)
-      "url" (string .RelPermalink)
-      "imgH" (int .Height)
-      "imgW" (int .Width))
+      "loUrl" (string $lores.RelPermalink)
+      "loImgH" (int $lores.Height)
+      "loImgW" (int $lores.Width)
+      "hiUrl" (string $hires.RelPermalink)
+      "hiImgH" (int $hires.Height)
+      "hiImgW" (int $hires.Width)
+      )
     }}
   {{- end -}}
     <script id="imagesSource" type="application/json">{{ $Page.Scratch.Get "img" | jsonify | safeJS }}</script>
