@@ -77,6 +77,7 @@ function setPositions(): void {
   })
 
   if (isOpen.get()) {
+    hires([getElCurrent()])
     gsap.set(imgs, { opacity: 0 })
     gsap.set(getElCurrent(), { opacity: 1, x: 0, y: 0, scale: 1 })
   }
@@ -88,6 +89,8 @@ function expandImage(): void {
 
   isOpen.set(true)
   isAnimating.set(true)
+
+  hires([getElCurrent()])
 
   const tl = gsap.timeline()
   // move down and hide trail inactive
@@ -125,6 +128,8 @@ export function minimizeImage(): void {
 
   isOpen.set(false)
   isAnimating.set(true)
+
+  lores(imgs)
 
   const tl = gsap.timeline()
   // shrink current
@@ -187,11 +192,34 @@ function createStage(ijs: ImageJSON[]): void {
   // append images to container
   for (let ij of ijs) {
     const e = document.createElement('img')
-    e.src = ij.url
-    e.height = ij.imgH
-    e.width = ij.imgW
+    e.src = ij.loUrl
+    e.height = ij.loImgH
+    e.width = ij.loImgW
+    // set data attributes
+    e.dataset.hiUrl = ij.hiUrl
+    e.dataset.hiImgH = ij.hiImgH.toString()
+    e.dataset.hiImgW = ij.hiImgW.toString()
+    e.dataset.loUrl = ij.loUrl
+    e.dataset.loImgH = ij.loImgH.toString()
+    e.dataset.loImgW = ij.loImgW.toString()
     e.alt = 'image'
     stage.append(e)
   }
   container.append(stage)
+}
+
+function hires(imgs: HTMLImageElement[]): void {
+  imgs.forEach((img) => {
+    img.src = img.dataset.hiUrl!
+    img.height = parseInt(img.dataset.hiImgH!)
+    img.width = parseInt(img.dataset.hiImgW!)
+  })
+}
+
+function lores(imgs: HTMLImageElement[]): void {
+  imgs.forEach((img) => {
+    img.src = img.dataset.loUrl!
+    img.height = parseInt(img.dataset.loImgH!)
+    img.width = parseInt(img.dataset.loImgW!)
+  })
 }
