@@ -1,0 +1,27 @@
+{{/* fingerprint */}}
+{{- $fingerprint := .Scratch.Get "fingerprint" | default "" -}}
+
+{{/* main style */}}
+{{- $style := dict "Source" "scss/style.scss" "Fingerprint" $fingerprint -}}
+{{- $options := dict "targetPath" "css/style.min.css" "enableSourceMap" true -}}
+{{- $style = dict "Context" . "ToCSS" $options | merge $style -}}
+{{- partial "plugin/style.html" $style -}}
+
+{{/* swiper css */}}
+{{- $style := dict "Source" "/lib/swiper/swiper-bundle.min.css" "Fingerprint" $fingerprint -}}
+{{- partial "plugin/style.html" $style -}}
+
+{{/* main js */}}
+{{- $esBuildOpts := dict "minify" hugo.IsProduction -}}
+{{- $js := resources.Get "ts/main.ts" | js.Build $esBuildOpts -}}
+{{- $script := dict "Source" $js.Permalink "Fingerprint" $fingerprint "Defer" true -}}
+{{- partial "plugin/script.html" $script -}}
+
+{{/* fonts */}}
+<link
+  rel="preload"
+  href="/lib/fonts/HelveticaNowText-Regular.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>

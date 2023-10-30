@@ -3,10 +3,18 @@
     <a href="/">Bridget Baker</a>
   </div>
   <div class="links">
-    <span class="link">Featured</span>
-    <span class="link">iPhone</span>
-    <span class="link">Film</span>
-    <span class="link">Info</span>
+    {{- $index := 0 -}}
+    {{- $menus := .Site.Menus.main -}}
+    {{- $len := len $menus }}
+    {{- range $menus -}}
+      {{- $url := .URL | relLangURL -}}
+      {{- if eq (add $index 1) $len -}}
+        <a href="{{- .URL | relLangURL -}}" class="link">{{- .Identifier -}}</a>
+      {{- else -}}
+        <a href="{{- .URL | relLangURL -}}" class="link">{{- .Identifier -}}</a>,&nbsp
+      {{- end -}}
+      {{- $index = add $index 1 -}}
+    {{- end -}}
   </div>
   <div class="threshold">
     <span>Threshold:</span>
