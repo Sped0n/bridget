@@ -13,6 +13,9 @@
       {{- with .Template -}}
         {{- $resource = $resource | resources.ExecuteAsTemplate . $.Context -}}
       {{- end -}}
+      {{- with .ToESBuild -}}
+        {{- $resource = $resource | js.Build . -}}
+      {{- end -}}
       {{- if .Minify -}}
         {{- $resource = $resource | minify -}}
       {{- end -}}
