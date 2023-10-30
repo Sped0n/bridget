@@ -1,4 +1,5 @@
 .info {
+  margin-top: var(--nav-height);
   padding: var(--space-standard);
   max-width: 25em;
 
@@ -38,12 +39,5 @@
   h6 {
     font-weight: bold;
     margin: 1.2rem 0;
-  }
-}
-
-@media (max-width: $tablet), (hover: none) {
-  .info {
-    top: var(--nav-height);
-    position: fixed;
   }
 }
