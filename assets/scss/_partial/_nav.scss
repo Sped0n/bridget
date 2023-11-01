@@ -1,4 +1,3 @@
-@import '../_core/mixins';
 $tablet: map-get($breakpoints, 'tablet') - 1;
 
 nav {
