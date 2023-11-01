@@ -1,25 +1,27 @@
 {{/* fingerprint */}}
 {{- $fingerprint := .Scratch.Get "fingerprint" | default "" -}}
 
-{{/* main style */}}
-{{- $style := dict "Source" "scss/style.scss" "Fingerprint" $fingerprint -}}
-{{- $options := dict "targetPath" "css/style.css" "enableSourceMap" true -}}
-{{- $style = dict "Context" . "ToCSS" $options "Minify" hugo.IsProduction | merge $style -}}
+{{/* critical style */}}
+{{- $style := dict "Source" "scss/critical.scss" "Fingerprint" $fingerprint -}}
+{{- $options := dict "enableSourceMap" true "includePaths" (slice "node_modules") -}}
+{{- $style = dict "Context" . "ToCSS" $options "Inline" true | merge $style -}}
 {{- partial "plugin/style.html" $style -}}
 
+{{/* main style */}}
+{{- $style := dict "Source" "scss/style.scss" "Fingerprint" $fingerprint -}}
+{{- $options := dict "targetPath" "css/style.css" "enableSourceMap" true "includePaths" (slice "node_modules") -}}
+{{- $style = dict "Context" . "ToCSS" $options "Minify" hugo.IsProduction "Defer" true | merge $style -}}
 {{- partial "plugin/style.html" $style -}}
 
 {{/* main js */}}
-{{- $esBuildOpts := dict "minify" hugo.IsProduction "targetPath" "js/main.js" -}}
-{{- $script := dict "Source" "ts/main.ts" "Fingerprint" $fingerprint "Defer" true -}}
-{{- $script = dict "ToESBuild" $esBuildOpts "Minify" hugo.IsProduction | merge $script -}}
-{{- partial "plugin/script.html" $script -}}
+<script type="module" src="js/main.js" defer></script>
 
 {{/* fonts */}}
 <link
   rel="preload"
-  href="/lib/fonts/HelveticaNowText-Regular.woff2"
+  href="/lib/fonts/GeistVF.woff2"
   as="font"
   type="font/woff2"
   crossorigin
 />
+<link rel="preload" href="/lib/fonts/fw.svg" as="font" type="font/svg" crossorigin />

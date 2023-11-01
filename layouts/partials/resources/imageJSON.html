@@ -6,7 +6,7 @@
   {{ $Page.Scratch.Add "img" slice }}
   {{ range . }}
     {{ $index = sub $index 1 }}
-    {{ $lores := .Resize "1000x webp Lanczos q70" }}
+    {{ $lores := .Resize "800x webp Lanczos q60" }}
     {{ $hires := .Resize "2500x webp Lanczos q75" }}
     {{ $Page.Scratch.Add "img" (dict
       "index" (int $index)

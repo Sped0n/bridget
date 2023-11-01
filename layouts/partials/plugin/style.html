@@ -18,7 +18,7 @@
       {{- $options := . | merge (dict "outputStyle" "compressed") -}}
       {{- $resource = $resource | toCSS $options -}}
     {{- end -}}
-    {{- if .Minify -}}
+    {{- if or .Minify .Inline -}}
       {{- $resource = $resource | minify -}}
     {{- end -}}
     {{- with .Fingerprint -}}
@@ -27,7 +27,9 @@
     {{- end -}}
     {{- $href = $resource.RelPermalink -}}
   {{- end -}}
-  {{- if .Defer -}}
+  {{- if .Inline -}}
+    <style>{{- $resource.Content | safeCSS -}}</style>
+  {{- else if .Defer -}}
     <link
       rel="preload"
       as="style"
@@ -55,4 +57,3 @@
     />
   {{- end -}}
 {{- end -}}
-
