@@ -7,8 +7,6 @@
 {{- $style = dict "Context" . "ToCSS" $options "Minify" hugo.IsProduction | merge $style -}}
 {{- partial "plugin/style.html" $style -}}
 
-{{/* swiper css */}}
-{{- $style := dict "Source" "/lib/swiper/swiper-bundle.min.css" "Fingerprint" $fingerprint -}}
 {{- partial "plugin/style.html" $style -}}
 
 {{/* main js */}}
