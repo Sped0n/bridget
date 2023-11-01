@@ -1,6 +1,13 @@
 @font-face {
-  font-family: HelveticaNow;
-  src: url('/lib/fonts/HelveticaNowText-Regular.woff2') format('woff2');
-  font-weight: 400;
+  font-family: 'Geist';
+  src: url('/lib/fonts/GeistVF.woff2') format('woff2');
+  font-weight: 90;
   font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'fw';
+  src: url('/lib/fonts/fw.svg') format('svg');
+  font-display: swap;
 }

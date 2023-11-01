@@ -3,7 +3,11 @@
 body {
   line-height: 1.2;
   font-size: 16px;
-  font-family: HelveticaNow, helvetica, arial, sans-serif;
+  font-family: 'Geist', helvetica, arial, sans-serif;
+
+  button {
+    font-family: 'fw', sans-serif;
+  }
 
   @include min-width('tablet') {
     font-size: 18px;
