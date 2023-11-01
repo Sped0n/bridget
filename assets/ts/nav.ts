@@ -39,13 +39,16 @@ const links = Array.from(linksDiv.getElementsByClassName('link')) as HTMLAnchorE
 
 // current link index
 const currentLinkIndex = document
-  .getElementById('main')!
-  .getAttribute('currentMenuItemIndex') as string
+  .getElementById('main')
+  ?.getAttribute('currentMenuItemIndex') as string
 
 // set current link
-for (let [index, link] of links.entries()) {
+for (const [index, link] of links.entries()) {
   if (index === parseInt(currentLinkIndex)) {
+    // set current link style
     link.classList.add('current')
+    // set current link title (only if not home)
+    if (index !== 0) document.title = link.innerText + ' | ' + document.title
   }
 }
 
@@ -53,14 +56,26 @@ for (let [index, link] of links.entries()) {
  * init
  */
 
-export function initNav() {
+export function initNav(): void {
   // init threshold text
   updateThresholdText()
   // init index text
   updateIndexText()
   // event listeners
-  decButton.addEventListener('click', () => decThreshold())
-  incButton.addEventListener('click', () => incThreshold())
+  decButton.addEventListener(
+    'click',
+    () => {
+      decThreshold()
+    },
+    { passive: true }
+  )
+  incButton.addEventListener(
+    'click',
+    () => {
+      incThreshold()
+    },
+    { passive: true }
+  )
 }
 
 // helper

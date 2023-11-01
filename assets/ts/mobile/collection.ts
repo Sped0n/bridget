@@ -1,7 +1,8 @@
 import { container } from '../container'
-import { ImageJSON } from '../resources'
-import { getNextFive, setIndex } from '../state'
+import { type ImageJSON } from '../resources'
+import { setIndex } from '../state'
 import { Watchable, getRandom, onVisible } from '../utils'
+
 import { slideUp } from './gallery'
 
 /**
@@ -42,16 +43,27 @@ export function initCollection(ijs: ImageJSON[]): void {
   imgs = Array.from(collection.getElementsByTagName('img'))
   // add event listeners
   imgs.forEach((img, i) => {
-    img.addEventListener('click', () => handleClick(i))
-    img.addEventListener('keydown', () => handleClick(i))
+    img.addEventListener(
+      'click',
+      () => {
+        handleClick(i)
+      },
+      { passive: true }
+    )
+    img.addEventListener(
+      'keydown',
+      () => {
+        handleClick(i)
+      },
+      { passive: true }
+    )
     // preload
     onVisible(img, () => {
-      // minues one because we want to preload the current and the next 4 images
-      getNextFive(i - 1, imgs.length)
-        .map((i) => imgs[i])
-        .forEach((e) => {
-          e.src = e.dataset.src!
-        })
+      for (let _i = 0; _i < 5; _i++) {
+        const n = i + _i
+        if (n < 0 || n > imgs.length - 1) continue
+        imgs[n].src = imgs[n].dataset.src as string
+      }
     })
   })
 }
@@ -65,7 +77,7 @@ function createCollection(ijs: ImageJSON[]): void {
   const _collection: HTMLDivElement = document.createElement('div')
   _collection.className = 'collection'
   // append images to container
-  for (let [i, ij] of ijs.entries()) {
+  for (const [i, ij] of ijs.entries()) {
     // random x and y
     const x = i !== 0 ? getRandom(-25, 25) : 0
     const y = i !== 0 ? getRandom(-30, 30) : 0

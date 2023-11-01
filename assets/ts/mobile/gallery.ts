@@ -1,9 +1,11 @@
 import { Power3, gsap } from 'gsap'
-import Swiper from 'swiper'
+import { Swiper } from 'swiper'
+
 import { container } from '../container'
-import { ImageJSON } from '../resources'
+import { type ImageJSON } from '../resources'
 import { setIndex, state } from '../state'
 import { Watchable, expand } from '../utils'
+
 import { imgs, mounted } from './collection'
 import { scrollable } from './scroll'
 
@@ -46,7 +48,6 @@ export function slideUp(): void {
   setTimeout(() => {
     scrollable.set(false)
     isAnimating.set(false)
-    console.log(swiper.activeIndex)
   }, 1200)
 }
 
@@ -76,7 +77,7 @@ export function initGallery(ijs: ImageJSON[]): void {
   createGallery(ijs)
   // get elements
   indexDispNums = Array.from(
-    document.getElementsByClassName('nav').item(0)!.getElementsByClassName('num')
+    document.getElementsByClassName('nav').item(0)?.getElementsByClassName('num') ?? []
   ) as HTMLSpanElement[]
   swiperNode = document.getElementsByClassName('galleryInner').item(0) as HTMLDivElement
   gallery = document.getElementsByClassName('gallery').item(0) as HTMLDivElement
@@ -100,9 +101,10 @@ export function initGallery(ijs: ImageJSON[]): void {
       setIndex(realIndex)
     })
   })
-
   // mounted
   mounted.set(true)
+  // dynamic load
+  window.addEventListener('touchstart', () => {})
 }
 
 /**
@@ -111,7 +113,7 @@ export function initGallery(ijs: ImageJSON[]): void {
 
 function changeSlide(slide: number): void {
   loadImages()
-  swiper!.slideTo(slide, 0)
+  swiper.slideTo(slide, 0)
 }
 
 function scrollToActive(): void {
@@ -151,7 +153,7 @@ function createGallery(ijs: ImageJSON[]): void {
   const _swiperWrapper = document.createElement('div')
   _swiperWrapper.className = 'swiper-wrapper'
   // swiper slide
-  for (let ij of ijs) {
+  for (const ij of ijs) {
     const _swiperSlide = document.createElement('div')
     _swiperSlide.className = 'swiper-slide'
     // img
@@ -179,8 +181,12 @@ function createGallery(ijs: ImageJSON[]): void {
   // close
   const _close = document.createElement('div')
   _close.innerText = 'Close'
-  _close.addEventListener('click', () => slideDown())
-  _close.addEventListener('keydown', () => slideDown())
+  _close.addEventListener('click', () => {
+    slideDown()
+  })
+  _close.addEventListener('keydown', () => {
+    slideDown()
+  })
   // nav
   const _navDiv = document.createElement('div')
   _navDiv.className = 'nav'
@@ -210,14 +216,14 @@ function createGallery(ijs: ImageJSON[]): void {
  */
 
 function loadImages(): void {
-  const activeImages = new Array()
+  const activeImages = []
   // load current, next, prev image
   activeImages.push(galleryImages[swiper.activeIndex])
   activeImages.push(
     galleryImages[Math.min(swiper.activeIndex + 1, swiper.slides.length)]
   )
   activeImages.push(galleryImages[Math.max(swiper.activeIndex - 1, 0)])
-  for (let e of activeImages) {
-    e.src = e.dataset.src!
+  for (const e of activeImages) {
+    e.src = e.dataset.src as string
   }
 }

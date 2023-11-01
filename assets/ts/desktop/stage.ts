@@ -1,14 +1,19 @@
 import { Power3, gsap } from 'gsap'
+
 import { container } from '../container'
-import { ImageJSON } from '../resources'
+import { type ImageJSON } from '../resources'
 import { incIndex, state } from '../state'
-import { Watchable } from '../utils'
+import { Watchable, decrement, increment } from '../utils'
 
 /**
  * types
  */
 
-export type HistoryItem = { i: number; x: number; y: number }
+export interface HistoryItem {
+  i: number
+  x: number
+  y: number
+}
 
 /**
  * variables
@@ -44,7 +49,22 @@ function getElCurrent(): HTMLImageElement {
 }
 
 function getElNextFive(): HTMLImageElement[] {
-  return state.get().nextFive.map((i) => imgs[i])
+  const s = state.get()
+  const els = []
+  for (let i = 0; i < 5; i++) {
+    els.push(imgs[increment(s.index + i, s.length)])
+  }
+  return els
+}
+
+function getElPrev(): HTMLImageElement {
+  const s = state.get()
+  return imgs[increment(s.index, s.length)]
+}
+
+function getElNext(): HTMLImageElement {
+  const s = state.get()
+  return imgs[decrement(s.index, s.length)]
 }
 
 /**
@@ -69,7 +89,7 @@ function onMouse(e: MouseEvent): void {
 // set image position with gsap
 function setPositions(): void {
   const elTrail = getElTrail()
-  if (!elTrail.length) return
+  if (elTrail.length === 0) return
 
   // preload
   lores(getElNextFive())
@@ -98,7 +118,7 @@ function expandImage(): void {
   isOpen.set(true)
   isAnimating.set(true)
 
-  hires([getElCurrent()])
+  hires([getElCurrent(), getElPrev(), getElNext()])
 
   const tl = gsap.timeline()
   // move down and hide trail inactive
@@ -125,6 +145,7 @@ function expandImage(): void {
     ease: Power3.easeInOut
   })
   // finished
+  // eslint-disable-next-line @typescript-eslint/no-floating-promises
   tl.then(() => {
     isAnimating.set(false)
   })
@@ -136,6 +157,9 @@ export function minimizeImage(): void {
 
   isOpen.set(false)
   isAnimating.set(true)
+
+  lores([getElCurrent()])
+  lores(getElTrailInactive())
 
   const tl = gsap.timeline()
   // shrink current
@@ -161,6 +185,7 @@ export function minimizeImage(): void {
     opacity: 1
   })
   // finished
+  // eslint-disable-next-line @typescript-eslint/no-floating-promises
   tl.then(() => {
     isAnimating.set(false)
   })
@@ -178,13 +203,23 @@ export function initStage(ijs: ImageJSON[]): void {
   // get image elements
   imgs = Array.from(stage.getElementsByTagName('img'))
   // event listeners
-  stage.addEventListener('click', () => expandImage())
-  stage.addEventListener('keydown', () => expandImage())
-  window.addEventListener('mousemove', onMouse)
+  stage.addEventListener('click', () => {
+    expandImage()
+  })
+  stage.addEventListener('keydown', () => {
+    expandImage()
+  })
+  window.addEventListener('mousemove', onMouse, { passive: true })
   // watchers
-  isOpen.addWatcher(() => active.set(isOpen.get() && !isAnimating.get()))
-  isAnimating.addWatcher(() => active.set(isOpen.get() && !isAnimating.get()))
-  cordHist.addWatcher(() => setPositions())
+  isOpen.addWatcher(() => {
+    active.set(isOpen.get() && !isAnimating.get())
+  })
+  isAnimating.addWatcher(() => {
+    active.set(isOpen.get() && !isAnimating.get())
+  })
+  cordHist.addWatcher(() => {
+    setPositions()
+  })
   // preload
   lores(getElNextFive())
 }
@@ -198,7 +233,7 @@ function createStage(ijs: ImageJSON[]): void {
   const stage: HTMLDivElement = document.createElement('div')
   stage.className = 'stage'
   // append images to container
-  for (let ij of ijs) {
+  for (const ij of ijs) {
     const e = document.createElement('img')
     e.height = ij.loImgH
     e.width = ij.loImgW
@@ -217,16 +252,16 @@ function createStage(ijs: ImageJSON[]): void {
 
 function hires(imgs: HTMLImageElement[]): void {
   imgs.forEach((img) => {
-    img.src = img.dataset.hiUrl!
-    img.height = parseInt(img.dataset.hiImgH!)
-    img.width = parseInt(img.dataset.hiImgW!)
+    img.src = img.dataset.hiUrl as string
+    img.height = parseInt(img.dataset.hiImgH as string)
+    img.width = parseInt(img.dataset.hiImgW as string)
   })
 }
 
 function lores(imgs: HTMLImageElement[]): void {
   imgs.forEach((img) => {
-    img.src = img.dataset.loUrl!
-    img.height = parseInt(img.dataset.loImgH!)
-    img.width = parseInt(img.dataset.loImgW!)
+    img.src = img.dataset.loUrl as string
+    img.height = parseInt(img.dataset.loImgH as string)
+    img.width = parseInt(img.dataset.loImgW as string)
   })
 }

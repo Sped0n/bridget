@@ -18,14 +18,14 @@ export function isMobile(): boolean {
   return window.matchMedia('(hover: none)').matches
 }
 
-export function getRandom(min: number, max: number) {
+export function getRandom(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-export function onVisible(
-  element: HTMLImageElement,
-  callback: (arg0: HTMLImageElement) => void
-) {
+export function onVisible<T extends Element>(
+  element: T,
+  callback: (arg0: T) => void
+): void {
   new IntersectionObserver((entries, observer) => {
     entries.forEach((entry) => {
       if (entry.intersectionRatio > 0) {
@@ -34,7 +34,6 @@ export function onVisible(
       }
     })
   }).observe(element)
-  if (!callback) return new Promise((r) => (callback = r))
 }
 
 /**
@@ -43,7 +42,7 @@ export function onVisible(
 
 export class Watchable<T> {
   constructor(private obj: T) {}
-  private watchers: (() => void)[] = []
+  private readonly watchers: Array<() => void> = []
 
   get(): T {
     return this.obj
@@ -51,7 +50,9 @@ export class Watchable<T> {
 
   set(e: T): void {
     this.obj = e
-    this.watchers.forEach((watcher) => watcher())
+    this.watchers.forEach((watcher) => {
+      watcher()
+    })
   }
 
   addWatcher(watcher: () => void): void {

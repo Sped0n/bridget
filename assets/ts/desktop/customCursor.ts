@@ -1,5 +1,6 @@
-import { active } from './stage'
 import { container } from '../container'
+
+import { active } from './stage'
 
 /**
  * variables
@@ -12,7 +13,7 @@ const cursorInner = document.createElement('div')
  * main functions
  */
 
-function onMouse(e: MouseEvent) {
+function onMouse(e: MouseEvent): void {
   const x = e.clientX
   const y = e.clientY
   cursor.style.transform = `translate3d(${x}px, ${y}px, 0)`
@@ -35,7 +36,7 @@ export function initCustomCursor(): void {
   // append cursor to main
   container.append(cursor)
   // bind mousemove event to window
-  window.addEventListener('mousemove', onMouse)
+  window.addEventListener('mousemove', onMouse, { passive: true })
   // add active callback
   active.addWatcher(() => {
     if (active.get()) {

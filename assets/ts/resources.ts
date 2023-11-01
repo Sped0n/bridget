@@ -11,7 +11,7 @@ export interface ImageJSON {
 
 export function initResources(): ImageJSON[] {
   const imagesJson = document.getElementById('imagesSource')
-  if (!imagesJson) {
+  if (imagesJson === null) {
     return []
   }
   return JSON.parse(imagesJson.textContent as string).sort(

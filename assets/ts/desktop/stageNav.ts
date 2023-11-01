@@ -1,6 +1,7 @@
 import { container } from '../container'
 import { decIndex, incIndex, state } from '../state'
 import { decrement, increment } from '../utils'
+
 import { setCustomCursor } from './customCursor'
 import { active, cordHist, isAnimating, isOpen, minimizeImage } from './stage'
 
@@ -20,7 +21,7 @@ const navItems = ['prev', 'close', 'next'] as const
  * main functions
  */
 
-function handleClick(type: NavItem) {
+function handleClick(type: NavItem): void {
   switch (type) {
     case 'prev':
       prevImage()
@@ -34,7 +35,7 @@ function handleClick(type: NavItem) {
   }
 }
 
-function handleKey(e: KeyboardEvent) {
+function handleKey(e: KeyboardEvent): void {
   if (isOpen.get() || isAnimating.get()) return
   switch (e.key) {
     case 'ArrowLeft':
@@ -53,16 +54,40 @@ function handleKey(e: KeyboardEvent) {
  * init
  */
 
-export function initStageNav() {
+export function initStageNav(): void {
   const navOverlay = document.createElement('div')
   navOverlay.className = 'navOverlay'
-  for (let navItem of navItems) {
+  for (const navItem of navItems) {
     const overlay = document.createElement('div')
     overlay.className = 'overlay'
-    overlay.addEventListener('click', () => handleClick(navItem))
-    overlay.addEventListener('keydown', () => handleClick(navItem))
-    overlay.addEventListener('mouseover', () => setCustomCursor(navItem))
-    overlay.addEventListener('focus', () => setCustomCursor(navItem))
+    overlay.addEventListener(
+      'click',
+      () => {
+        handleClick(navItem)
+      },
+      { passive: true }
+    )
+    overlay.addEventListener(
+      'keydown',
+      () => {
+        handleClick(navItem)
+      },
+      { passive: true }
+    )
+    overlay.addEventListener(
+      'mouseover',
+      () => {
+        setCustomCursor(navItem)
+      },
+      { passive: true }
+    )
+    overlay.addEventListener(
+      'focus',
+      () => {
+        setCustomCursor(navItem)
+      },
+      { passive: true }
+    )
     navOverlay.append(overlay)
   }
   active.addWatcher(() => {
@@ -73,14 +98,14 @@ export function initStageNav() {
     }
   })
   container.append(navOverlay)
-  window.addEventListener('keydown', handleKey)
+  window.addEventListener('keydown', handleKey, { passive: true })
 }
 
 /**
  * hepler
  */
 
-function nextImage() {
+function nextImage(): void {
   if (isAnimating.get()) return
   cordHist.set(
     cordHist.get().map((item) => {
@@ -91,7 +116,7 @@ function nextImage() {
   incIndex()
 }
 
-function prevImage() {
+function prevImage(): void {
   if (isAnimating.get()) return
   cordHist.set(
     cordHist.get().map((item) => {
