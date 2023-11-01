@@ -1,5 +1,4 @@
 baseURL = 'https://www.example.com/'
-title = 'My New Hugo Site'
 themesdir = '../..'
 theme = 'Bridget'
 disableKinds = ["section", "taxonomy", "term", "home"]
