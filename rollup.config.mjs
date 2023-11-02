@@ -4,9 +4,8 @@ import typescript from '@rollup/plugin-typescript'
 
 export default {
   input: './assets/ts/main.ts',
-  sourceMap: 'inline',
   output: {
-    dir: './static/js',
+    dir: './static/bundled/js',
     format: 'es',
     chunkFileNames: '[hash:6].js',
     compact: true
