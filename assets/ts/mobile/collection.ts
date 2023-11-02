@@ -1,16 +1,16 @@
 import { container } from '../container'
 import { type ImageJSON } from '../resources'
 import { setIndex } from '../state'
-import { Watchable, getRandom, onVisible } from '../utils'
+import { getRandom, onVisible } from '../utils'
 
 import { slideUp } from './gallery'
+import { mounted } from './mounted'
 
 /**
  * variables
  */
 
 export let imgs: HTMLImageElement[] = []
-export const mounted = new Watchable<boolean>(false)
 
 /**
  * main functions
@@ -32,8 +32,8 @@ export function initCollection(ijs: ImageJSON[]): void {
     .getElementsByClassName('collection')
     .item(0) as HTMLDivElement
   // add watcher
-  mounted.addWatcher(() => {
-    if (mounted.get()) {
+  mounted.addWatcher((o) => {
+    if (o) {
       collection.classList.remove('hidden')
     } else {
       collection.classList.add('hidden')

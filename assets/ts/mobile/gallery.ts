@@ -6,7 +6,7 @@ import { type ImageJSON } from '../resources'
 import { setIndex, state } from '../state'
 import { Watchable, expand } from '../utils'
 
-import { imgs, mounted } from './collection'
+import { mounted } from './mounted'
 import { scrollable } from './scroll'
 
 /**
@@ -21,6 +21,7 @@ const isAnimating = new Watchable<boolean>(false)
 let lastIndex = -1
 let indexDispNums: HTMLSpanElement[] = []
 let galleryImages: HTMLImageElement[] = []
+let collectionImages: HTMLImageElement[] = []
 
 /**
  * main functions
@@ -83,6 +84,12 @@ export function initGallery(ijs: ImageJSON[]): void {
   gallery = document.getElementsByClassName('gallery').item(0) as HTMLDivElement
   curtain = document.getElementsByClassName('curtain').item(0) as HTMLDivElement
   galleryImages = Array.from(gallery.getElementsByTagName('img'))
+  collectionImages = Array.from(
+    document
+      .getElementsByClassName('collection')
+      .item(0)
+      ?.getElementsByTagName('img') ?? []
+  )
   // state watcher
   state.addWatcher(() => {
     const s = state.get()
@@ -117,7 +124,7 @@ function changeSlide(slide: number): void {
 }
 
 function scrollToActive(): void {
-  imgs[state.get().index].scrollIntoView({
+  collectionImages[state.get().index].scrollIntoView({
     block: 'center',
     behavior: 'auto'
   })
