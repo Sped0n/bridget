@@ -181,12 +181,20 @@ function createGallery(ijs: ImageJSON[]): void {
   // close
   const _close = document.createElement('div')
   _close.innerText = 'Close'
-  _close.addEventListener('click', () => {
-    slideDown()
-  })
-  _close.addEventListener('keydown', () => {
-    slideDown()
-  })
+  _close.addEventListener(
+    'click',
+    () => {
+      slideDown()
+    },
+    { passive: true }
+  )
+  _close.addEventListener(
+    'keydown',
+    () => {
+      slideDown()
+    },
+    { passive: true }
+  )
   // nav
   const _navDiv = document.createElement('div')
   _navDiv.className = 'nav'
