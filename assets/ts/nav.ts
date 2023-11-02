@@ -57,10 +57,17 @@ for (const [index, link] of links.entries()) {
  */
 
 export function initNav(): void {
+  const s = state.get()
   // init threshold text
-  updateThresholdText()
+  updateThresholdText(expand(s.threshold))
   // init index text
-  updateIndexText()
+  updateIndexText(expand(s.index + 1), expand(s.length))
+  // add watcher for updating nav text
+  state.addWatcher((o) => {
+    updateIndexText(expand(o.index + 1), expand(o.length))
+    updateThresholdText(expand(o.threshold))
+  })
+
   // event listeners
   decButton.addEventListener(
     'click',
@@ -80,16 +87,13 @@ export function initNav(): void {
 
 // helper
 
-export function updateThresholdText(): void {
-  const thresholdValue: string = expand(state.get().threshold)
+export function updateThresholdText(thresholdValue: string): void {
   thresholdDispNums.forEach((e: HTMLSpanElement, i: number) => {
     e.innerText = thresholdValue[i]
   })
 }
 
-export function updateIndexText(): void {
-  const indexValue: string = expand(state.get().index + 1)
-  const indexLength: string = expand(state.get().length)
+export function updateIndexText(indexValue: string, indexLength: string): void {
   indexDispNums.forEach((e: HTMLSpanElement, i: number) => {
     if (i < 4) {
       e.innerText = indexValue[i]

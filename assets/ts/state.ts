@@ -1,4 +1,3 @@
-import { updateIndexText, updateThresholdText } from './nav'
 import { Watchable, decrement, increment } from './utils'
 
 /**
@@ -36,10 +35,6 @@ export function initState(length: number): void {
   const s = state.get()
   s.length = length
   state.set(s)
-  state.addWatcher(() => {
-    updateIndexText()
-    updateThresholdText()
-  })
 }
 
 export function setIndex(index: number): void {
