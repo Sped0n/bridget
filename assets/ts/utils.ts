@@ -42,7 +42,7 @@ export function onVisible<T extends Element>(
 
 export class Watchable<T> {
   constructor(private obj: T) {}
-  private readonly watchers: Array<() => void> = []
+  private readonly watchers: Array<(arg0: T) => void> = []
 
   get(): T {
     return this.obj
@@ -51,11 +51,11 @@ export class Watchable<T> {
   set(e: T): void {
     this.obj = e
     this.watchers.forEach((watcher) => {
-      watcher()
+      watcher(this.obj)
     })
   }
 
-  addWatcher(watcher: () => void): void {
+  addWatcher(watcher: (arg0: T) => void): void {
     this.watchers.push(watcher)
   }
 }

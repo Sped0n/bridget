@@ -211,13 +211,13 @@ export function initStage(ijs: ImageJSON[]): void {
   })
   window.addEventListener('mousemove', onMouse, { passive: true })
   // watchers
-  isOpen.addWatcher(() => {
-    active.set(isOpen.get() && !isAnimating.get())
+  isOpen.addWatcher((o) => {
+    active.set(o && !isAnimating.get())
   })
-  isAnimating.addWatcher(() => {
-    active.set(isOpen.get() && !isAnimating.get())
+  isAnimating.addWatcher((o) => {
+    active.set(isOpen.get() && !o)
   })
-  cordHist.addWatcher(() => {
+  cordHist.addWatcher((_) => {
     setPositions()
   })
   // preload

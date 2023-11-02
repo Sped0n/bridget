@@ -38,8 +38,8 @@ export function initCustomCursor(): void {
   // bind mousemove event to window
   window.addEventListener('mousemove', onMouse, { passive: true })
   // add active callback
-  active.addWatcher(() => {
-    if (active.get()) {
+  active.addWatcher((o) => {
+    if (o) {
       cursor.classList.add('active')
     } else {
       cursor.classList.remove('active')

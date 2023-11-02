@@ -93,8 +93,8 @@ export function initGallery(ijs: ImageJSON[]): void {
     lastIndex = s.index
   })
   // mounted watcher
-  mounted.addWatcher(() => {
-    if (!mounted.get()) return
+  mounted.addWatcher((o) => {
+    if (!o) return
     scrollable.set(true)
     swiper = new Swiper(swiperNode, { spaceBetween: 20 })
     swiper.on('slideChange', ({ realIndex }) => {
