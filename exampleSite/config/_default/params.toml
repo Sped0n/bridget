@@ -1,2 +1,5 @@
 # website title
 title = "Bridget"
+# use bundled js and css
+# if you want to build the js and css from scratch, set this to false and run `npm install` and `npm run build`
+bundled = false

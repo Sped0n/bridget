@@ -8,13 +8,24 @@
 {{- partial "plugin/style.html" $style -}}
 
 {{/* main style */}}
-{{- $style := dict "Source" "scss/style.scss" "Fingerprint" $fingerprint -}}
-{{- $options := dict "targetPath" "css/style.css" "enableSourceMap" true "includePaths" (slice "node_modules") -}}
-{{- $style = dict "Context" . "ToCSS" $options "Minify" hugo.IsProduction "Defer" true | merge $style -}}
-{{- partial "plugin/style.html" $style -}}
+{{- if site.Params.bundled -}}
+  <link
+    rel="stylesheet"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+    href="/bundled/css/style.min.css"
+  />
+  <noscript><link rel="stylesheet" href="/bundled/css/style.min.css" /></noscript>
+{{- else -}}
+  {{- $style := dict "Source" "scss/style.scss" "Fingerprint" $fingerprint -}}
+  {{- $style := dict "Source" "scss/style.scss" "Fingerprint" $fingerprint -}}
+  {{- $options := dict "targetPath" "css/style.css" "enableSourceMap" true "includePaths" (slice "node_modules") -}}
+  {{- $style = dict "Context" . "ToCSS" $options "Minify" hugo.IsProduction "Defer" true | merge $style -}}
+  {{- partial "plugin/style.html" $style -}}
+{{- end -}}
 
 {{/* main js */}}
-<script type="module" src="js/main.js" defer></script>
+<script type="module" src="bundled/js/main.js" defer></script>
 
 {{/* fonts */}}
 <link
