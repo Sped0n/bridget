@@ -145,9 +145,10 @@ function expandImage(): void {
     ease: Power3.easeInOut
   })
   // finished
-  // eslint-disable-next-line @typescript-eslint/no-floating-promises
   tl.then(() => {
     isAnimating.set(false)
+  }).catch((e) => {
+    console.log(e)
   })
 }
 
@@ -185,9 +186,10 @@ export function minimizeImage(): void {
     opacity: 1
   })
   // finished
-  // eslint-disable-next-line @typescript-eslint/no-floating-promises
   tl.then(() => {
     isAnimating.set(false)
+  }).catch((e) => {
+    console.log(e)
   })
 }
 
