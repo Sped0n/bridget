@@ -5,7 +5,7 @@ themesdir = '../..'
 # theme name
 theme = 'Bridget'
 # website title
-title = 'bridget'
+title = 'Bridget'
 # don't touch this
 disableKinds = ["section", "taxonomy", "term", "home"]
 # robots.txt
