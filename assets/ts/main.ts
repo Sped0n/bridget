@@ -11,8 +11,8 @@ initNav()
 
 if (ijs.length > 0) {
   if (!isMobile()) {
-    const d = await import('./desktop/stage')
-    d.initStage(ijs)
+    const d = await import('./desktop/init')
+    d.initDesktop(ijs)
   } else {
     const m = await import('./mobile/init')
     m.initMobile(ijs)
