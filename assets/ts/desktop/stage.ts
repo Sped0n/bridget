@@ -1,9 +1,9 @@
-import { Power3, gsap } from 'gsap'
+import { type Power3, type gsap } from 'gsap'
 
 import { container } from '../container'
 import { type ImageJSON } from '../resources'
 import { incIndex, state } from '../state'
-import { Watchable, decrement, increment } from '../utils'
+import { Watchable, decrement, increment, loadGsap } from '../utils'
 
 /**
  * types
@@ -25,6 +25,11 @@ export const cordHist = new Watchable<HistoryItem[]>([])
 export const isOpen = new Watchable<boolean>(false)
 export const isAnimating = new Watchable<boolean>(false)
 export const active = new Watchable<boolean>(false)
+
+let _gsap: typeof gsap
+let _Power3: typeof Power3
+
+let gsapLoaded = false
 
 /**
  * getter
@@ -73,7 +78,7 @@ function getElNext(): HTMLImageElement {
 
 // on mouse
 function onMouse(e: MouseEvent): void {
-  if (isOpen.get() || isAnimating.get()) return
+  if (isOpen.get() || isAnimating.get() || !gsapLoaded) return
   const cord = { x: e.clientX, y: e.clientY }
   const travelDist = Math.hypot(cord.x - last.x, cord.y - last.y)
 
@@ -89,12 +94,12 @@ function onMouse(e: MouseEvent): void {
 // set image position with gsap
 function setPositions(): void {
   const elTrail = getElTrail()
-  if (elTrail.length === 0) return
+  if (elTrail.length === 0 || !gsapLoaded) return
 
   // preload
   lores(getElNextFive())
 
-  gsap.set(elTrail, {
+  _gsap.set(elTrail, {
     x: (i: number) => cordHist.get()[i].x - window.innerWidth / 2,
     y: (i: number) => cordHist.get()[i].y - window.innerHeight / 2,
     opacity: (i: number) =>
@@ -106,25 +111,25 @@ function setPositions(): void {
   if (isOpen.get()) {
     lores(getElTrail())
     hires([getElCurrent()])
-    gsap.set(imgs, { opacity: 0 })
-    gsap.set(getElCurrent(), { opacity: 1, x: 0, y: 0, scale: 1 })
+    _gsap.set(imgs, { opacity: 0 })
+    _gsap.set(getElCurrent(), { opacity: 1, x: 0, y: 0, scale: 1 })
   }
 }
 
 // open image into navigation
 function expandImage(): void {
-  if (isAnimating.get()) return
+  if (isAnimating.get() || !gsapLoaded) return
 
   isOpen.set(true)
   isAnimating.set(true)
 
   hires([getElCurrent(), getElPrev(), getElNext()])
 
-  const tl = gsap.timeline()
+  const tl = _gsap.timeline()
   // move down and hide trail inactive
   tl.to(getElTrailInactive(), {
     y: '+=20',
-    ease: Power3.easeIn,
+    ease: _Power3.easeIn,
     stagger: 0.075,
     duration: 0.3,
     delay: 0.1,
@@ -134,7 +139,7 @@ function expandImage(): void {
   tl.to(getElCurrent(), {
     x: 0,
     y: 0,
-    ease: Power3.easeInOut,
+    ease: _Power3.easeInOut,
     duration: 0.7,
     delay: 0.3
   })
@@ -142,7 +147,7 @@ function expandImage(): void {
   tl.to(getElCurrent(), {
     delay: 0.1,
     scale: 1,
-    ease: Power3.easeInOut
+    ease: _Power3.easeInOut
   })
   // finished
   tl.then(() => {
@@ -154,7 +159,7 @@ function expandImage(): void {
 
 // close navigation and back to stage
 export function minimizeImage(): void {
-  if (isAnimating.get()) return
+  if (isAnimating.get() || !gsapLoaded) return
 
   isOpen.set(false)
   isAnimating.set(true)
@@ -162,25 +167,25 @@ export function minimizeImage(): void {
   lores([getElCurrent()])
   lores(getElTrailInactive())
 
-  const tl = gsap.timeline()
+  const tl = _gsap.timeline()
   // shrink current
   tl.to(getElCurrent(), {
     scale: 0.6,
     duration: 0.6,
-    ease: Power3.easeInOut
+    ease: _Power3.easeInOut
   })
   // move current to original position
   tl.to(getElCurrent(), {
     delay: 0.3,
     duration: 0.7,
-    ease: Power3.easeInOut,
+    ease: _Power3.easeInOut,
     x: cordHist.get()[cordHist.get().length - 1].x - window.innerWidth / 2,
     y: cordHist.get()[cordHist.get().length - 1].y - window.innerHeight / 2
   })
   // show trail inactive
   tl.to(getElTrailInactive(), {
     y: '-=20',
-    ease: Power3.easeOut,
+    ease: _Power3.easeOut,
     stagger: -0.1,
     duration: 0.3,
     opacity: 1
@@ -224,6 +229,22 @@ export function initStage(ijs: ImageJSON[]): void {
   })
   // preload
   lores(getElNextFive())
+  // dynamic import
+  window.addEventListener(
+    'mousemove',
+    () => {
+      loadGsap()
+        .then((g) => {
+          _gsap = g[0]
+          _Power3 = g[1]
+          gsapLoaded = true
+        })
+        .catch((e) => {
+          console.log(e)
+        })
+    },
+    { once: true, passive: true }
+  )
 }
 
 /**
