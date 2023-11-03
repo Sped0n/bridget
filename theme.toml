@@ -3,19 +3,17 @@
 
 name = "Bridget"
 license = "MIT"
-licenselink = "https://github.com/yourname/yourtheme/blob/master/LICENSE"
-description = ""
+licenselink = "https://github.com/Sped0n/bridget/blob/main/LICENSE"
+description = "Bridget is a minimal Hugo theme designed for photographers / visual artists."
 homepage = "http://example.com/"
-tags = []
-features = []
-min_version = "0.41.0"
+tags = ["photography", "visual art", "minimal", "portfolio", "responsive"]
+features = ["SEO optimized", "TypeScript", "multi-language support"]
 
 [author]
-  name = ""
-  homepage = ""
+name = "sped0n"
+homepage = "https://github.com/Sped0n"
 
-# If porting an existing theme
-[original]
-  name = ""
-  homepage = ""
-  repo = ""
+[module]
+[module.hugoVersion]
+extended = true
+min = "0.83.0"
