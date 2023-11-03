@@ -1,0 +1,8 @@
+[next]
+other = "前进"
+[prev]
+other = "后退"
+[close]
+other = "关闭"
+[threshold]
+other = "阈值"

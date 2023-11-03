@@ -29,7 +29,7 @@
 
 {{/* fonts */}}
 <link rel="preload" href="/lib/fonts/NotoSans-Regular.woff2" as="font" crossorigin />
-{{- if (partial "function/langCode.html" (slice "en")) -}}
+{{- if (partial "function/langCode.html" (slice "en" "de" "fr" "es" "it")) -}}
   <link rel="preload" href="/lib/fonts/GeistVF.woff2" as="font" crossorigin />
 {{- else if (partial "function/langCode.html" (slice "zh-cn" "zh-sg")) -}}
   <link

@@ -1,0 +1,8 @@
+[next]
+other = "進む"
+[prev]
+other = "後退"
+[close]
+other = "閉じる"
+[threshold]
+other = "しきい値"

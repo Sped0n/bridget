@@ -1,0 +1,9 @@
+[next]
+other = "siguiente"
+[prev]
+other = "previo"
+[close]
+other = "cerrar"
+# capititalized for menu
+[threshold]
+other = "Umbral"

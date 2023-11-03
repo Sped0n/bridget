@@ -1,0 +1,9 @@
+[next]
+other = "suivant"
+[prev]
+other = "précédent"
+[close]
+other = "fermer"
+# capititalized for menu
+[threshold]
+other = "Seuil"

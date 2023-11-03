@@ -15,23 +15,24 @@ type NavItem = (typeof navItems)[number]
  * variables
  */
 
-const navItems = ['prev', 'close', 'next'] as const
+const mainDiv = document.getElementById('main') as HTMLDivElement
+const navItems = [
+  mainDiv.getAttribute('prevText') as string,
+  mainDiv.getAttribute('closeText') as string,
+  mainDiv.getAttribute('nextText') as string
+] as const
 
 /**
  * main functions
  */
 
 function handleClick(type: NavItem): void {
-  switch (type) {
-    case 'prev':
-      prevImage()
-      break
-    case 'close':
-      minimizeImage()
-      break
-    case 'next':
-      nextImage()
-      break
+  if (type === navItems[0]) {
+    prevImage()
+  } else if (type === navItems[1]) {
+    minimizeImage()
+  } else {
+    nextImage()
   }
 }
 

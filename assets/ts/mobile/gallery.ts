@@ -4,7 +4,13 @@ import { type Swiper } from 'swiper'
 import { container } from '../container'
 import { type ImageJSON } from '../resources'
 import { setIndex, state } from '../state'
-import { Watchable, expand, loadGsap, loadSwiper } from '../utils'
+import {
+  Watchable,
+  capitalizeFirstLetter,
+  expand,
+  loadGsap,
+  loadSwiper
+} from '../utils'
 
 import { mounted } from './mounted'
 import { scrollable } from './scroll'
@@ -214,7 +220,10 @@ function createGallery(ijs: ImageJSON[]): void {
   )
   // close
   const _close = document.createElement('div')
-  _close.innerText = 'Close'
+  const str: string = document
+    .getElementById('main')
+    ?.getAttribute('closeText') as string
+  _close.innerText = capitalizeFirstLetter(str)
   _close.addEventListener(
     'click',
     () => {

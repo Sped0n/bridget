@@ -1,0 +1,9 @@
+[next]
+other = "prossimo"
+[prev]
+other = "precedente"
+[close]
+other = "chiudi"
+# capititalized for menu
+[threshold]
+other = "Soglia"
