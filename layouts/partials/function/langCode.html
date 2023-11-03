@@ -1,0 +1,9 @@
+{{- $res := false -}}
+
+{{- range . -}}
+  {{- if eq site.LanguageCode . -}}
+    {{- $res = true -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return $res -}}
