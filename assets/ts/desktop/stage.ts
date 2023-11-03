@@ -267,7 +267,7 @@ function createStage(ijs: ImageJSON[]): void {
     e.dataset.loUrl = ij.loUrl
     e.dataset.loImgH = ij.loImgH.toString()
     e.dataset.loImgW = ij.loImgW.toString()
-    e.alt = 'image'
+    e.alt = ij.alt
     stage.append(e)
   }
   container.append(stage)

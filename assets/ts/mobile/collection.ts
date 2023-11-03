@@ -86,7 +86,7 @@ function createCollection(ijs: ImageJSON[]): void {
     e.dataset.src = ij.loUrl
     e.height = ij.loImgH
     e.width = ij.loImgW
-    e.alt = 'image'
+    e.alt = ij.alt
     e.style.transform = `translate3d(${x}%, ${y - 50}%, 0)`
     _collection.append(e)
   }

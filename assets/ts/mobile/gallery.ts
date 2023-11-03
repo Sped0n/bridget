@@ -195,7 +195,7 @@ function createGallery(ijs: ImageJSON[]): void {
     e.dataset.src = ij.hiUrl
     e.height = ij.hiImgH
     e.width = ij.hiImgW
-    e.alt = 'image'
+    e.alt = ij.alt
     // append
     _swiperSlide.append(e)
     _swiperWrapper.append(_swiperSlide)

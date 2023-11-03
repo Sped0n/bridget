@@ -1,6 +1,7 @@
 // data structure for images info
 export interface ImageJSON {
   index: number
+  alt: string
   loUrl: string
   loImgH: number
   loImgW: number
