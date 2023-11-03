@@ -1,3 +1,6 @@
+import { type Power3, type gsap } from 'gsap'
+import { type Swiper } from 'swiper'
+
 /**
  * custom helpers
  */
@@ -34,6 +37,16 @@ export function onVisible<T extends Element>(
       }
     })
   }).observe(element)
+}
+
+export async function loadGsap(): Promise<[typeof gsap, typeof Power3]> {
+  const g = await import('gsap')
+  return [g.gsap, g.Power3]
+}
+
+export async function loadSwiper(): Promise<typeof Swiper> {
+  const s = await import('swiper')
+  return s.Swiper
 }
 
 /**
