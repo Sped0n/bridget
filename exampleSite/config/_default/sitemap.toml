@@ -1,3 +1,4 @@
+# please refer to https://gohugo.io/templates/sitemap-template/#configuration
 changefreq = "weekly"
 filename = "sitemap.xml"
 priority = 0.5

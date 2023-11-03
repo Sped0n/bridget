@@ -1,3 +1,4 @@
+# don't touch this file
 [goldmark]
 [goldmark.extensions]
 definitionList = true
