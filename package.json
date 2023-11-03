@@ -6,9 +6,9 @@
   "sideEffects": false,
   "scripts": {
     "lint": "eslint . --fix",
-    "dev": "rm ./static/bundled/js/* && run-p rollup:dev hugo:dev",
-    "build": "rm ./static/bundled/js/* && run-s rollup:build hugo:build && cp ./exampleSite/public/css/* ./static/bundled/css",
-    "server": "rm ./static/bundled/js/* && run-p rollup:server hugo:server",
+    "dev": "run-p rollup:dev hugo:dev",
+    "build": "rm -f ./static/bundled/js/* && run-s rollup:build hugo:build && yes | cp -rf ./exampleSite/public/css/* ./static/bundled/css",
+    "server": "run-p rollup:server hugo:server",
     "rollup:build": "rollup -c --environment BUILD:production",
     "rollup:server": "rollup -c --watch --environment BUILD:production",
     "rollup:dev": "rollup -c --watch --environment BUILD:development",
