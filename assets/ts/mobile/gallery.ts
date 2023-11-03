@@ -1,10 +1,10 @@
-import { Power3, gsap } from 'gsap'
-import { Swiper } from 'swiper'
+import { type Power3, type gsap } from 'gsap'
+import { type Swiper } from 'swiper'
 
 import { container } from '../container'
 import { type ImageJSON } from '../resources'
 import { setIndex, state } from '../state'
-import { Watchable, expand } from '../utils'
+import { Watchable, expand, loadGsap, loadSwiper } from '../utils'
 
 import { mounted } from './mounted'
 import { scrollable } from './scroll'
@@ -23,25 +23,31 @@ let indexDispNums: HTMLSpanElement[] = []
 let galleryImages: HTMLImageElement[] = []
 let collectionImages: HTMLImageElement[] = []
 
+let _Swiper: typeof Swiper
+let _gsap: typeof gsap
+let _Power3: typeof Power3
+
+let libLoaded = false
+
 /**
  * main functions
  */
 
 export function slideUp(): void {
-  if (isAnimating.get()) return
+  if (isAnimating.get() || !libLoaded) return
   isAnimating.set(true)
 
   // load active image
   loadImages()
 
-  gsap.to(curtain, {
+  _gsap.to(curtain, {
     opacity: 1,
     duration: 1
   })
 
-  gsap.to(gallery, {
+  _gsap.to(gallery, {
     y: 0,
-    ease: Power3.easeInOut,
+    ease: _Power3.easeInOut,
     duration: 1,
     delay: 0.4
   })
@@ -56,13 +62,13 @@ function slideDown(): void {
   scrollable.set(true)
   scrollToActive()
 
-  gsap.to(gallery, {
+  _gsap.to(gallery, {
     y: '100%',
-    ease: Power3.easeInOut,
+    ease: _Power3.easeInOut,
     duration: 1
   })
 
-  gsap.to(curtain, {
+  _gsap.to(curtain, {
     opacity: 0,
     duration: 1.2,
     delay: 0.4
@@ -103,15 +109,36 @@ export function initGallery(ijs: ImageJSON[]): void {
   mounted.addWatcher((o) => {
     if (!o) return
     scrollable.set(true)
-    swiper = new Swiper(swiperNode, { spaceBetween: 20 })
+    swiper = new _Swiper(swiperNode, { spaceBetween: 20 })
     swiper.on('slideChange', ({ realIndex }) => {
       setIndex(realIndex)
     })
   })
   // mounted
   mounted.set(true)
-  // dynamic load
-  window.addEventListener('touchstart', () => {})
+  // dynamic import
+  window.addEventListener(
+    'touchstart',
+    () => {
+      loadGsap()
+        .then((g) => {
+          _gsap = g[0]
+          _Power3 = g[1]
+        })
+        .catch((e) => {
+          console.log(e)
+        })
+      loadSwiper()
+        .then((s) => {
+          _Swiper = s
+        })
+        .catch((e) => {
+          console.log(e)
+        })
+      libLoaded = true
+    },
+    { once: true, passive: true }
+  )
 }
 
 /**
@@ -226,12 +253,8 @@ function createGallery(ijs: ImageJSON[]): void {
   container.append(_gallery, _curtain)
 }
 
-/**
- * helper
- */
-
 function loadImages(): void {
-  const activeImages = []
+  const activeImages: HTMLImageElement[] = []
   // load current, next, prev image
   activeImages.push(galleryImages[swiper.activeIndex])
   activeImages.push(
