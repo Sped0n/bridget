@@ -27,6 +27,9 @@
     {{- end -}}
     {{- $href = $resource.RelPermalink -}}
   {{- end -}}
+  {{- with .Link -}}
+    {{- $href = . -}}
+  {{- end -}}
   {{- if .Inline -}}
     <style>{{- $resource.Content | safeCSS -}}</style>
   {{- else if .Defer -}}
