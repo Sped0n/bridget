@@ -1,17 +1,17 @@
 <nav>
   <div class="navArtist">
-    <a href="/">{{ .Site.Params.title }}</a>
+    <a href="/">{{ site.Title }}</a>
   </div>
   <div class="links">
     {{- $index := 0 -}}
     {{- $menus := .Site.Menus.main -}}
     {{- $len := len $menus }}
     {{- range $menus -}}
-      {{- $url := .URL | relLangURL -}}
+      {{- $url := .URL | relURL -}}
       {{- if eq (add $index 1) $len -}}
-        <a href="{{- .URL | relLangURL -}}" class="link">{{- .Identifier -}}</a>
+        <a href="{{- .URL | relURL -}}" class="link">{{- .Title -}}</a>
       {{- else -}}
-        <a href="{{- .URL | relLangURL -}}" class="link">{{- .Identifier -}}</a>,&nbsp
+        <a href="{{- .URL | relURL -}}" class="link">{{- .Title -}}</a>,&nbsp
       {{- end -}}
       {{- $index = add $index 1 -}}
     {{- end -}}
