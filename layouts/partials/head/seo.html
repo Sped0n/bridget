@@ -1,0 +1,21 @@
+{{- with site.Params.verification.google -}}
+  <meta name="google-site-verification" content="{{ . }}" />
+{{- end -}}
+{{- with site.Params.verification.bing -}}
+  <meta name="msvalidate.01" content="{{ . }}" />
+{{- end -}}
+{{- with site.Params.verification.yandex -}}
+  <meta name="yandex-verification" content="{{ . }}" />
+{{- end -}}
+{{- with site.Params.verification.pinterest -}}
+  <meta name="p:domain_verify" content="{{ . }}" />
+{{- end -}}
+{{- with site.Params.verification.baidu -}}
+  <meta name="baidu-site-verification" content="{{ . }}" />
+{{- end -}}
+{{- with site.Params.verification.sogou -}}
+  <meta name="sogou_site_verification" content="{{ . }}" />
+{{- end -}}
+{{- with site.Params.verification.so -}}
+  <meta name="360-site-verification" content="{{ . }}" />
+{{- end -}}
