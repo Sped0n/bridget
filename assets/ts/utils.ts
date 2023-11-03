@@ -39,6 +39,10 @@ export function onVisible<T extends Element>(
   }).observe(element)
 }
 
+export function capitalizeFirstLetter(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
 export async function loadGsap(): Promise<[typeof gsap, typeof Power3]> {
   const g = await import('gsap')
   return [g.gsap, g.Power3]
