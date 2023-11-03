@@ -6,4 +6,6 @@ menu:
   main:
     weight: 3
     identifier: Erwitt
+    title: Erwitt
+unifiedAlt: '© Elliott Erwitt'
 ---

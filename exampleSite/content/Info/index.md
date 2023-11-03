@@ -1,11 +1,13 @@
 ---
 type: _default
 layout: single
-url: /info/
+url: /Info/
 menu:
   main:
     weight: 4
     identifier: Info
+    title: Info
+unifiedAlt: ''
 ---
 
 Bridget is a _minimal_ Hugo theme designed for photographers / visual artists.
