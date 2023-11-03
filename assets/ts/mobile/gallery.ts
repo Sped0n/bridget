@@ -115,13 +115,7 @@ export function initGallery(ijs: ImageJSON[]): void {
   mounted.addWatcher((o) => {
     if (!o) return
     scrollable.set(true)
-    swiper = new _Swiper(swiperNode, { spaceBetween: 20 })
-    swiper.on('slideChange', ({ realIndex }) => {
-      setIndex(realIndex)
-    })
   })
-  // mounted
-  mounted.set(true)
   // dynamic import
   window.addEventListener(
     'touchstart',
@@ -137,6 +131,10 @@ export function initGallery(ijs: ImageJSON[]): void {
       loadSwiper()
         .then((s) => {
           _Swiper = s
+          swiper = new _Swiper(swiperNode, { spaceBetween: 20 })
+          swiper.on('slideChange', ({ realIndex }) => {
+            setIndex(realIndex)
+          })
         })
         .catch((e) => {
           console.log(e)
@@ -145,6 +143,8 @@ export function initGallery(ijs: ImageJSON[]): void {
     },
     { once: true, passive: true }
   )
+  // mounted
+  mounted.set(true)
 }
 
 /**
