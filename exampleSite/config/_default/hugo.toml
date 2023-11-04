@@ -1,3 +1,5 @@
+# timeout
+timeout = "1200s"
 # your website url
 baseURL = 'https://www.example.com/'
 # website title

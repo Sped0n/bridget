@@ -26,7 +26,8 @@
     "hugo",
     "theme",
     "photography",
-    "typescript"
+    "typescript",
+    "sass"
   ],
   "author": "spedon",
   "license": "MIT",

@@ -3,7 +3,7 @@ description = "Bridget is a minimal Hugo theme designed for photographers / visu
 # use bundled js and css
 # * if you want to build the js and css from scratch, set this to false and run `npm install` and `npm run build`
 # * tldr: set this to false if you want to develop and edit the js and css
-bundled = true
+bundled = false
 
 # whether to use favicon resource links
 # generate these with https://realfavicongenerator.net
