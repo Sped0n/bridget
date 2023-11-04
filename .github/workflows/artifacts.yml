@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Filter
     outputs:
-      result: ${{ steps.changed-files-specific.outputs.any_changed }}
+      any_changed: ${{ steps.changed-files-specific.outputs.any_changed }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -31,8 +31,8 @@ jobs:
     needs: [filter]
     if: |
       github.ref == 'refs/heads/main' &&
-      github.event.repository.fork == 'false' &&
-      needs.filter.outputs.result == 'true'
+      github.event.repository.fork == false &&
+      needs.filter.outputs.any_changed == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
