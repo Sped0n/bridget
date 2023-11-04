@@ -18,9 +18,9 @@ jobs:
         id: changed-files-specific
         uses: tj-actions/changed-files@v40
         with:
-          files:
-            - package.json
-            - assets/**
+          files: |
+            package.json
+            assets/**
 
       - name: Run step if any file(s) in the scope change
         if: steps.changed-files-specific.outputs.any_changed == 'true'
