@@ -14,9 +14,19 @@ initNav()
 if (ijs.length > 0) {
   if (!isMobile()) {
     import('./desktop/init')
-      .then((d) => d.initDesktop(ijs))
-      .catch((e) => console.log(e))
+      .then((d) => {
+        d.initDesktop(ijs)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
   } else {
-    import('./mobile/init').then((m) => m.initMobile(ijs)).catch((e) => console.log(e))
+    import('./mobile/init')
+      .then((m) => {
+        m.initMobile(ijs)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
   }
 }
