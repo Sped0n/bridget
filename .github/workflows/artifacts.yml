@@ -37,6 +37,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.83.0'
+          extended: true
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
