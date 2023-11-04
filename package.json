@@ -6,7 +6,7 @@
   "private": true,
   "sideEffects": false,
   "scripts": {
-    "lint": "eslint . --fix",
+    "lint": "eslint . --fix && prettier --write .",
     "dev": "run-p rollup:dev hugo:dev",
     "build": "rm -f ./static/bundled/js/* && run-s rollup:build hugo:build && yes | cp -rf ./exampleSite/public/css/* ./static/bundled/css",
     "server": "run-p rollup:server hugo:server",
