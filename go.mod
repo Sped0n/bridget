@@ -1,3 +1,3 @@
 module github.com/Sped0n/bridget
 
-go 1.20
+go 1.21.3
