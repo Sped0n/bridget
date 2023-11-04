@@ -9,6 +9,7 @@ jobs:
   filter:
     runs-on: ubuntu-latest
     name: Filter
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v3
         with:
@@ -24,25 +25,29 @@ jobs:
 
       - name: Run step if any file(s) in the scope change
         if: steps.changed-files-specific.outputs.any_changed == 'true'
-        run: echo "file(s) in scope is affected"
+        run: echo "{result}={false}" >> $GITHUB_OUTPUT
 
       - name: Prevent from running
         if: steps.changed-files-specific.outputs.any_changed != 'true'
-        run: exit 1
+        run: echo "{result}={false}" >> $GITHUB_OUTPUT
 
   build:
     timeout-minutes: 30
     runs-on: ubuntu-latest
+    name: Build
     needs: [filter]
     if: |
       github.ref == 'refs/heads/main' &&
-      github.event.repository.fork == false
+      github.event.repository.fork == 'false' &&
+      needs.filter.result == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
       - name: Get pnpm store directory
         id: pnpm-cache
