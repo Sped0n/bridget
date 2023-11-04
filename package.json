@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "bridget theme source file",
   "packageManager": "pnpm@8.10.2",
-  "private": true,
+  "private": false,
   "sideEffects": false,
   "scripts": {
     "lint": "eslint . --fix",
