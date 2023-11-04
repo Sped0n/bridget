@@ -20,6 +20,9 @@ on:
   schedule:
     - cron: '27 16 * * 5'
 
+paths:
+  - assets/ts
+
 jobs:
   analyze:
     name: Analyze
