@@ -4,6 +4,5 @@ other = "siguiente"
 other = "previo"
 [close]
 other = "cerrar"
-# capititalized for menu
 [threshold]
-other = "Umbral"
+other = "umbral"

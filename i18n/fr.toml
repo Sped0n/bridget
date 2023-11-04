@@ -4,6 +4,5 @@ other = "suivant"
 other = "précédent"
 [close]
 other = "fermer"
-# capititalized for menu
 [threshold]
-other = "Seuil"
+other = "seuil"

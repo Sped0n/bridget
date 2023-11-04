@@ -4,6 +4,5 @@ other = "next"
 other = "prev"
 [close]
 other = "close"
-# capitialize the first letter of the word
 [threshold]
-other = "Threshold"
+other = "threshold"

@@ -4,6 +4,5 @@ other = "nächste"
 other = "vorher"
 [close]
 other = "schließen"
-# capititalized for menu
 [threshold]
-other = "Schwelle"
+other = "schwelle"

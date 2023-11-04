@@ -4,6 +4,5 @@ other = "prossimo"
 other = "precedente"
 [close]
 other = "chiudi"
-# capititalized for menu
 [threshold]
-other = "Soglia"
+other = "soglia"
