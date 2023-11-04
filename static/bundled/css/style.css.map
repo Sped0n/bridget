@@ -1,14 +1,14 @@
 {
 	"version": 3,
 	"file": "style.css",
-	"sourceRoot": "/Users/spedon/eden/hugo/bridget/exampleSite",
+	"sourceRoot": "/home/runner/work/bridget/bridget/exampleSite",
 	"sources": [
-		"/Users/spedon/eden/hugo/Bridget/assets/scss/style.scss",
-		"../Bridget/assets/scss/_partial/_customCursor.scss",
-		"../Bridget/assets/scss/_partial/_stage.scss",
-		"../Bridget/assets/scss/_partial/_stageNav.scss",
-		"../Bridget/assets/scss/_partial/_collection.scss",
-		"../Bridget/assets/scss/_partial/_gallery.scss",
+		"/home/runner/work/bridget/bridget/assets/scss/style.scss",
+		"assets/scss/_partial/_customCursor.scss",
+		"assets/scss/_partial/_stage.scss",
+		"assets/scss/_partial/_stageNav.scss",
+		"assets/scss/_partial/_collection.scss",
+		"assets/scss/_partial/_gallery.scss",
 		"node_modules/swiper/swiper.scss",
 		"node_modules/swiper/swiper-vars.scss"
 	],
