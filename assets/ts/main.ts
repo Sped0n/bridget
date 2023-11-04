@@ -9,12 +9,14 @@ const ijs = initResources()
 initState(ijs.length)
 initNav()
 
+// NOTE: it seems firefox and chromnium don't like top layer await
+//       so we are using import then instead
 if (ijs.length > 0) {
   if (!isMobile()) {
-    const d = await import('./desktop/init')
-    d.initDesktop(ijs)
+    import('./desktop/init')
+      .then((d) => d.initDesktop(ijs))
+      .catch((e) => console.log(e))
   } else {
-    const m = await import('./mobile/init')
-    m.initMobile(ijs)
+    import('./mobile/init').then((m) => m.initMobile(ijs)).catch((e) => console.log(e))
   }
 }
