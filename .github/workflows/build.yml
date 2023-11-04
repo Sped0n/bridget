@@ -68,7 +68,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ./exampleSite/resources
-          key: ${{ runner.os }}-hugo-
+          key: ${{ runner.os }}-hugo-${{ hashFiles('./exampleSite') }}
+          restore-keys: ${{ runner.os }}-hugo-
 
       - name: Install dependencies
         run: pnpm install
