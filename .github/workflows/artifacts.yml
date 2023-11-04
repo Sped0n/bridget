@@ -9,7 +9,8 @@ jobs:
   filter:
     runs-on: ubuntu-latest
     name: Filter
-    continue-on-error: true
+    outputs:
+      result: ${{ steps.changed-files-specific.outputs.any_changed }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -23,14 +24,6 @@ jobs:
             package.json
             assets/**
 
-      - name: Run step if any file(s) in the scope change
-        if: steps.changed-files-specific.outputs.any_changed == 'true'
-        run: echo "{result}={false}" >> $GITHUB_OUTPUT
-
-      - name: Prevent from running
-        if: steps.changed-files-specific.outputs.any_changed != 'true'
-        run: echo "{result}={false}" >> $GITHUB_OUTPUT
-
   build:
     timeout-minutes: 30
     runs-on: ubuntu-latest
@@ -39,7 +32,7 @@ jobs:
     if: |
       github.ref == 'refs/heads/main' &&
       github.event.repository.fork == 'false' &&
-      needs.filter.result == 'true'
+      needs.filter.outputs.result == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
