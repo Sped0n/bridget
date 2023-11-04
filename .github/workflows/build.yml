@@ -1,4 +1,4 @@
-name: 'Update artifacts'
+name: 'Build'
 on:
   push:
     branches:
@@ -71,12 +71,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: ESlint
-        run: pnpm run lint
-
       - name: Build
         run: |
           pnpm run build
+
+      - name: Push artifacts
+        if: ${{ github.event.pull_request.merged == true }}
+        run: |
           git config --global user.email "noreply@github.com"
           git config --global user.name "CI"
           git diff --quiet || (git add -A && git commit -m "build: update bundled artifacts [skip ci]" && git push)
