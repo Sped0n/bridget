@@ -16,4 +16,4 @@ homepage = "https://github.com/Sped0n"
 [module]
 [module.hugoVersion]
 extended = true
-min = "0.83.0"
+min = "0.114.0"
