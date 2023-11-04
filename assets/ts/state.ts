@@ -21,8 +21,10 @@ const thresholds = [
 const defaultState = {
   index: -1,
   length: 0,
-  threshold: thresholds[2].threshold,
-  trailLength: thresholds[2].trailLength
+  threshold:
+    thresholds[parseInt(sessionStorage.getItem('thresholdsIndex') || '2')].threshold,
+  trailLength:
+    thresholds[parseInt(sessionStorage.getItem('thresholdsIndex') || '2')].trailLength
 }
 
 export const state = new Watchable<State>(defaultState)
@@ -34,6 +36,7 @@ export const state = new Watchable<State>(defaultState)
 export function initState(length: number): void {
   const s = state.get()
   s.length = length
+  updateThreshold(s, 0)
   state.set(s)
 }
 
@@ -72,9 +75,11 @@ export function decThreshold(): void {
  */
 
 function updateThreshold(state: State, inc: number): State {
-  const i = thresholds.findIndex((t) => state.threshold === t.threshold) + inc
+  let i = thresholds.findIndex((t) => state.threshold === t.threshold) + inc
   // out of bounds
   if (i < 0 || i >= thresholds.length) return state
+  // storage the index so we can restore it even if we go to another page
+  sessionStorage.setItem('thresholdsIndex', i.toString())
   const newItems = thresholds[i]
   return { ...state, ...newItems }
 }
