@@ -1,0 +1,13 @@
+{{- if site.Params.favicon -}}
+  {{- with site.Params.svgFavicon -}}
+    <link rel="icon" href="{{ . }}" />
+  {{- else -}}
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  {{- end -}}
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  {{- with site.Params.iconColor -}}
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="{{ . }}" />
+  {{- end -}}
+{{- end -}}
