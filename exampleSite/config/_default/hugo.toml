@@ -1,9 +1,5 @@
 # your website url
 baseURL = 'https://www.example.com/'
-# path to theme directory
-themesdir = '../..'
-# theme name
-theme = 'Bridget'
 # website title
 title = 'Bridget'
 # don't touch this
@@ -21,3 +17,12 @@ enableRobotsTXT = true
 # * ja (powered by Noto Sans JP)
 # * ko (powered by Noto Sans KR)
 defaultContentLanguage = 'en'
+
+# theme as local file
+# themesdir = "../.."
+# theme = "bridget"
+
+# theme as module
+[module]
+[[module.imports]]
+path = "github.com/Sped0n/bridget"
