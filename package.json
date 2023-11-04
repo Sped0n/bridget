@@ -7,6 +7,7 @@
   "sideEffects": false,
   "scripts": {
     "lint": "eslint . --fix && prettier --write .",
+    "lint:check": "eslint . && prettier . --check",
     "dev": "run-p rollup:dev hugo:dev",
     "build": "rm -f ./static/bundled/js/* && run-s rollup:build hugo:build && yes | cp -rf ./exampleSite/public/css/* ./static/bundled/css",
     "server": "run-p rollup:server hugo:server",
