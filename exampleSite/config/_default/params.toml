@@ -30,7 +30,7 @@ sogou = ""
 
 # Analytics config
 [analytics]
-enable = false
+enable = true
 # Google Analytics
 [analytics.google]
 id = ""
@@ -46,10 +46,10 @@ server = ""
 id = ""
 # Umami Analytics
 [analytics.umami]
-data_website_id = ""
-src = ""
+data_website_id = "44a4a42d-ec8e-44c9-a38c-7533929e9845"
+src = "https://umami.sped0nwen.com/script.js"
 data_host_url = ""
-data_domains = ""
+data_domains = "bridget-demo.sped0nwen.com"
 # Plausible Analytics
 [analytics.plausible]
 data_domain = ""
