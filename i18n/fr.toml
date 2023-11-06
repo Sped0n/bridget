@@ -6,3 +6,5 @@ other = "précédent"
 other = "fermer"
 [threshold]
 other = "seuil"
+[404]
+other = "page non trouvée"

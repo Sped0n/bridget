@@ -6,3 +6,5 @@ other = "後退"
 other = "閉じる"
 [threshold]
 other = "しきい値"
+[404]
+other = "ページが見つかりません"

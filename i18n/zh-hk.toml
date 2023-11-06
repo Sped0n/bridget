@@ -6,3 +6,5 @@ other = "後退"
 other = "關閉"
 [threshold]
 other = "閾值"
+[404]
+other = "找不到頁面"

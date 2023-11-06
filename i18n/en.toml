@@ -6,3 +6,5 @@ other = "prev"
 other = "close"
 [threshold]
 other = "threshold"
+[404]
+other = "page not found"
