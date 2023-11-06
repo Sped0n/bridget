@@ -6,11 +6,17 @@ Bridget is a minimal [Hugo](https://gohugo.io) theme designed for photographers 
 
 It’s based on the https://github.com/tylermcrobert/bridget-pictures-www.
 
+![thumbnail](images/tn.jpg)
+
+## [Demo Site](https://bridget-demo.sped0nwen.com)
+
+To see this theme in action, here is a live [demo site](https://bridget-demo.sped0nwen.com) which is rendered with **Bridget** theme.
+
 ## Getting Started
 
 Head to this [documentation](https://github.com/Sped0n/bridget/blob/main/doc/getStarted.md) for a complete guidance to get started with the Bridget theme.
 
-## Feature
+## Features
 
 - **Blazingly fast**: 99/100 on mobile and 100/100 on desktop in [Google PageSpeed Insights](https://developers.google.com/speed/pagespeed/insights)
 

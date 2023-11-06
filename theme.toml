@@ -4,14 +4,20 @@
 name = "Bridget"
 license = "MIT"
 licenselink = "https://github.com/Sped0n/bridget/blob/main/LICENSE"
-description = "Bridget is a minimal Hugo theme designed for photographers / visual artists."
-homepage = "http://example.com/"
+description = "Bridget is a minimal Hugo theme designed for photographers/visual artists."
+homepage = "https://github.com/Sped0n/bridget"
+demosite = "https://bridget-demo.sped0nwen.com"
 tags = ["photography", "visual art", "minimal", "portfolio", "responsive"]
 features = ["SEO optimized", "TypeScript", "multi-language support"]
 
 [author]
 name = "sped0n"
 homepage = "https://github.com/Sped0n"
+
+[original]
+author = "Tyler McRobert"
+homepage = "https://github.com/tylermcrobert"
+repo = "https://github.com/tylermcrobert/bridget-pictures-www"
 
 [module]
 [module.hugoVersion]
