@@ -20,12 +20,8 @@ enableRobotsTXT = true
 # * ko (powered by Noto Sans KR)
 defaultContentLanguage = 'en'
 
-# theme
-theme = "bridget"
-# theme as local file  WARN: Set the themesdir according to your own situation !!!
-themesdir = "../.."
-
-# or theme as module  WARN: you should also set `bundled` to true in params.toml !!!
-# [module]
-# [[module.imports]]
-# path = "github.com/Sped0n/bridget"
+# theme as module
+[module]
+replacements = "github.com/Sped0n/bridget -> ../.." # deploy with local dir  WARN: delete this line if you want to deploy with git
+[[module.imports]]
+path = "github.com/Sped0n/bridget" # deploy with git (recommended)  WARN: you should also set `bundled` to true in params.toml !!!

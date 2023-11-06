@@ -14,8 +14,8 @@
     "rollup:build": "rollup -c --environment BUILD:production",
     "rollup:server": "rollup -c --watch --environment BUILD:production",
     "rollup:dev": "rollup -c --watch --environment BUILD:development",
-    "hugo:build": "hugo --logLevel info --source=exampleSite --themesDir ../.. --gc",
-    "hugo:preview": "hugo --logLevel info --source=exampleSite --themesDir ../.. -D --gc",
+    "hugo:build": "hugo --logLevel info --source=exampleSite --gc",
+    "hugo:preview": "hugo --logLevel info --source=exampleSite -D --gc",
     "hugo:dev": "hugo server --source=exampleSite --gc -D --disableFastRender --watch --logLevel info",
     "hugo:server": "hugo server --source=exampleSite --gc --disableFastRender -e production --watch --logLevel info"
   },
