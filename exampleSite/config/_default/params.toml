@@ -13,6 +13,10 @@ svgFavicon = "/dot.svg"
 # fallback png favicon for unsupported browsers
 svgFaviconFallback = "/dot.png"
 
+# resize options for dynamic resolution, please refer to https://gohugo.io/content-management/image-processing/#image-processing-options
+loResOpt = "700x webp Lanczos q60"
+hiResOpt = "2000x webp Lanczos q75"
+
 # page config
 [page]
 # unified alt text for all images in the page
