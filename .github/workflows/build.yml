@@ -79,7 +79,7 @@ jobs:
 
       - name: Push artifacts
         if: ${{ (github.event_name == 'push' || github.event.pull_request.merged == true) && needs.filter.outputs.any_changed == 'true' }}
-        use: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.PAT }}
           title: Update bundled artifacts
