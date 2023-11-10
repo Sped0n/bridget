@@ -53,10 +53,10 @@ function getElCurrent(): HTMLImageElement {
   return elTrail[elTrail.length - 1]
 }
 
-function getElNextFive(): HTMLImageElement[] {
+function getElNextSeven(): HTMLImageElement[] {
   const s = state.get()
   const els = []
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 7; i++) {
     els.push(imgs[increment(s.index + i, s.length)])
   }
   return els
@@ -97,7 +97,7 @@ function setPositions(): void {
   if (elTrail.length === 0 || !gsapLoaded) return
 
   // preload
-  lores(getElNextFive())
+  lores(getElNextSeven())
 
   _gsap.set(elTrail, {
     x: (i: number) => cordHist.get()[i].x - window.innerWidth / 2,
@@ -228,7 +228,7 @@ export function initStage(ijs: ImageJSON[]): void {
     setPositions()
   })
   // preload
-  lores(getElNextFive())
+  lores(getElNextSeven())
   // dynamic import
   window.addEventListener(
     'mousemove',

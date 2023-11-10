@@ -39,6 +39,11 @@ jobs:
       github.ref == 'refs/heads/main' &&
       github.event.repository.fork == false
     steps:
+      - name: Set current date as env variable
+        run: |
+          echo "builddate=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+        id: version
+
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -84,5 +89,5 @@ jobs:
           token: ${{ secrets.PAT }}
           title: Update bundled artifacts
           commit-message: Update bundled artifacts
-          branch: update-artifacts
+          branch: update-artifacts-${{ steps.version.outputs.builddate }}
           base: main

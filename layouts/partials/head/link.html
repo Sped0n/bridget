@@ -23,10 +23,11 @@
 {{- partial "plugin/script.html" $script -}}
 
 {{/* fonts */}}
-<link rel="preload" href="/lib/fonts/NotoSans-Regular.woff2" as="font" crossorigin />
+<link rel="preload" href="/lib/fonts/fw.woff2" as="font" crossorigin />
 {{- if (partial "function/langCode.html" (slice "en" "de" "fr" "es" "it")) -}}
   <link rel="preload" href="/lib/fonts/GeistVF.woff2" as="font" crossorigin />
 {{- else if (partial "function/langCode.html" (slice "zh-cn" "zh-sg")) -}}
+  <link rel="preload" href="/lib/fonts/NotoSans-Regular.woff2" as="font" crossorigin />
   <link
     rel="preload"
     href="/lib/fonts/NotoSansCJKsc-Regular.woff2"
@@ -34,6 +35,7 @@
     crossorigin
   />
 {{- else if (partial "function/langCode.html" (slice "zh-tw" "zh-hk" "zh-mo")) -}}
+  <link rel="preload" href="/lib/fonts/NotoSans-Regular.woff2" as="font" crossorigin />
   <link
     rel="preload"
     href="/lib/fonts/NotoSansCJKtc-Regular.woff2"
@@ -41,6 +43,7 @@
     crossorigin
   />
 {{- else if (partial "function/langCode.html" (slice "ja")) -}}
+  <link rel="preload" href="/lib/fonts/NotoSans-Regular.woff2" as="font" crossorigin />
   <link
     rel="preload"
     href="/lib/fonts/NotoSansCJKjp-Regular.woff2"
@@ -48,6 +51,7 @@
     crossorigin
   />
 {{- else if (partial "function/langCode.html" (slice "ko")) -}}
+  <link rel="preload" href="/lib/fonts/NotoSans-Regular.woff2" as="font" crossorigin />
   <link
     rel="preload"
     href="/lib/fonts/NotoSansCJKkr-Regular.woff2"

@@ -1,7 +1,7 @@
 @font-face {
   font-family: 'Geist';
   src: url('/lib/fonts/GeistVF.woff2') format('woff2');
-  font-weight: 90;
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
@@ -41,6 +41,14 @@
 @font-face {
   font-family: 'Noto Sans';
   src: url('/lib/fonts/NotoSans-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'FW';
+  src: url('/lib/fonts/fw.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;

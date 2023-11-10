@@ -12,8 +12,8 @@
     {{- with $params.unifiedAlt -}}
       {{- $alt = . -}}
     {{- end -}}
-    {{- $lores := .Resize "800x webp Lanczos q60" -}}
-    {{- $hires := .Resize "2500x webp Lanczos q75" -}}
+    {{- $lores := .Resize (site.Params.loResOpt | default "700x webp Lanczos q60") -}}
+    {{- $hires := .Resize (site.Params.hiResOpt | default "2000x webp Lanczos q75") -}}
     {{- $Page.Scratch.Add "img" (dict
       "index" (int $index)
       "alt" (string $alt)
