@@ -60,6 +60,6 @@
   },
   "dependencies": {
     "gsap": "^3.12.2",
-    "swiper": "^11.0.3"
+    "swiper": "^11.0.4"
   }
 }
