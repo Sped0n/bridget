@@ -1,6 +1,6 @@
 {
   "name": "bridget",
-  "version": "0.0.1",
+  "version": "v0.0.2",
   "description": "bridget theme source file",
   "packageManager": "pnpm@8.10.2",
   "private": true,
