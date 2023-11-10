@@ -6,7 +6,7 @@ body {
   font-family: sans-serif;
 
   button {
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'FW';
   }
 
   @include min-width('tablet') {
@@ -17,15 +17,43 @@ body {
   }
 }
 
-body:lang(en, de, es, fr, it) {
+body:lang(en) {
   font-family: 'Geist', sans-serif;
 }
 
-body:lang(zh-cn, zh-sg) {
+body:lang(de) {
+  font-family: 'Geist', sans-serif;
+}
+
+body:lang(es) {
+  font-family: 'Geist', sans-serif;
+}
+
+body:lang(fr) {
+  font-family: 'Geist', sans-serif;
+}
+
+body:lang(it) {
+  font-family: 'Geist', sans-serif;
+}
+
+body:lang(zh-cn) {
   font-family: 'Noto Sans', 'Noto Sans CJK SC', sans-serif;
 }
 
-body:lang(zh-hk, zh-mo, zh-tw) {
+body:lang(zh-sg) {
+  font-family: 'Noto Sans', 'Noto Sans CJK SC', sans-serif;
+}
+
+body:lang(zh-hk) {
+  font-family: 'Noto Sans', 'Noto Sans CJK TC', sans-serif;
+}
+
+body:lang(zh-mo) {
+  font-family: 'Noto Sans', 'Noto Sans CJK TC', sans-serif;
+}
+
+body:lang(zh-tw) {
   font-family: 'Noto Sans', 'Noto Sans CJK TC', sans-serif;
 }
 
