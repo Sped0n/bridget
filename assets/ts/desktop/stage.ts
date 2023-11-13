@@ -110,7 +110,7 @@ function setPositions(): void {
 
   if (isOpen.get()) {
     lores(getElTrail())
-    hires([getElCurrent()])
+    hires([getElCurrent(), getElPrev(), getElNext()])
     _gsap.set(imgs, { opacity: 0 })
     _gsap.set(getElCurrent(), { opacity: 1, x: 0, y: 0, scale: 1 })
   }
