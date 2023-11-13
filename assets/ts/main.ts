@@ -5,7 +5,7 @@ import { initState } from './state'
 import { isMobile } from './utils'
 
 initContainer()
-const ijs = initResources()
+const ijs = await initResources()
 initState(ijs.length)
 initNav()
 
