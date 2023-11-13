@@ -57,7 +57,6 @@ function getElNextSeven(): HTMLImageElement[] {
   const c = cordHist.get()
   const s = state.get()
   const c0 = c.length > 0 ? c[c.length - 1].i : s.index
-  console.log(c0)
   const els = []
   for (let i = 0; i < 7; i++) {
     els.push(imgs[increment(c0 + i, s.length)])
