@@ -2,7 +2,6 @@
   {{- $params := .Scratch.Get "params" -}}
   {{- $currentPage := . -}}
   {{- with partial "function/currentMenuItem.html" . -}}
-    {{- partial "resources/imageJSON.html" (dict "Path" .DirName "Page" $currentPage) -}}
     <script>
       document.getElementById("main").setAttribute("currentMenuItemIndex", "{{- (sub .ID 1) -}}")
       document.getElementById("main").setAttribute("nextText", "{{- i18n "next" -}}")
