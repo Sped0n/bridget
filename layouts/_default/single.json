@@ -1,7 +1,12 @@
-{{- $Page := .Page -}}
+{{- $Page := . -}}
+{{- $Path := "" -}}
 {{- $params := .Page.Params | merge .Site.Params.Page -}}
 
-{{- $gallery := site.GetPage .Path -}}
+{{- with partial "function/currentMenuItem.html" . -}}
+  {{- $Path = .DirName -}}
+{{- end -}}
+
+{{- $gallery := site.GetPage $Path -}}
 {{- with $gallery.Resources.ByType "image" -}}
   {{- $index := len . -}}
   {{- $Page.Scratch.Add "img" slice -}}
@@ -26,5 +31,7 @@
       )
     -}}
   {{- end -}}
-    <script id="imagesSource" type="application/json">{{ $Page.Scratch.Get "img" | jsonify | safeJS }}</script>
+    {{ $Page.Scratch.Get "img" | jsonify }}
+{{- else -}}
+[]
 {{- end -}}
