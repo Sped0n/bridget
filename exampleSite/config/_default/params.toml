@@ -14,8 +14,8 @@ svgFavicon = "/dot.svg"
 svgFaviconFallback = "/dot.png"
 
 # resize options for dynamic resolution, please refer to https://gohugo.io/content-management/image-processing/#image-processing-options
-loResOpt = "700x webp Lanczos q60"
-hiResOpt = "2000x webp Lanczos q75"
+loResOpt = "800x webp Lanczos q60"
+hiResOpt = "2500x webp Lanczos q75"
 
 # page config
 [page]
