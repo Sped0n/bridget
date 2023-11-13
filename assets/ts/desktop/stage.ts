@@ -54,22 +54,27 @@ function getElCurrent(): HTMLImageElement {
 }
 
 function getElNextSeven(): HTMLImageElement[] {
+  const c = cordHist.get()
   const s = state.get()
+  const c0 = c.length > 0 ? c[c.length - 1].i : s.index
+  console.log(c0)
   const els = []
   for (let i = 0; i < 7; i++) {
-    els.push(imgs[increment(s.index + i, s.length)])
+    els.push(imgs[increment(c0 + i, s.length)])
   }
   return els
 }
 
 function getElPrev(): HTMLImageElement {
+  const c = cordHist.get()
   const s = state.get()
-  return imgs[increment(s.index, s.length)]
+  return imgs[decrement(c[c.length - 1].i, s.length)]
 }
 
 function getElNext(): HTMLImageElement {
+  const c = cordHist.get()
   const s = state.get()
-  return imgs[decrement(s.index, s.length)]
+  return imgs[increment(c[c.length - 1].i, s.length)]
 }
 
 /**
