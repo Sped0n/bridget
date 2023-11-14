@@ -55,7 +55,7 @@
     "prettier": "3.1.0",
     "prettier-plugin-go-template": "^0.0.15",
     "prettier-plugin-organize-imports": "^3.2.4",
-    "rollup": "^4.3.0",
+    "rollup": "^4.4.0",
     "typescript": "^5.2.2"
   },
   "dependencies": {
