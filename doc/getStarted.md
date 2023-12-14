@@ -36,6 +36,8 @@ If you are already using Git for your site, you can add the theme as a submodule
 git submodule add https://github.com/Sped0n/bridget themes/bridget
 ```
 
+After cloning/downloading theme files to the directory, if you want to customize the theme, please run `pnpm install` or `npm install` first.
+
 ### Module (recommended)
 
 > If you want to modify the theme, use Git installation instead.
@@ -155,8 +157,8 @@ replacements = "github.com/Sped0n/bridget -> ../.."
 path = "github.com/Sped0n/bridget"
 ```
 
-- If you want to <u>modify the theme</u> or you have <u>installation with Git</u>, please keep the `replacements` configuration and change the path after the arrow to the location of your local theme file.
-- If you have <u>installation with Module</u>, remove the `replacements` configuration.
+- If you want to <u>modify the theme</u> or you have <u>installation with Git</u>, please **keep the `replacements` configuration** and change the path after the arrow to the location of your local theme file (relative path only).
+- If you have <u>installation with Module</u>, **remove the `replacements` configuration**.
 
 ### `markup.toml`
 
@@ -164,7 +166,11 @@ path = "github.com/Sped0n/bridget"
 
 ### `params.toml`
 
-There is a detailed description in the comments.
+Detailed description in the comments.
+
+> ⚠️⚠️⚠️
+>
+> Only thing that you need to pay **extra attention** is the [`bundled`](https://github.com/Sped0n/bridget/blob/1e2f1fadde9c16989eef1ab771f2ac8463dec5a4/exampleSite/config/_default/params.toml#L6) option, please read the corresponding doc and set it as your need.
 
 ### `sitemap.toml`
 

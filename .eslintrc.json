@@ -22,6 +22,7 @@
     "arrow-body-style": "off",
     "prefer-arrow-callback": "off",
     "import/no-cycle": "error",
+    "@typescript-eslint/non-nullable-type-assertion-style": "off",
     "sort-imports": [
       "error",
       {

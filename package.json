@@ -1,6 +1,6 @@
 {
   "name": "bridget",
-  "version": "v0.0.3",
+  "version": "v0.0.4",
   "description": "bridget theme source file",
   "packageManager": "pnpm@8.10.2",
   "private": true,
@@ -37,9 +37,6 @@
   },
   "homepage": "https://github.com/Sped0n/bridget#readme",
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^11.1.5",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
     "@typescript-eslint/parser": "^6.14.0",
     "eslint": "^8.55.0",
@@ -55,11 +52,14 @@
     "prettier": "3.1.1",
     "prettier-plugin-go-template": "^0.0.15",
     "prettier-plugin-organize-imports": "^3.2.4",
-    "rollup": "^4.9.0",
     "typescript": "^5.3.3"
   },
   "dependencies": {
     "gsap": "^3.12.3",
-    "swiper": "^11.0.5"
+    "swiper": "^11.0.5",
+    "rollup": "^4.9.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.5"
   }
 }
