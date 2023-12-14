@@ -11,10 +11,7 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "overrides": [],
-  "plugins": [
-    "prettier",
-    "@typescript-eslint"
-  ],
+  "plugins": ["prettier", "@typescript-eslint"],
   "parserOptions": {
     "ecmaVersion": "latest",
     "project": "./tsconfig.json",
@@ -32,12 +29,7 @@
         "ignoreCase": false,
         "ignoreDeclarationSort": true,
         "ignoreMemberSort": false,
-        "memberSyntaxSortOrder": [
-          "none",
-          "all",
-          "multiple",
-          "single"
-        ],
+        "memberSyntaxSortOrder": ["none", "all", "multiple", "single"],
         "allowSeparatedGroups": true
       }
     ],
@@ -45,14 +37,7 @@
     "import/order": [
       "error",
       {
-        "groups": [
-          "builtin",
-          "external",
-          "internal",
-          "parent",
-          "sibling",
-          "index"
-        ],
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
         "newlines-between": "always",
         "alphabetize": {
           "order": "asc",

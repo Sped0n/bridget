@@ -166,11 +166,11 @@ path = "github.com/Sped0n/bridget"
 
 ### `params.toml`
 
-Detailed description in the comments. 
+Detailed description in the comments.
 
->   ⚠️⚠️⚠️
+> ⚠️⚠️⚠️
 >
->   Only thing that you need to pay **extra attention** is the [`bundled`](https://github.com/Sped0n/bridget/blob/1e2f1fadde9c16989eef1ab771f2ac8463dec5a4/exampleSite/config/_default/params.toml#L6) option, please read the corresponding doc and set it as your need.
+> Only thing that you need to pay **extra attention** is the [`bundled`](https://github.com/Sped0n/bridget/blob/1e2f1fadde9c16989eef1ab771f2ac8463dec5a4/exampleSite/config/_default/params.toml#L6) option, please read the corresponding doc and set it as your need.
 
 ### `sitemap.toml`
 
