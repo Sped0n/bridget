@@ -57,7 +57,7 @@
   "dependencies": {
     "gsap": "^3.12.3",
     "swiper": "^11.0.5",
-    "rollup": "^4.9.0",
+    "rollup": "^4.9.2",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.5"
