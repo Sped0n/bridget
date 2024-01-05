@@ -24,7 +24,7 @@ jobs:
 
       - name: Get changed files in scope
         id: changed-files-specific
-        uses: tj-actions/changed-files@v40
+        uses: tj-actions/changed-files@v41
         with:
           files: |
             package.json
