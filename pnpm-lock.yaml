@@ -15,8 +15,8 @@ dependencies:
     specifier: ^11.1.5
     version: 11.1.5(rollup@4.9.2)(typescript@5.3.3)
   gsap:
-    specifier: ^3.12.3
-    version: 3.12.3
+    specifier: ^3.12.4
+    version: 3.12.4
   rollup:
     specifier: ^4.9.2
     version: 4.9.2
@@ -1465,8 +1465,8 @@ packages:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
     dev: true
 
-  /gsap@3.12.3:
-    resolution: {integrity: sha512-TySXTE+ABiAVa61W+h5wv2p5GkJT1Uj//4nWpK8EjmhcDqwH++35IvtbQlVVFj+rdcJdFCdCt0SKgb+SwdPq/A==}
+  /gsap@3.12.4:
+    resolution: {integrity: sha512-1ByAq8dD0W4aBZ/JArgaQvc0gyUfkGkP8mgAQa0qZGdpOKlSOhOf+WNXjoLimKaKG3Z4Iu6DKZtnyszqQeyqWQ==}
     dev: false
 
   /has-bigints@1.0.2:
