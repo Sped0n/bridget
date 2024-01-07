@@ -1,9 +1,22 @@
-<meta name="Description" content="{{- site.Params.description -}}" />
-<meta
-  name="application-name"
-  content="{{- .Site.Params.app.title | default site.Title -}}"
-/>
-<meta
-  name="apple-mobile-web-app-title"
-  content="{{- .Site.Params.app.title | default site.Title -}}"
-/>
+{{/* Title */}}
+{{- $page_title := "" -}}
+{{- with partial "function/currentMenuItem.html" . -}}
+  {{ $page_title = printf "%s" site.Title | printf "%s%s" " | " | printf "%s%s" .Title | printf "%s" }}
+{{- end -}}
+<title>{{ $page_title }}</title>
+
+{{/* Basic */}}
+<meta name="Description" content="{{ site.Params.description }}" />
+<meta name="application-name" content="{{ $page_title }}" />
+<meta name="apple-mobile-web-app-title" content="{{ $page_title }}" />
+
+{{/* Opengraph */}}
+<meta property="og:title" content="{{ $page_title }}" />
+<meta name="twitter:title" content="{{ $page_title }}" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="{{ .Permalink }}" />
+<meta property="og:description" content="{{ site.Params.description }}" />
+<meta name="twitter:description" content="{{ site.Params.description }}" />
+
+{{/* Generator */}}
+{{ hugo.Generator }}
