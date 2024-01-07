@@ -1,14 +1,9 @@
 {{- define "main" -}}
-  {{- $params := .Scratch.Get "params" -}}
-  {{- $currentPage := . -}}
-  {{- with partial "function/currentMenuItem.html" . -}}
-    <script>
-      document.getElementById("main").setAttribute("currentMenuItemIndex", "{{- (sub .ID 1) -}}")
-      document.getElementById("main").setAttribute("nextText", "{{- i18n "next" -}}")
-      document.getElementById("main").setAttribute("prevText", "{{- i18n "prev" -}}")
-      document.getElementById("main").setAttribute("closeText", "{{- i18n "close" -}}")
-   </script>
-  {{- end -}}
+  <script>
+    document.getElementById("main").setAttribute("nextText", "{{- i18n "next" -}}")
+    document.getElementById("main").setAttribute("prevText", "{{- i18n "prev" -}}")
+    document.getElementById("main").setAttribute("closeText", "{{- i18n "close" -}}")
+  </script>
   <div class="container">
     {{- partial "nav.html" . -}}
   </div>

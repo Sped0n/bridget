@@ -10,9 +10,9 @@ menu:
 unifiedAlt: ''
 ---
 
-Bridget is a _minimal_ Hugo theme designed for photographers / visual artists.
+Bridget is a _minimal_ Hugo theme designed for photographers/visual artists.
 
-The inspiration for this theme came from a video by <u>[Hyperlexed](https://www.youtube.com/@Hyperplexed)</u>, which can be found <u>[here](https://www.youtube.com/watch?v=Jt3A2lNN2aE)</u>. Initially, it was designed using pure TypeScript and CSS. However, after website designer <u>[Tyler McRobert](https://tylermcrobert.com)</u> made the source code publicly available, the whole project was modified to mimic the original design. The animations in Bridget are achieved using gsap and swiper. In essence, it is more like a porting of the original design into Hugo.
+The inspiration for this theme came from a video by <u>[Hyperlexed](https://www.youtube.com/@Hyperplexed)</u>, which can be found <u>[here](https://www.youtube.com/watch?v=Jt3A2lNN2aE)</u>. Initially, it was developed using raw TypeScript and CSS. However, after website designer <u>[Tyler McRobert](https://tylermcrobert.com)</u> made the source code publicly available, I realized that I have invented many unnecessary components, and this project was modified to porting the original design to hugo while focussing on _performance_.
 
 Once again, great shout out to <u>[Tyler McRobert](https://tylermcrobert.com)</u> for his inspiration to this project.
 

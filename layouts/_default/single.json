@@ -3,7 +3,7 @@
 {{- $params := .Page.Params | merge .Site.Params.Page -}}
 
 {{- with partial "function/currentMenuItem.html" . -}}
-  {{- $Path = .DirName -}}
+  {{- $Path = .Identifier -}}
 {{- end -}}
 
 {{- $gallery := site.GetPage $Path -}}

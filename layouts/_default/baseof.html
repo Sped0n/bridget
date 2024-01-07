@@ -3,11 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ site.Title }}</title>
-    {{- partial "head/link.html" -}}
-    {{- partial "head/meta.html" -}}
-    {{- partial "head/seo.html" -}}
-    {{- partial "head/favicon.html" -}}
+    {{- partial "head/link.html" . -}}
+    {{- partial "head/meta.html" . -}}
+    {{- partial "head/seo.html" . -}}
+    {{- partial "head/favicon.html" . -}}
   </head>
   <body lang="{{- site.LanguageCode -}}">
     <div id="main">

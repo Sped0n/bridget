@@ -31,27 +31,6 @@ const indexDispNums = Array.from(
   indexDiv.getElementsByClassName('num')
 ) as HTMLSpanElement[]
 
-// links div
-const linksDiv = document.getElementsByClassName('links').item(0) as HTMLDivElement
-
-// links
-const links = Array.from(linksDiv.getElementsByClassName('link')) as HTMLAnchorElement[]
-
-// current link index
-const currentLinkIndex = document
-  .getElementById('main')
-  ?.getAttribute('currentMenuItemIndex') as string
-
-// set current link
-for (const [index, link] of links.entries()) {
-  if (index === parseInt(currentLinkIndex)) {
-    // set current link style
-    link.classList.add('current')
-    // set current link title (only if not home)
-    if (index !== 0) document.title = link.innerText + ' | ' + document.title
-  }
-}
-
 /**
  * init
  */
