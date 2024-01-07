@@ -4,14 +4,30 @@
   </div>
   <div class="links">
     {{- $index := 0 -}}
+    {{- $currentIndex := -1 -}}
+    {{- with partial "function/currentMenuItem.html" . -}}
+      {{- $currentIndex = sub .Weight 1 -}}
+    {{- end -}}
     {{- $menus := .Site.Menus.main -}}
     {{- $len := len $menus }}
     {{- range $menus -}}
       {{- $url := .URL | relURL -}}
       {{- if eq (add $index 1) $len -}}
-        <a href="{{- .URL | relURL -}}" class="link">{{- .Title -}}</a>
+        <a
+          href="{{- .URL | relURL -}}"
+          class="link{{- if eq $index $currentIndex -}}
+            {{- printf " current" -}}
+          {{- end -}}"
+          >{{- .Title -}}</a
+        >
       {{- else -}}
-        <a href="{{- .URL | relURL -}}" class="link">{{- .Title -}}</a>,&nbsp
+        <a
+          href="{{- .URL | relURL -}}"
+          class="link{{- if eq $index $currentIndex -}}
+            {{- printf " current" -}}
+          {{- end -}}"
+          >{{- .Title -}}</a
+        >,&nbsp
       {{- end -}}
       {{- $index = add $index 1 -}}
     {{- end -}}

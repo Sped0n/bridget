@@ -1,9 +1,4 @@
 {{- define "main" -}}
-  {{- $params := .Scratch.Get "params" -}}
-  {{- $currentPage := . -}}
-  {{- with partial "function/currentMenuItem.html" . -}}
-    <script>document.getElementById("main").setAttribute("currentMenuItemIndex", "{{- (sub .ID 1) -}}")</script>
-  {{- end -}}
   <div class="container">
     {{- partial "nav.html" . -}}
   </div>
