@@ -33,6 +33,10 @@
     {{- end -}}
   </div>
   <div class="threshold">
+    {{- $length := 0 -}}
+    {{- with partial "function/getImageSlice.html" . -}}
+      {{- $length = len . -}}
+    {{- end -}}
     <span>{{- i18n "threshold" | strings.FirstUpper -}}:</span>
     <span>
       <button class="dec">&#xFF0D;</button>
@@ -42,10 +46,43 @@
     </span>
   </div>
   <div class="index">
-    <span class="num"></span><span class="num"></span><span class="num"></span
-    ><span class="num"></span>
+    <span class="num">0</span><span class="num">0</span><span class="num">0</span
+    ><span class="num">0</span>
     <span>/</span>
-    <span class="num"></span><span class="num"></span><span class="num"></span
-    ><span class="num"></span>
+    <span class="num">{{- math.Floor (div $length 1000) -}}</span
+    ><span class="num">{{- mod (math.Floor (div $length 100)) 10 -}}</span
+    ><span class="num">{{- mod (math.Floor (div $length 10)) 10 -}}</span
+    ><span class="num">{{- mod $length 10 -}}</span>
   </div>
 </nav>
+{{- /* for threshold */ -}}
+<script>
+  i = 2
+  const s = sessionStorage.getItem('thresholdsIndex')
+  if (s !== null) {
+    i = parseInt(s)
+  }
+  var t = ''
+  switch (i) {
+    case 0:
+      t = '0020'
+      break
+    case 1:
+      t = '0040'
+      break
+    case 2:
+      t = '0080'
+      break
+    case 3:
+      t = '0140'
+      break
+    case 4:
+      t = '0200'
+      break
+  }
+  Array.from(
+    document.getElementsByClassName('threshold').item(0).getElementsByClassName('num')
+  ).forEach((e, i) => {
+    e.innerText = t[i]
+  })
+</script>
