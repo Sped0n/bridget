@@ -6,8 +6,8 @@
   </script>
   <div class="container">
     {{- partial "nav.html" . -}}
+    <article class="info">
+      {{ .Content }}
+    </article>
   </div>
-  <article class="info">
-    {{ .Content }}
-  </article>
 {{- end -}}
