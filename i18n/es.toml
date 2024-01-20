@@ -8,3 +8,5 @@ other = "cerrar"
 other = "umbral"
 [404]
 other = "página no encontrada"
+[loading]
+other = "cargando"

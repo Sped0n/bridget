@@ -8,3 +8,5 @@ other = "닫기"
 other = "임계값"
 [404]
 other = "페이지를 찾을 수 없습니다"
+[loading]
+other = "로딩중"

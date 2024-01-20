@@ -8,3 +8,5 @@ other = "關閉"
 other = "閾值"
 [404]
 other = "找不到頁面"
+[loading]
+other = "載入中"
