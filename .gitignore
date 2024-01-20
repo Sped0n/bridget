@@ -22,3 +22,6 @@ $RECYCLE.BIN/
 # Hugo
 .hugo_build.lock
 jsconfig.json
+
+# css map
+*.css.map
