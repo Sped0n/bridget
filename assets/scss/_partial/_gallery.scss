@@ -27,6 +27,20 @@
         height: 100%;
         object-fit: contain;
       }
+
+      .loadingText {
+        position: absolute;
+        color: black;
+        font-size: 14px;
+        top: 50%;
+        left: 50%;
+        transform: translate3d(-50%, -50%, 0);
+      }
+
+      .slideContainer {
+        position: relative;
+        display: inline-block;
+      }
     }
   }
 

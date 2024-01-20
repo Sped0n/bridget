@@ -196,14 +196,34 @@ function createGallery(ijs: ImageJSON[]): void {
   for (const ij of ijs) {
     const _swiperSlide = document.createElement('div')
     _swiperSlide.className = 'swiper-slide'
+    // loading indicator
+    const l = document.createElement('div')
+    l.className = 'loadingText'
+    l.innerText =
+      (document.getElementById('main')?.getAttribute('loadingText') as string) + '...'
     // img
     const e = document.createElement('img')
     e.dataset.src = ij.hiUrl
     e.height = ij.hiImgH
     e.width = ij.hiImgW
     e.alt = ij.alt
+    e.classList.add('hide')
+    // load event
+    e.addEventListener(
+      'load',
+      () => {
+        e.classList.remove('hide')
+        l.classList.add('hide')
+      },
+      { once: true, passive: true }
+    )
+    // parent container
+    const p = document.createElement('div')
+    p.className = 'slideContainer'
     // append
-    _swiperSlide.append(e)
+    p.append(e)
+    p.append(l)
+    _swiperSlide.append(p)
     _swiperWrapper.append(_swiperSlide)
   }
   // swiper node
