@@ -25,6 +25,7 @@ export const cordHist = new Watchable<HistoryItem[]>([])
 export const isOpen = new Watchable<boolean>(false)
 export const isAnimating = new Watchable<boolean>(false)
 export const active = new Watchable<boolean>(false)
+export const isLoading = new Watchable<boolean>(false)
 
 let _gsap: typeof gsap
 let _Power3: typeof Power3
@@ -114,9 +115,13 @@ function setPositions(): void {
 
   if (isOpen.get()) {
     lores(getElTrail())
-    hires([getElCurrent(), getElPrev(), getElNext()])
+    const elc = getElCurrent()
+    elc.src = '' // reset src to ensure we only display hires images
+    elc.classList.add('hide')
+    hires([elc, getElPrev(), getElNext()])
     _gsap.set(imgs, { opacity: 0 })
-    _gsap.set(getElCurrent(), { opacity: 1, x: 0, y: 0, scale: 1 })
+    _gsap.set(elc, { opacity: 1, x: 0, y: 0, scale: 1 })
+    loader(elc)
   }
 }
 
@@ -127,7 +132,11 @@ function expandImage(): void {
   isOpen.set(true)
   isAnimating.set(true)
 
-  hires([getElCurrent(), getElPrev(), getElNext()])
+  const elc = getElCurrent()
+  // don't clear src here because we want a better transition
+
+  hires([elc, getElPrev(), getElNext()])
+  loader(elc)
 
   const tl = _gsap.timeline()
   // move down and hide trail inactive
@@ -291,4 +300,28 @@ function lores(imgs: HTMLImageElement[]): void {
     img.height = parseInt(img.dataset.loImgH as string)
     img.width = parseInt(img.dataset.loImgW as string)
   })
+}
+
+function loader(e: HTMLImageElement): void {
+  if (!e.complete) {
+    isLoading.set(true)
+    e.addEventListener(
+      'load',
+      () => {
+        isLoading.set(false)
+        e.classList.remove('hide')
+      },
+      { once: true, passive: true }
+    )
+    e.addEventListener(
+      'error',
+      () => {
+        isLoading.set(false)
+      },
+      { once: true, passive: true }
+    )
+  } else {
+    e.classList.remove('hide')
+    isLoading.set(false)
+  }
 }

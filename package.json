@@ -1,6 +1,6 @@
 {
   "name": "bridget",
-  "version": "v0.0.4",
+  "version": "v1.0.0",
   "description": "bridget theme source file",
   "packageManager": "pnpm@8.10.2",
   "private": true,
@@ -9,7 +9,7 @@
     "lint": "eslint . --fix && prettier --write .",
     "lint:check": "eslint . && prettier . --check",
     "dev": "run-p rollup:dev hugo:dev",
-    "build": "rm -f ./static/bundled/js/* && run-s rollup:build hugo:build && yes | cp -rf ./exampleSite/public/css/* ./static/bundled/css",
+    "build": "rm -f ./static/bundled/js/* && run-s rollup:build hugo:build && yes | cp -rf ./exampleSite/public/css/*.css ./static/bundled/css",
     "server": "run-p rollup:server hugo:server",
     "rollup:build": "rollup -c --environment BUILD:production",
     "rollup:server": "rollup -c --watch --environment BUILD:production",

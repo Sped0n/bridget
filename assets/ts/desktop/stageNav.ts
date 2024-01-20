@@ -3,7 +3,14 @@ import { decIndex, incIndex, state } from '../state'
 import { decrement, increment } from '../utils'
 
 import { setCustomCursor } from './customCursor'
-import { active, cordHist, isAnimating, isOpen, minimizeImage } from './stage'
+import {
+  active,
+  cordHist,
+  isAnimating,
+  isLoading,
+  isOpen,
+  minimizeImage
+} from './stage'
 
 /**
  * types
@@ -21,6 +28,8 @@ const navItems = [
   mainDiv.getAttribute('closeText') as string,
   mainDiv.getAttribute('nextText') as string
 ] as const
+const loadingText = (mainDiv.getAttribute('loadingText') as string) + '...'
+let loadedText = ''
 
 /**
  * main functions
@@ -56,39 +65,80 @@ function handleKey(e: KeyboardEvent): void {
  */
 
 export function initStageNav(): void {
+  // isLoading
+  isLoading.addWatcher((o) => {
+    if (o) setCustomCursor(loadingText)
+    else setCustomCursor(loadedText)
+  })
+  // navOverlay
   const navOverlay = document.createElement('div')
   navOverlay.className = 'navOverlay'
-  for (const navItem of navItems) {
+  for (const [index, navItem] of navItems.entries()) {
     const overlay = document.createElement('div')
     overlay.className = 'overlay'
-    overlay.addEventListener(
-      'click',
-      () => {
-        handleClick(navItem)
-      },
-      { passive: true }
-    )
-    overlay.addEventListener(
-      'keydown',
-      () => {
-        handleClick(navItem)
-      },
-      { passive: true }
-    )
-    overlay.addEventListener(
-      'mouseover',
-      () => {
-        setCustomCursor(navItem)
-      },
-      { passive: true }
-    )
-    overlay.addEventListener(
-      'focus',
-      () => {
-        setCustomCursor(navItem)
-      },
-      { passive: true }
-    )
+    const isClose = index === 1
+    // close
+    if (isClose) {
+      overlay.addEventListener(
+        'click',
+        () => {
+          handleCloseClick(navItem)
+        },
+        { passive: true }
+      )
+      overlay.addEventListener(
+        'keydown',
+        () => {
+          handleCloseClick(navItem)
+        },
+        { passive: true }
+      )
+      overlay.addEventListener(
+        'mouseover',
+        () => {
+          handleCloseHover(navItem)
+        },
+        { passive: true }
+      )
+      overlay.addEventListener(
+        'focus',
+        () => {
+          handleCloseHover(navItem)
+        },
+        { passive: true }
+      )
+    }
+    // prev and next
+    else {
+      overlay.addEventListener(
+        'click',
+        () => {
+          handlePNClick(navItem)
+        },
+        { passive: true }
+      )
+      overlay.addEventListener(
+        'keydown',
+        () => {
+          handlePNClick(navItem)
+        },
+        { passive: true }
+      )
+      overlay.addEventListener(
+        'mouseover',
+        () => {
+          handlePNHover(navItem)
+        },
+        { passive: true }
+      )
+      overlay.addEventListener(
+        'focus',
+        () => {
+          handlePNHover(navItem)
+        },
+        { passive: true }
+      )
+    }
     navOverlay.append(overlay)
   }
   active.addWatcher(() => {
@@ -126,4 +176,24 @@ function prevImage(): void {
   )
 
   decIndex()
+}
+
+function handleCloseClick(navItem: NavItem): void {
+  handleClick(navItem)
+  isLoading.set(false)
+}
+
+function handleCloseHover(navItem: NavItem): void {
+  loadedText = navItem
+  setCustomCursor(navItem)
+}
+
+function handlePNClick(navItem: NavItem): void {
+  if (!isLoading.get()) handleClick(navItem)
+}
+
+function handlePNHover(navItem: NavItem): void {
+  loadedText = navItem
+  if (isLoading.get()) setCustomCursor(loadingText)
+  else setCustomCursor(navItem)
 }

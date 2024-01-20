@@ -8,3 +8,5 @@ other = "chiudi"
 other = "soglia"
 [404]
 other = "pagina non trovata"
+[loading]
+other = "caricamento"
