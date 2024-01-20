@@ -96,14 +96,14 @@ export function initStageNav(): void {
       overlay.addEventListener(
         'mouseover',
         () => {
-          setCustomCursor(navItem)
+          handleCloseHover(navItem)
         },
         { passive: true }
       )
       overlay.addEventListener(
         'focus',
         () => {
-          setCustomCursor(navItem)
+          handleCloseHover(navItem)
         },
         { passive: true }
       )
@@ -181,6 +181,11 @@ function prevImage(): void {
 function handleCloseClick(navItem: NavItem): void {
   handleClick(navItem)
   isLoading.set(false)
+}
+
+function handleCloseHover(navItem: NavItem): void {
+  loadedText = navItem
+  setCustomCursor(navItem)
 }
 
 function handlePNClick(navItem: NavItem): void {
