@@ -33,6 +33,11 @@
     {{- end -}}
   </div>
   <div class="threshold">
+    {{- $length := 0 -}}
+    {{- with partial "function/getImageSlice.html" . -}}
+      {{- $length = len . -}}
+      {{- warnf "%d" $length -}}
+    {{- end -}}
     <span>{{- i18n "threshold" | strings.FirstUpper -}}:</span>
     <span>
       <button class="dec">&#xFF0D;</button>
@@ -42,10 +47,12 @@
     </span>
   </div>
   <div class="index">
-    <span class="num"></span><span class="num"></span><span class="num"></span
-    ><span class="num"></span>
+    <span class="num">0</span><span class="num">0</span><span class="num">0</span
+    ><span class="num">0</span>
     <span>/</span>
-    <span class="num"></span><span class="num"></span><span class="num"></span
-    ><span class="num"></span>
+    <span class="num">{{- math.Floor (div $length 1000) -}}</span
+    ><span class="num">{{- mod (math.Floor (div $length 100)) 10 -}}</span
+    ><span class="num">{{- mod (math.Floor (div $length 10)) 10 -}}</span
+    ><span class="num">{{- mod $length 10 -}}</span>
   </div>
 </nav>

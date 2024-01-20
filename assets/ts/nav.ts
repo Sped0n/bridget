@@ -39,8 +39,6 @@ export function initNav(): void {
   const s = state.get()
   // init threshold text
   updateThresholdText(expand(s.threshold))
-  // init index text
-  updateIndexText(expand(s.index + 1), expand(s.length))
   // add watcher for updating nav text
   state.addWatcher((o) => {
     updateIndexText(expand(o.index + 1), expand(o.length))
