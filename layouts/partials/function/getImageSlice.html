@@ -1,0 +1,10 @@
+{{- $context := . -}}
+{{- $Path := "" -}}
+{{- $params := .Page.Params | merge .Site.Params.Page -}}
+
+{{- with partial "function/currentMenuItem.html" . -}}
+  {{- $Path = .Identifier -}}
+{{- end -}}
+
+{{- $gallery := site.GetPage $Path -}}
+{{- return $gallery.Resources.ByType "image" -}}
