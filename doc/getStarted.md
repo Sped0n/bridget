@@ -22,7 +22,7 @@ The minimum required Hugo version can be seen in the [`theme.toml`](https://gith
 
 ## Installation
 
-### Git
+### Git (for adavanced user)
 
 On the main branch, you can find the theme's latest source code. To use the latest version, you can clone the repository to `themes/bridget` by running the following command in the root directory of your Hugo site:
 
@@ -36,11 +36,13 @@ If you are already using Git for your site, you can add the theme as a submodule
 git submodule add https://github.com/Sped0n/bridget themes/bridget
 ```
 
-After cloning/downloading theme files to the directory, if you want to customize the theme, please run `pnpm install` or `npm install` first.
+>   ⚠️⚠️⚠️
+>
+>   Please refer to the config section for the following content.
 
 ### Module (recommended)
 
-> If you want to modify the theme, use Git installation instead.
+> If you want to have some customizations, use Git installation instead.
 
 This theme is also available as a [Hugo module](https://gohugo.io/hugo-modules/). Run the following command in the root directory of your Hugo site:
 
@@ -48,7 +50,7 @@ First turn your site into a Hugo module (in case you haven't done it yet):
 
 ```shell
 hugo mod init github.com/me/my-new-site
-# or whatever you like, it doesn’t necessarily have to be a GitHub link.
+# or whatever you like, it doesn’t necessarily have to be a GitHub repo link.
 hugo mod init blablabla
 ```
 
@@ -66,6 +68,10 @@ If you want to upgrade the theme, just run:
 ```shell
 hugo mod get -u
 ```
+
+>   ⚠️⚠️⚠️
+>
+>   Please refer to the config section for the following content.
 
 ## Content Management
 
@@ -157,7 +163,10 @@ replacements = "github.com/Sped0n/bridget -> ../.."
 path = "github.com/Sped0n/bridget"
 ```
 
-- If you want to <u>modify the theme</u> or you have <u>installation with Git</u>, please **keep the `replacements` configuration** and change the path after the arrow to the location of your local theme file (relative path only).
+- If you have <u>installation with Git</u>
+    - `replacement`: replace the <u>path after the arrow</u>(`../..`) with the location of your local theme file (⚠️⚠️⚠️**relative path only**, example: `themes/bridget`)
+    - `path`: no change
+
 - If you have <u>installation with Module</u>, **remove the `replacements` configuration**.
 
 ### `markup.toml`
@@ -171,7 +180,38 @@ Detailed description in the comments.
 > ⚠️⚠️⚠️
 >
 > Only thing that you need to pay **extra attention** is the [`bundled`](https://github.com/Sped0n/bridget/blob/1e2f1fadde9c16989eef1ab771f2ac8463dec5a4/exampleSite/config/_default/params.toml#L6) option, please read the corresponding doc and set it as your need.
+>
+> For users who have installation with module, please always set this option to `true`, unless you know what you are doing.
+>
+> Or you might get the error related to `node_modules/swiper/swiper.scss`.
+>
+
 
 ### `sitemap.toml`
 
 https://gohugo.io/templates/sitemap-template/#configuration
+
+## Customization (AKA for developer)
+
+>   Before heading to this section, please make sure you have **installation with Git**.
+
+### Option 1: *it just works* way
+
+>   If you want to modify js/ts file, please use option 2.
+
+1.   Use hugo create a site and move the bridget theme into the theme directory.
+2.   Run `npm install` in the <u>bridget theme root dir</u>, not <u>your hugo site root dir</u>.
+3.   After the command is done, copy the `node_modules` dir from <u>bridget theme root dir</u> to <u>your hugo site root dir</u>.
+4.   In <u>your hugo site root dir</u>, write/modify configuration files according to your needs, remember to set `bundled` option to `false`, so hugo will not use prebuilt css file.
+5.   Run `hugo server` in <u>your hugo site root dir</u>, and you are good to go.
+
+### Option 2: recommended way
+
+1.   Use hugo create a site and move the bridget theme into the theme directory.
+2.   Run `npm install` in the <u>bridget theme root dir</u>, not <u>your hugo site root dir</u>.
+3.   Run `npm run dev` in the <u>bridget theme root dir</u>, we will use content in exampleSite to debug.
+4.   Make your customization.
+5.   After modification, run `npm run build` in the <u>bridget theme root dir</u> to build artifacts.
+6.   In <u>your hugo site root dir</u>, write/modify configuration files according to your needs, remember to set `bundled` option to `true`, so hugo will use the artifacts you built in step 5.
+7.   Run `hugo server` in <u>your hugo site root dir</u>, and you are good to go.
+
