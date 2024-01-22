@@ -1,19 +1,23 @@
-.container {
-  position: fixed;
-  top: 0;
-  z-index: 0;
+$tablet: map-get($breakpoints, 'tablet') - 1;
 
-  width: 100vw;
-  height: var(--window-height);
+@media (max-width: $tablet), (hover: none) {
+  .container {
+    position: fixed;
+    top: 0;
+    z-index: 0;
 
-  overflow-y: scroll;
-  overflow-x: hidden;
-  background: white;
+    width: 100vw;
+    height: var(--window-height);
 
-  overscroll-behavior: none;
-  -webkit-overflow-scrolling: none;
-}
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background: white;
 
-.disableScroll {
-  pointer-events: none;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: none;
+  }
+
+  .disableScroll {
+    pointer-events: none;
+  }
 }
