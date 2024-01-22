@@ -7,8 +7,10 @@
   </script>
   <div class="container">
     {{- partial "nav.html" . -}}
-    <article class="info">
-      {{ .Content }}
-    </article>
+    {{- with .Content -}}
+      <article class="info">
+        {{- . -}}
+      </article>
+    {{- end -}}
   </div>
 {{- end -}}
