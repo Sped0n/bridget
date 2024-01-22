@@ -287,7 +287,7 @@ function loadImages(): void {
   // load current, next, prev image
   activeImages.push(galleryImages[swiper.activeIndex])
   activeImages.push(
-    galleryImages[Math.min(swiper.activeIndex + 1, swiper.slides.length)]
+    galleryImages[Math.min(swiper.activeIndex + 1, swiper.slides.length - 1)]
   )
   activeImages.push(galleryImages[Math.max(swiper.activeIndex - 1, 0)])
   for (const e of activeImages) {
