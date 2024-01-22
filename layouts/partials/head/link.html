@@ -18,6 +18,16 @@
   {{- partial "plugin/style.html" $style -}}
 {{- end -}}
 
+{{/* fuck safari */}}
+<script>
+  function z() {
+    const r = document.querySelector(':root')
+    r.style.setProperty('--window-height', `${window.innerHeight}px`)
+  }
+  z()
+  window.addEventListener('resize', z, { passive: true })
+</script>
+
 {{/* main js */}}
 {{- $script := dict "Link" "/bundled/js/main.js" "Defer" true "Esm" true -}}
 {{- partial "plugin/script.html" $script -}}

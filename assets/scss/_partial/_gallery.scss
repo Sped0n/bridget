@@ -9,11 +9,7 @@
   flex-direction: column;
 
   width: 100vw;
-  height: calc(
-    var(--window-height) - env(safe-area-inset-bottom, 0) - env(safe-area-inset-top, 0) - var(
-        --nav-height
-      )
-  );
+  height: calc(var(--window-height) - var(--nav-height));
   background: white;
   transform: translate3d(0, 100%, 0);
 
@@ -63,9 +59,7 @@
   z-index: var(--z-curtain);
 
   width: 100vw;
-  height: calc(
-    var(--window-height)- env(safe-area-inset-bottom, 0) - env(safe-area-inset-top, 0)
-  );
+  height: var(--window-height);
 
   background: rgba(0, 0, 0, 0.5);
   opacity: 0;
