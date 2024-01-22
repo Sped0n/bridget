@@ -7,8 +7,9 @@ $tablet: map-get($breakpoints, 'tablet') - 1;
     z-index: 0;
 
     width: 100vw;
-    height: var(--window-height);
-    height: -webkit-fill-available;
+    height: calc(
+      var(--window-height)- env(safe-area-inset-bottom, 0) - env(safe-area-inset-top, 0)
+    );
 
     overflow-y: scroll;
     overflow-x: hidden;
