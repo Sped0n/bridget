@@ -8,6 +8,7 @@ $tablet: map-get($breakpoints, 'tablet') - 1;
 
     width: 100vw;
     height: var(--window-height);
+    height: -webkit-fill-available;
 
     overflow-y: scroll;
     overflow-x: hidden;
