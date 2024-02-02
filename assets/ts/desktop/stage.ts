@@ -3,7 +3,7 @@ import { type Power3, type gsap } from 'gsap'
 import { container } from '../container'
 import { incIndex, isAnimating, state } from '../globalState'
 import { type ImageJSON } from '../resources'
-import { decrement, increment, loadGsap } from '../utils'
+import { decrement, increment, loadGsap, onMutation } from '../utils'
 
 import { active, cordHist, isLoading, isOpen } from './state'
 
@@ -39,17 +39,6 @@ function getTrailInactiveElsIndex(): number[] {
 function getCurrentElIndex(): number {
   const trailElsIndex = getTrailElsIndex()
   return trailElsIndex[trailElsIndex.length - 1]
-}
-
-function getCacheElsIndex(depth: number): number[] {
-  const c = cordHist.get()
-  const s = state.get()
-  const c0 = c.length > 0 ? c[c.length - 1].i : s.index // current index
-  const indexes = []
-  for (let i = 0; i < depth; i++) {
-    indexes.push(increment(c0 + i, s.length))
-  }
-  return indexes
 }
 
 function getPrevElIndex(): number {
@@ -91,9 +80,6 @@ function onMouse(e: MouseEvent): void {
 function setPositions(): void {
   const trailElsIndex = getTrailElsIndex()
   if (trailElsIndex.length === 0 || !gsapLoaded) return
-
-  // preload
-  lores(getImagesWithIndexArray(getCacheElsIndex(7)))
 
   const elsTrail = getImagesWithIndexArray(trailElsIndex)
 
@@ -223,6 +209,33 @@ export function initStage(ijs: ImageJSON[]): void {
   const stage = document.getElementsByClassName('stage').item(0) as HTMLDivElement
   // get image elements
   imgs = Array.from(stage.getElementsByTagName('img'))
+  imgs.forEach((img, i) => {
+    // preload first 5 images on page load
+    if (i < 5) {
+      console.log(`preload ${i + 1}th image`)
+      img.src = img.dataset.loUrl as string
+    }
+    // preloader for rest of the images
+    onMutation(img, (mutations, observer) => {
+      mutations.every((mutation) => {
+        // if open or animating, skip
+        if (isOpen.get() || isAnimating.get()) return true
+        // if mutation is not about style attribute, skip
+        if (mutation.attributeName !== 'style') return true
+        const opacity = parseFloat(img.style.opacity)
+        // if opacity is not 1, skip
+        if (opacity !== 1) return true
+        // preload the i + 5th image
+        if (i + 5 < imgs.length) {
+          console.log(`preload ${i + 5 + 1}th image`)
+          imgs[i + 5].src = imgs[i + 5].dataset.loUrl as string
+        }
+        // disconnect observer and return false to break the loop
+        observer.disconnect()
+        return false
+      })
+    })
+  })
   // event listeners
   stage.addEventListener('click', () => {
     expandImage()
@@ -241,8 +254,6 @@ export function initStage(ijs: ImageJSON[]): void {
   cordHist.addWatcher((_) => {
     setPositions()
   })
-  // preload
-  lores(getImagesWithIndexArray(getCacheElsIndex(7)))
   // dynamic import
   window.addEventListener(
     'mousemove',
@@ -274,6 +285,7 @@ function createStage(ijs: ImageJSON[]): void {
     e.dataset.loImgH = ij.loImgH.toString()
     e.dataset.loImgW = ij.loImgW.toString()
     e.alt = ij.alt
+    // append
     stage.append(e)
   }
   container.append(stage)

@@ -1,7 +1,7 @@
 import { container } from '../container'
 import { setIndex } from '../globalState'
 import { type ImageJSON } from '../resources'
-import { getRandom, onVisible } from '../utils'
+import { getRandom, onIntersection } from '../utils'
 
 import { slideUp } from './gallery'
 import { mounted } from './state'
@@ -43,6 +43,12 @@ export function initCollection(ijs: ImageJSON[]): void {
   imgs = Array.from(collection.getElementsByTagName('img'))
   // add event listeners
   imgs.forEach((img, i) => {
+    // preload first 5 images on page load
+    if (i < 5) {
+      console.log(`preload ${i + 1}th image`)
+      img.src = img.dataset.src as string
+    }
+    // event listeners
     img.addEventListener(
       'click',
       () => {
@@ -58,13 +64,19 @@ export function initCollection(ijs: ImageJSON[]): void {
       { passive: true }
     )
     // preload
-    onVisible(img, () => {
-      console.log(`visible: ${i}`)
-      for (let _i = 0; _i < 5; _i++) {
-        const n = i + _i
-        if (n < 0 || n > imgs.length - 1) continue // out of range
-        imgs[n].src = imgs[n].dataset.src as string
-      }
+    onIntersection(img, (entries, observer) => {
+      entries.every((entry) => {
+        // no intersection, skip
+        if (entry.intersectionRatio <= 0) return true
+        // preload the i + 5th image
+        if (i + 5 < imgs.length) {
+          console.log(`preload ${i + 5 + 1}th image`)
+          imgs[i + 5].src = imgs[i + 5].dataset.src as string
+        }
+        // disconnect observer and return false to break the loop
+        observer.disconnect()
+        return false
+      })
     })
   })
 }
