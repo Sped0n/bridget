@@ -21,16 +21,18 @@ export function getRandom(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-export function onVisible<T extends Element>(
+export function onVisible<T extends HTMLElement>(
   element: T,
   callback: (arg0: T) => void
 ): void {
   new IntersectionObserver((entries, observer) => {
-    entries.forEach((entry) => {
+    entries.every((entry) => {
       if (entry.intersectionRatio > 0) {
         callback(element)
         observer.disconnect()
+        return false // break
       }
+      return true
     })
   }).observe(element)
 }
