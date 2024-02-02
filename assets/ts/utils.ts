@@ -21,38 +21,23 @@ export function getRandom(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-export function onVisible<T extends HTMLElement>(
+export function onIntersection<T extends HTMLElement>(
   element: T,
-  callback: (arg0: T) => void
+  callback: (arg0: IntersectionObserverEntry[], arg1: IntersectionObserver) => void
 ): void {
   new IntersectionObserver((entries, observer) => {
-    entries.every((entry) => {
-      if (entry.intersectionRatio > 0) {
-        callback(element)
-        observer.disconnect()
-        return false // break
-      }
-      return true
-    })
+    callback(entries, observer)
   }).observe(element)
 }
 
-export function onOpacityOne<T extends HTMLElement>(
+export function onMutation<T extends HTMLElement>(
   element: T,
-  callback: (arg0: T) => void
+  callback: (arg0: MutationRecord[], arg1: MutationObserver) => void,
+  observeOptions: MutationObserverInit = { attributes: true }
 ): void {
   new MutationObserver((mutations, observer) => {
-    mutations.every((mutation) => {
-      if (mutation.attributeName !== 'style') return true
-      const opacity = parseFloat(element.style.opacity)
-      if (opacity === 1) {
-        callback(element)
-        observer.disconnect()
-        return false // break
-      }
-      return true
-    })
-  }).observe(element, { attributes: true })
+    callback(mutations, observer)
+  }).observe(element, observeOptions)
 }
 
 export function capitalizeFirstLetter(str: string): string {
