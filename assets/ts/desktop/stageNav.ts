@@ -1,16 +1,10 @@
 import { container } from '../container'
-import { decIndex, incIndex, state } from '../state'
+import { decIndex, incIndex, isAnimating, state } from '../globalState'
 import { decrement, increment } from '../utils'
 
 import { setCustomCursor } from './customCursor'
-import {
-  active,
-  cordHist,
-  isAnimating,
-  isLoading,
-  isOpen,
-  minimizeImage
-} from './stage'
+import { minimizeImage } from './stage'
+import { active, cordHist, isLoading, isOpen } from './state'
 
 /**
  * types

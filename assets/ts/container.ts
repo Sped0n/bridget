@@ -1,4 +1,6 @@
-import { scrollable } from './mobile/scroll'
+import { Watchable } from './utils'
+
+export const scrollable = new Watchable<boolean>(true)
 
 export let container: HTMLDivElement
 

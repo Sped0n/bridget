@@ -1,19 +1,11 @@
 import { type Power3, type gsap } from 'gsap'
 
 import { container } from '../container'
+import { incIndex, isAnimating, state } from '../globalState'
 import { type ImageJSON } from '../resources'
-import { incIndex, state } from '../state'
-import { Watchable, decrement, increment, loadGsap } from '../utils'
+import { decrement, increment, loadGsap } from '../utils'
 
-/**
- * types
- */
-
-export interface HistoryItem {
-  i: number
-  x: number
-  y: number
-}
+import { active, cordHist, isLoading, isOpen } from './state'
 
 /**
  * variables
@@ -21,11 +13,6 @@ export interface HistoryItem {
 
 let imgs: HTMLImageElement[] = []
 let last = { x: 0, y: 0 }
-export const cordHist = new Watchable<HistoryItem[]>([])
-export const isOpen = new Watchable<boolean>(false)
-export const isAnimating = new Watchable<boolean>(false)
-export const active = new Watchable<boolean>(false)
-export const isLoading = new Watchable<boolean>(false)
 
 let _gsap: typeof gsap
 let _Power3: typeof Power3
@@ -36,45 +23,45 @@ let gsapLoaded = false
  * getter
  */
 
-function getElTrail(): HTMLImageElement[] {
-  return cordHist.get().map((item) => imgs[item.i])
+function getTrailElsIndex(): number[] {
+  return cordHist.get().map((item) => item.i)
 }
 
-function getElTrailCurrent(): HTMLImageElement[] {
-  return getElTrail().slice(-state.get().trailLength)
+function getTrailCurrentElsIndex(): number[] {
+  return getTrailElsIndex().slice(-state.get().trailLength)
 }
 
-function getElTrailInactive(): HTMLImageElement[] {
-  const elTrailCurrent = getElTrailCurrent()
-  return elTrailCurrent.slice(0, elTrailCurrent.length - 1)
+function getTrailInactiveElsIndex(): number[] {
+  const trailCurrentElsIndex = getTrailCurrentElsIndex()
+  return trailCurrentElsIndex.slice(0, trailCurrentElsIndex.length - 1)
 }
 
-function getElCurrent(): HTMLImageElement {
-  const elTrail = getElTrail()
-  return elTrail[elTrail.length - 1]
+function getCurrentElIndex(): number {
+  const trailElsIndex = getTrailElsIndex()
+  return trailElsIndex[trailElsIndex.length - 1]
 }
 
-function getElNextSeven(): HTMLImageElement[] {
+function getCacheElsIndex(depth: number): number[] {
   const c = cordHist.get()
   const s = state.get()
-  const c0 = c.length > 0 ? c[c.length - 1].i : s.index
-  const els = []
-  for (let i = 0; i < 7; i++) {
-    els.push(imgs[increment(c0 + i, s.length)])
+  const c0 = c.length > 0 ? c[c.length - 1].i : s.index // current index
+  const indexes = []
+  for (let i = 0; i < depth; i++) {
+    indexes.push(increment(c0 + i, s.length))
   }
-  return els
+  return indexes
 }
 
-function getElPrev(): HTMLImageElement {
+function getPrevElIndex(): number {
   const c = cordHist.get()
   const s = state.get()
-  return imgs[decrement(c[c.length - 1].i, s.length)]
+  return decrement(c[c.length - 1].i, s.length)
 }
 
-function getElNext(): HTMLImageElement {
+function getNextElIndex(): number {
   const c = cordHist.get()
   const s = state.get()
-  return imgs[increment(c[c.length - 1].i, s.length)]
+  return increment(c[c.length - 1].i, s.length)
 }
 
 /**
@@ -83,7 +70,11 @@ function getElNext(): HTMLImageElement {
 
 // on mouse
 function onMouse(e: MouseEvent): void {
-  if (isOpen.get() || isAnimating.get() || !gsapLoaded) return
+  if (isOpen.get() || isAnimating.get()) return
+  if (!gsapLoaded) {
+    loadLib()
+    return
+  }
   const cord = { x: e.clientX, y: e.clientY }
   const travelDist = Math.hypot(cord.x - last.x, cord.y - last.y)
 
@@ -96,15 +87,17 @@ function onMouse(e: MouseEvent): void {
   }
 }
 
-// set image position with gsap
+// set image position with gsap (in both stage and navigation)
 function setPositions(): void {
-  const elTrail = getElTrail()
-  if (elTrail.length === 0 || !gsapLoaded) return
+  const trailElsIndex = getTrailElsIndex()
+  if (trailElsIndex.length === 0 || !gsapLoaded) return
 
   // preload
-  lores(getElNextSeven())
+  lores(getImagesWithIndexArray(getCacheElsIndex(7)))
 
-  _gsap.set(elTrail, {
+  const elsTrail = getImagesWithIndexArray(trailElsIndex)
+
+  _gsap.set(elsTrail, {
     x: (i: number) => cordHist.get()[i].x - window.innerWidth / 2,
     y: (i: number) => cordHist.get()[i].y - window.innerHeight / 2,
     opacity: (i: number) =>
@@ -114,33 +107,38 @@ function setPositions(): void {
   })
 
   if (isOpen.get()) {
-    lores(getElTrail())
-    const elc = getElCurrent()
+    lores(elsTrail)
+    const elcIndex = getCurrentElIndex()
+    const elc = getImagesWithIndexArray([elcIndex])[0]
     elc.src = '' // reset src to ensure we only display hires images
-    elc.classList.add('hide')
-    hires([elc, getElPrev(), getElNext()])
+    elc.classList.add('hide') // hide image to prevent flash
+    hires(getImagesWithIndexArray([elcIndex, getPrevElIndex(), getNextElIndex()]))
+    setLoaderForImage(elc)
     _gsap.set(imgs, { opacity: 0 })
     _gsap.set(elc, { opacity: 1, x: 0, y: 0, scale: 1 })
-    loader(elc)
   }
 }
 
 // open image into navigation
 function expandImage(): void {
-  if (isAnimating.get() || !gsapLoaded) return
+  if (isAnimating.get()) return
 
   isOpen.set(true)
   isAnimating.set(true)
 
-  const elc = getElCurrent()
+  const elcIndex = getCurrentElIndex()
+  const elc = getImagesWithIndexArray([elcIndex])[0]
   // don't clear src here because we want a better transition
+  // elc.src = ''
+  // elc.classList.add('hide')
 
-  hires([elc, getElPrev(), getElNext()])
-  loader(elc)
+  hires(getImagesWithIndexArray([elcIndex, getPrevElIndex(), getNextElIndex()]))
+  setLoaderForImage(elc)
 
   const tl = _gsap.timeline()
+  const trailInactiveEls = getImagesWithIndexArray(getTrailInactiveElsIndex())
   // move down and hide trail inactive
-  tl.to(getElTrailInactive(), {
+  tl.to(trailInactiveEls, {
     y: '+=20',
     ease: _Power3.easeIn,
     stagger: 0.075,
@@ -149,7 +147,7 @@ function expandImage(): void {
     opacity: 0
   })
   // current move to center
-  tl.to(getElCurrent(), {
+  tl.to(elc, {
     x: 0,
     y: 0,
     ease: _Power3.easeInOut,
@@ -157,7 +155,7 @@ function expandImage(): void {
     delay: 0.3
   })
   // current expand
-  tl.to(getElCurrent(), {
+  tl.to(elc, {
     delay: 0.1,
     scale: 1,
     ease: _Power3.easeInOut
@@ -172,23 +170,26 @@ function expandImage(): void {
 
 // close navigation and back to stage
 export function minimizeImage(): void {
-  if (isAnimating.get() || !gsapLoaded) return
+  if (isAnimating.get()) return
 
   isOpen.set(false)
   isAnimating.set(true)
 
-  lores([getElCurrent()])
-  lores(getElTrailInactive())
+  lores(
+    getImagesWithIndexArray([...getTrailInactiveElsIndex(), ...[getCurrentElIndex()]])
+  )
 
   const tl = _gsap.timeline()
+  const elc = getImagesWithIndexArray([getCurrentElIndex()])
+  const elsTrailInactive = getImagesWithIndexArray(getTrailInactiveElsIndex())
   // shrink current
-  tl.to(getElCurrent(), {
+  tl.to(elc, {
     scale: 0.6,
     duration: 0.6,
     ease: _Power3.easeInOut
   })
   // move current to original position
-  tl.to(getElCurrent(), {
+  tl.to(elc, {
     delay: 0.3,
     duration: 0.7,
     ease: _Power3.easeInOut,
@@ -196,7 +197,7 @@ export function minimizeImage(): void {
     y: cordHist.get()[cordHist.get().length - 1].y - window.innerHeight / 2
   })
   // show trail inactive
-  tl.to(getElTrailInactive(), {
+  tl.to(elsTrailInactive, {
     y: '-=20',
     ease: _Power3.easeOut,
     stagger: -0.1,
@@ -241,20 +242,12 @@ export function initStage(ijs: ImageJSON[]): void {
     setPositions()
   })
   // preload
-  lores(getElNextSeven())
+  lores(getImagesWithIndexArray(getCacheElsIndex(7)))
   // dynamic import
   window.addEventListener(
     'mousemove',
     () => {
-      loadGsap()
-        .then((g) => {
-          _gsap = g[0]
-          _Power3 = g[1]
-          gsapLoaded = true
-        })
-        .catch((e) => {
-          console.log(e)
-        })
+      loadLib()
     },
     { once: true, passive: true }
   )
@@ -286,6 +279,10 @@ function createStage(ijs: ImageJSON[]): void {
   container.append(stage)
 }
 
+function getImagesWithIndexArray(indexArray: number[]): HTMLImageElement[] {
+  return indexArray.map((i) => imgs[i])
+}
+
 function hires(imgs: HTMLImageElement[]): void {
   imgs.forEach((img) => {
     img.src = img.dataset.hiUrl as string
@@ -302,7 +299,7 @@ function lores(imgs: HTMLImageElement[]): void {
   })
 }
 
-function loader(e: HTMLImageElement): void {
+function setLoaderForImage(e: HTMLImageElement): void {
   if (!e.complete) {
     isLoading.set(true)
     e.addEventListener(
@@ -324,4 +321,16 @@ function loader(e: HTMLImageElement): void {
     e.classList.remove('hide')
     isLoading.set(false)
   }
+}
+
+function loadLib(): void {
+  loadGsap()
+    .then((g) => {
+      _gsap = g[0]
+      _Power3 = g[1]
+      gsapLoaded = true
+    })
+    .catch((e) => {
+      console.log(e)
+    })
 }

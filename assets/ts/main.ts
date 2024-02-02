@@ -1,19 +1,33 @@
 import { initContainer } from './container'
+import { initState } from './globalState'
 import { initNav } from './nav'
 import { initResources } from './resources'
-import { initState } from './state'
-import { isMobile } from './utils'
 
-initContainer()
-const ijs = await initResources()
-initState(ijs.length)
-initNav()
+// this is the main entry point for the app
+document.addEventListener('DOMContentLoaded', () => {
+  main().catch((e) => {
+    console.log(e)
+  })
+})
 
-// NOTE: it seems firefox and chromnium don't like top layer await
-//       so we are using import then instead
-if (ijs.length > 0) {
+/**
+ * main functions
+ */
+
+async function main(): Promise<void> {
+  initContainer()
+  const ijs = await initResources()
+  initState(ijs.length)
+  initNav()
+
+  if (ijs.length === 0) {
+    return
+  }
+
+  // NOTE: it seems firefox and chromnium don't like top layer await
+  //       so we are using import then instead
   if (!isMobile()) {
-    import('./desktop/init')
+    await import('./desktop/init')
       .then((d) => {
         d.initDesktop(ijs)
       })
@@ -21,7 +35,7 @@ if (ijs.length > 0) {
         console.log(e)
       })
   } else {
-    import('./mobile/init')
+    await import('./mobile/init')
       .then((m) => {
         m.initMobile(ijs)
       })
@@ -29,4 +43,12 @@ if (ijs.length > 0) {
         console.log(e)
       })
   }
+}
+
+/**
+ * hepler
+ */
+
+function isMobile(): boolean {
+  return window.matchMedia('(hover: none)').matches
 }

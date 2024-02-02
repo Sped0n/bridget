@@ -1,19 +1,18 @@
 import { type Power3, type gsap } from 'gsap'
 import { type Swiper } from 'swiper'
 
-import { container } from '../container'
+import { container, scrollable } from '../container'
+import { isAnimating, setIndex, state } from '../globalState'
 import { type ImageJSON } from '../resources'
-import { setIndex, state } from '../state'
 import {
-  Watchable,
   capitalizeFirstLetter,
   expand,
   loadGsap,
-  loadSwiper
+  loadSwiper,
+  removeDuplicates
 } from '../utils'
 
-import { mounted } from './mounted'
-import { scrollable } from './scroll'
+import { mounted } from './state'
 
 /**
  * variables
@@ -23,7 +22,6 @@ let swiperNode: HTMLDivElement
 let gallery: HTMLDivElement
 let curtain: HTMLDivElement
 let swiper: Swiper
-const isAnimating = new Watchable<boolean>(false)
 let lastIndex = -1
 let indexDispNums: HTMLSpanElement[] = []
 let galleryImages: HTMLImageElement[] = []
@@ -44,7 +42,7 @@ export function slideUp(): void {
   isAnimating.set(true)
 
   // load active image
-  loadImages()
+  galleryLoadImages()
 
   _gsap.to(curtain, {
     opacity: 1,
@@ -152,7 +150,7 @@ export function initGallery(ijs: ImageJSON[]): void {
  */
 
 function changeSlide(slide: number): void {
-  loadImages()
+  galleryLoadImages()
   swiper.slideTo(slide, 0)
 }
 
@@ -282,15 +280,14 @@ function createGallery(ijs: ImageJSON[]): void {
   container.append(_gallery, _curtain)
 }
 
-function loadImages(): void {
-  const activeImages: HTMLImageElement[] = []
+function galleryLoadImages(): void {
+  const activeImagesIndex: number[] = []
   // load current, next, prev image
-  activeImages.push(galleryImages[swiper.activeIndex])
-  activeImages.push(
-    galleryImages[Math.min(swiper.activeIndex + 1, swiper.slides.length - 1)]
-  )
-  activeImages.push(galleryImages[Math.max(swiper.activeIndex - 1, 0)])
-  for (const e of activeImages) {
+  activeImagesIndex.push(swiper.activeIndex)
+  activeImagesIndex.push(Math.min(swiper.activeIndex + 1, swiper.slides.length - 1))
+  activeImagesIndex.push(Math.max(swiper.activeIndex - 1, 0))
+  for (const i of removeDuplicates(activeImagesIndex)) {
+    const e = galleryImages[i]
     e.src = e.dataset.src as string
   }
 }

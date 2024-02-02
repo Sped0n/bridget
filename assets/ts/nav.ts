@@ -1,4 +1,4 @@
-import { decThreshold, incThreshold, state } from './state'
+import { decThreshold, incThreshold, state } from './globalState'
 import { expand } from './utils'
 
 /**

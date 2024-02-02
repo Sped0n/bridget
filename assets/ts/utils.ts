@@ -17,10 +17,6 @@ export function expand(num: number): string {
   return ('0000' + num.toString()).slice(-4)
 }
 
-export function isMobile(): boolean {
-  return window.matchMedia('(hover: none)').matches
-}
-
 export function getRandom(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
@@ -51,6 +47,18 @@ export async function loadGsap(): Promise<[typeof gsap, typeof Power3]> {
 export async function loadSwiper(): Promise<typeof Swiper> {
   const s = await import('swiper')
   return s.Swiper
+}
+
+export function getThresholdSessionIndex(): number {
+  const s = sessionStorage.getItem('thresholdsIndex')
+  if (s === null) return 2
+  return parseInt(s)
+}
+
+export function removeDuplicates<T>(arr: T[]): T[] {
+  console.log('before', arr)
+  console.log('after', [...new Set(arr)])
+  return [...new Set(arr)]
 }
 
 /**

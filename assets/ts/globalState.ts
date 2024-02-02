@@ -1,4 +1,4 @@
-import { Watchable, decrement, increment } from './utils'
+import { Watchable, decrement, getThresholdSessionIndex, increment } from './utils'
 
 /**
  * types
@@ -26,6 +26,10 @@ const defaultState = {
 }
 
 export const state = new Watchable<State>(defaultState)
+
+export const isAnimating = new Watchable<boolean>(false)
+export const isLoresFullyLoaded = new Watchable<boolean>(false)
+export const isHiresFullyLoaded = new Watchable<boolean>(false)
 
 /**
  * main functions
@@ -80,10 +84,4 @@ function updateThreshold(state: State, inc: number): State {
   sessionStorage.setItem('thresholdsIndex', i.toString())
   const newItems = thresholds[i]
   return { ...state, ...newItems }
-}
-
-function getThresholdSessionIndex(): number {
-  const s = sessionStorage.getItem('thresholdsIndex')
-  if (s === null) return 2
-  return parseInt(s)
 }

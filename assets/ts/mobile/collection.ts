@@ -1,10 +1,10 @@
 import { container } from '../container'
+import { setIndex } from '../globalState'
 import { type ImageJSON } from '../resources'
-import { setIndex } from '../state'
 import { getRandom, onVisible } from '../utils'
 
 import { slideUp } from './gallery'
-import { mounted } from './mounted'
+import { mounted } from './state'
 
 /**
  * variables
@@ -59,9 +59,10 @@ export function initCollection(ijs: ImageJSON[]): void {
     )
     // preload
     onVisible(img, () => {
+      console.log(`visible: ${i}`)
       for (let _i = 0; _i < 5; _i++) {
         const n = i + _i
-        if (n < 0 || n > imgs.length - 1) continue
+        if (n < 0 || n > imgs.length - 1) continue // out of range
         imgs[n].src = imgs[n].dataset.src as string
       }
     })
