@@ -37,6 +37,24 @@ export function onVisible<T extends HTMLElement>(
   }).observe(element)
 }
 
+export function onOpacityOne<T extends HTMLElement>(
+  element: T,
+  callback: (arg0: T) => void
+): void {
+  new MutationObserver((mutations, observer) => {
+    mutations.every((mutation) => {
+      if (mutation.attributeName !== 'style') return true
+      const opacity = parseFloat(element.style.opacity)
+      if (opacity === 1) {
+        callback(element)
+        observer.disconnect()
+        return false // break
+      }
+      return true
+    })
+  }).observe(element, { attributes: true })
+}
+
 export function capitalizeFirstLetter(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
