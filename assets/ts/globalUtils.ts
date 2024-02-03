@@ -28,8 +28,7 @@ export function getThresholdSessionIndex(): number {
 }
 
 export function removeDuplicates<T>(arr: T[]): T[] {
-  console.log('before', arr)
-  console.log('after', [...new Set(arr)])
+  if (arr.length < 2) return arr // optimization
   return [...new Set(arr)]
 }
 
