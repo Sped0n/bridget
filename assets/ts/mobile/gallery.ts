@@ -268,10 +268,7 @@ function createGallery(ijs: ImageJSON[]): void {
   )
   // close
   const _close = document.createElement('div')
-  const str: string = document
-    .getElementById('main')
-    ?.getAttribute('closeText') as string
-  _close.innerText = capitalizeFirstLetter(str)
+  _close.innerText = capitalizeFirstLetter(container.dataset.close)
   _close.addEventListener(
     'click',
     () => {
