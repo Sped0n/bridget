@@ -55,11 +55,12 @@ export function slideUp(): void {
   setTimeout(() => {
     scrollable.set(false)
     isAnimating.set(false)
-  }, 1200)
+  }, 1400)
 }
 
 function slideDown(): void {
-  scrollable.set(true)
+  if (isAnimating.get()) return
+  isAnimating.set(true)
   scrollToActive()
 
   _gsap.to(gallery, {
@@ -73,6 +74,11 @@ function slideDown(): void {
     duration: 1.2,
     delay: 0.4
   })
+
+  setTimeout(() => {
+    scrollable.set(true)
+    isAnimating.set(false)
+  }, 1600)
 }
 
 /**
@@ -89,17 +95,18 @@ export function initGallery(ijs: ImageJSON[]): void {
   swiperNode = document.getElementsByClassName('galleryInner').item(0) as HTMLDivElement
   gallery = document.getElementsByClassName('gallery').item(0) as HTMLDivElement
   curtain = document.getElementsByClassName('curtain').item(0) as HTMLDivElement
-  galleryImages = Array.from(gallery.getElementsByTagName('img'))
+  galleryImages = Array.from(gallery.getElementsByTagName('img')) as MobileImage[]
   collectionImages = Array.from(
     document
       .getElementsByClassName('collection')
       .item(0)
       ?.getElementsByTagName('img') ?? []
-  )
+  ) as MobileImage[]
   // state watcher
   state.addWatcher(() => {
     const s = state.get()
     // change slide only when index is changed
+    console.log(s.index, lastIndex)
     if (s.index === lastIndex) return
     else if (lastIndex === -1)
       navigateVector.set('none') // lastIndex before first set
