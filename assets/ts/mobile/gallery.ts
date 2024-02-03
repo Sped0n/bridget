@@ -2,7 +2,7 @@ import { type Power3, type gsap } from 'gsap'
 import { type Swiper } from 'swiper'
 
 import { container, scrollable } from '../container'
-import { isAnimating, setIndex, state } from '../globalState'
+import { isAnimating, navigateVector, setIndex, state } from '../globalState'
 import { expand, loadGsap, removeDuplicates } from '../globalUtils'
 import { type ImageJSON } from '../resources'
 
@@ -101,6 +101,10 @@ export function initGallery(ijs: ImageJSON[]): void {
     const s = state.get()
     // change slide only when index is changed
     if (s.index === lastIndex) return
+    else if (lastIndex === -1)
+      navigateVector.set('none') // lastIndex before first set
+    else if (s.index < lastIndex) navigateVector.set('prev')
+    else navigateVector.set('next')
     changeSlide(s.index)
     updateIndexText()
     lastIndex = s.index
@@ -170,15 +174,27 @@ function updateIndexText(): void {
 }
 
 function galleryLoadImages(): void {
-  const activeImagesIndex: number[] = []
-  // load current, next, prev image
-  activeImagesIndex.push(swiper.activeIndex)
-  activeImagesIndex.push(Math.min(swiper.activeIndex + 1, swiper.slides.length - 1))
-  activeImagesIndex.push(Math.max(swiper.activeIndex - 1, 0))
-  for (const i of removeDuplicates(activeImagesIndex)) {
-    const e = galleryImages[i]
-    e.src = e.dataset.src as string
+  let activeImagesIndex: number[] = []
+  const currentIndex = state.get().index
+  const nextIndex = Math.min(currentIndex + 1, state.get().length - 1)
+  const prevIndex = Math.max(currentIndex - 1, 0)
+  console.log(navigateVector.get())
+  switch (navigateVector.get()) {
+    case 'next':
+      activeImagesIndex = [nextIndex]
+      break
+    case 'prev':
+      activeImagesIndex = [prevIndex]
+      break
+    case 'none':
+      activeImagesIndex = [currentIndex, nextIndex, prevIndex]
+      break
   }
+  removeDuplicates(activeImagesIndex).forEach((i) => {
+    const e = galleryImages[i]
+    if (e.src === e.dataset.src) return // already loaded
+    e.src = e.dataset.src
+  })
 }
 
 function createGallery(ijs: ImageJSON[]): void {

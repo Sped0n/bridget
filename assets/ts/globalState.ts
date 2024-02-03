@@ -10,6 +10,7 @@ import {
  */
 
 export type State = typeof defaultState
+export type NavVec = 'next' | 'none' | 'prev'
 
 /**
  * variables
@@ -31,8 +32,8 @@ const defaultState = {
 }
 
 export const state = new Watchable<State>(defaultState)
-
 export const isAnimating = new Watchable<boolean>(false)
+export const navigateVector = new Watchable<NavVec>('none')
 
 /**
  * main functions
