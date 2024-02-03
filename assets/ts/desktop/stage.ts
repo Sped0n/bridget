@@ -1,7 +1,7 @@
 import { type Power3, type gsap } from 'gsap'
 
 import { container } from '../container'
-import { incIndex, isAnimating, state } from '../globalState'
+import { incIndex, isAnimating, navigateVector, state } from '../globalState'
 import { decrement, increment, loadGsap } from '../globalUtils'
 import { type ImageJSON } from '../resources'
 
@@ -95,15 +95,27 @@ function setPositions(): void {
   })
 
   if (isOpen.get()) {
-    lores(elsTrail)
-    const elcIndex = getCurrentElIndex()
-    const elc = getImagesWithIndexArray([elcIndex])[0]
-    elc.src = '' // reset src to ensure we only display hires images
+    const elc = getImagesWithIndexArray([getCurrentElIndex()])[0]
     elc.classList.add('hide') // hide image to prevent flash
-    hires(getImagesWithIndexArray([elcIndex, getPrevElIndex(), getNextElIndex()]))
+    const indexArrayToHires: number[] = []
+    switch (navigateVector.get()) {
+      case 'prev':
+        indexArrayToHires.push(getPrevElIndex())
+        break
+      case 'next':
+        indexArrayToHires.push(getNextElIndex())
+        break
+      default:
+        break
+    }
+    console.log(navigateVector.get())
+    console.log('hires', indexArrayToHires)
+    hires(getImagesWithIndexArray(indexArrayToHires)) // preload
     setLoaderForImage(elc)
     _gsap.set(imgs, { opacity: 0 })
     _gsap.set(elc, { opacity: 1, x: 0, y: 0, scale: 1 })
+  } else {
+    lores(elsTrail)
   }
 }
 
@@ -116,8 +128,7 @@ function expandImage(): void {
 
   const elcIndex = getCurrentElIndex()
   const elc = getImagesWithIndexArray([elcIndex])[0]
-  // don't clear src here because we want a better transition
-  // elc.src = ''
+  // don't hide here because we want a better transition
   // elc.classList.add('hide')
 
   hires(getImagesWithIndexArray([elcIndex, getPrevElIndex(), getNextElIndex()]))
@@ -162,6 +173,7 @@ export function minimizeImage(): void {
 
   isOpen.set(false)
   isAnimating.set(true)
+  navigateVector.set('none') // cleanup
 
   lores(
     getImagesWithIndexArray([...getTrailInactiveElsIndex(), ...[getCurrentElIndex()]])
@@ -217,7 +229,7 @@ export function initStage(ijs: ImageJSON[]): void {
       console.log(`preload ${i + 1}th image`)
       img.src = img.dataset.loUrl
     }
-    // preloader for rest of the images
+    // lores preloader for rest of the images
     onMutation(img, (mutations, observer) => {
       mutations.every((mutation) => {
         // if open or animating, skip
@@ -239,12 +251,20 @@ export function initStage(ijs: ImageJSON[]): void {
     })
   })
   // event listeners
-  stage.addEventListener('click', () => {
-    expandImage()
-  })
-  stage.addEventListener('keydown', () => {
-    expandImage()
-  })
+  stage.addEventListener(
+    'click',
+    () => {
+      expandImage()
+    },
+    { passive: true }
+  )
+  stage.addEventListener(
+    'keydown',
+    () => {
+      expandImage()
+    },
+    { passive: true }
+  )
   window.addEventListener('mousemove', onMouse, { passive: true })
   // watchers
   isOpen.addWatcher((o) => {
@@ -299,6 +319,7 @@ function getImagesWithIndexArray(indexArray: number[]): DesktopImage[] {
 
 function hires(imgs: DesktopImage[]): void {
   imgs.forEach((img) => {
+    if (img.src === img.dataset.hiUrl) return
     img.src = img.dataset.hiUrl
     img.height = parseInt(img.dataset.hiImgH)
     img.width = parseInt(img.dataset.hiImgW)
@@ -307,6 +328,7 @@ function hires(imgs: DesktopImage[]): void {
 
 function lores(imgs: DesktopImage[]): void {
   imgs.forEach((img) => {
+    if (img.src === img.dataset.loUrl) return
     img.src = img.dataset.loUrl
     img.height = parseInt(img.dataset.loImgH)
     img.width = parseInt(img.dataset.loImgW)
