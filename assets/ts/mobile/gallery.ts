@@ -20,8 +20,8 @@ let curtain: HTMLDivElement
 let swiper: Swiper
 let lastIndex = -1
 let indexDispNums: HTMLSpanElement[] = []
-let galleryImages: HTMLImageElement[] = []
-let collectionImages: HTMLImageElement[] = []
+let galleryImages: MobileImage[] = []
+let collectionImages: MobileImage[] = []
 
 let _Swiper: typeof Swiper
 let _gsap: typeof gsap
