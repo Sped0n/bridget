@@ -1,6 +1,6 @@
 import { container } from '../container'
 
-import { active } from './stage'
+import { active } from './state'
 
 /**
  * variables

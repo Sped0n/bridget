@@ -1,10 +1,16 @@
-import { Watchable, decrement, increment } from './utils'
+import {
+  Watchable,
+  decrement,
+  getThresholdSessionIndex,
+  increment
+} from './globalUtils'
 
 /**
  * types
  */
 
 export type State = typeof defaultState
+export type NavVec = 'next' | 'none' | 'prev'
 
 /**
  * variables
@@ -26,6 +32,8 @@ const defaultState = {
 }
 
 export const state = new Watchable<State>(defaultState)
+export const isAnimating = new Watchable<boolean>(false)
+export const navigateVector = new Watchable<NavVec>('none')
 
 /**
  * main functions
@@ -80,10 +88,4 @@ function updateThreshold(state: State, inc: number): State {
   sessionStorage.setItem('thresholdsIndex', i.toString())
   const newItems = thresholds[i]
   return { ...state, ...newItems }
-}
-
-function getThresholdSessionIndex(): number {
-  const s = sessionStorage.getItem('thresholdsIndex')
-  if (s === null) return 2
-  return parseInt(s)
 }

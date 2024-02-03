@@ -1,16 +1,10 @@
 import { container } from '../container'
-import { decIndex, incIndex, state } from '../state'
-import { decrement, increment } from '../utils'
+import { decIndex, incIndex, isAnimating, navigateVector, state } from '../globalState'
+import { decrement, increment } from '../globalUtils'
 
 import { setCustomCursor } from './customCursor'
-import {
-  active,
-  cordHist,
-  isAnimating,
-  isLoading,
-  isOpen,
-  minimizeImage
-} from './stage'
+import { minimizeImage } from './stage'
+import { active, cordHist, isLoading, isOpen } from './state'
 
 /**
  * types
@@ -22,13 +16,12 @@ type NavItem = (typeof navItems)[number]
  * variables
  */
 
-const mainDiv = document.getElementById('main') as HTMLDivElement
 const navItems = [
-  mainDiv.getAttribute('prevText') as string,
-  mainDiv.getAttribute('closeText') as string,
-  mainDiv.getAttribute('nextText') as string
+  container.dataset.prev,
+  container.dataset.close,
+  container.dataset.next
 ] as const
-const loadingText = (mainDiv.getAttribute('loadingText') as string) + '...'
+const loadingText = container.dataset.loading + '...'
 let loadedText = ''
 
 /**
@@ -158,6 +151,7 @@ export function initStageNav(): void {
 
 function nextImage(): void {
   if (isAnimating.get()) return
+  navigateVector.set('next')
   cordHist.set(
     cordHist.get().map((item) => {
       return { ...item, i: increment(item.i, state.get().length) }
@@ -169,6 +163,7 @@ function nextImage(): void {
 
 function prevImage(): void {
   if (isAnimating.get()) return
+  navigateVector.set('prev')
   cordHist.set(
     cordHist.get().map((item) => {
       return { ...item, i: decrement(item.i, state.get().length) }

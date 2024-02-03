@@ -87,7 +87,7 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.PAT }}
-          title: Update bundled artifacts
-          commit-message: Update bundled artifacts
+          title: "ci: update bundled artifacts"
+          commit-message: "ci: update bundled artifacts"
           branch: update-artifacts-${{ steps.version.outputs.builddate }}
           base: main

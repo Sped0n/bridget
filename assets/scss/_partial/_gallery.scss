@@ -16,30 +16,30 @@
   .galleryInner {
     flex: 1;
     height: 0;
+  }
 
-    .swiper-slide {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+  .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 
-      .loadingText {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate3d(-50%, -50%, 0);
-      }
+  .loadingText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+  }
 
-      .slideContainer {
-        position: relative;
-        display: inline-block;
-      }
-    }
+  .slideContainer {
+    position: relative;
+    display: inline-block;
   }
 
   .nav {

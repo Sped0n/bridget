@@ -1,16 +1,17 @@
 import { container } from '../container'
+import { setIndex } from '../globalState'
 import { type ImageJSON } from '../resources'
-import { setIndex } from '../state'
-import { getRandom, onVisible } from '../utils'
 
 import { slideUp } from './gallery'
-import { mounted } from './mounted'
+import { mounted } from './state'
+// eslint-disable-next-line sort-imports
+import { getRandom, onIntersection, type MobileImage } from './utils'
 
 /**
  * variables
  */
 
-export let imgs: HTMLImageElement[] = []
+export let imgs: MobileImage[] = []
 
 /**
  * main functions
@@ -40,9 +41,14 @@ export function initCollection(ijs: ImageJSON[]): void {
     }
   })
   // get image elements
-  imgs = Array.from(collection.getElementsByTagName('img'))
+  imgs = Array.from(collection.getElementsByTagName('img')) as MobileImage[]
   // add event listeners
   imgs.forEach((img, i) => {
+    // preload first 5 images on page load
+    if (i < 5) {
+      img.src = img.dataset.src
+    }
+    // event listeners
     img.addEventListener(
       'click',
       () => {
@@ -58,12 +64,18 @@ export function initCollection(ijs: ImageJSON[]): void {
       { passive: true }
     )
     // preload
-    onVisible(img, () => {
-      for (let _i = 0; _i < 5; _i++) {
-        const n = i + _i
-        if (n < 0 || n > imgs.length - 1) continue
-        imgs[n].src = imgs[n].dataset.src as string
-      }
+    onIntersection(img, (entries, observer) => {
+      entries.every((entry) => {
+        // no intersection, skip
+        if (entry.intersectionRatio <= 0) return true
+        // preload the i + 5th image
+        if (i + 5 < imgs.length) {
+          imgs[i + 5].src = imgs[i + 5].dataset.src
+        }
+        // disconnect observer and return false to break the loop
+        observer.disconnect()
+        return false
+      })
     })
   })
 }
@@ -82,7 +94,7 @@ function createCollection(ijs: ImageJSON[]): void {
     const x = i !== 0 ? getRandom(-25, 25) : 0
     const y = i !== 0 ? getRandom(-30, 30) : 0
     // element
-    const e = document.createElement('img')
+    const e = document.createElement('img') as MobileImage
     e.dataset.src = ij.loUrl
     e.height = ij.loImgH
     e.width = ij.loImgW
