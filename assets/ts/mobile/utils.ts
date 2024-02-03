@@ -1,3 +1,5 @@
+import { type Swiper } from 'swiper'
+
 /**
  * interfaces
  */
@@ -27,4 +29,9 @@ export function onIntersection<T extends HTMLElement>(
 
 export function capitalizeFirstLetter(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
+export async function loadSwiper(): Promise<typeof Swiper> {
+  const s = await import('swiper')
+  return s.Swiper
 }

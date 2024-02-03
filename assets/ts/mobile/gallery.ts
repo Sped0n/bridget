@@ -3,12 +3,12 @@ import { type Swiper } from 'swiper'
 
 import { container, scrollable } from '../container'
 import { isAnimating, setIndex, state } from '../globalState'
-import { expand, loadGsap, loadSwiper, removeDuplicates } from '../globalUtils'
+import { expand, loadGsap, removeDuplicates } from '../globalUtils'
 import { type ImageJSON } from '../resources'
 
 import { mounted } from './state'
 // eslint-disable-next-line sort-imports
-import { capitalizeFirstLetter, type MobileImage } from './utils'
+import { capitalizeFirstLetter, loadSwiper, type MobileImage } from './utils'
 
 /**
  * variables
