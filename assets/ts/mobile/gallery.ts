@@ -37,9 +37,6 @@ export function slideUp(): void {
   if (isAnimating.get() || !libLoaded) return
   isAnimating.set(true)
 
-  // load active image
-  galleryLoadImages()
-
   _gsap.to(curtain, {
     opacity: 1,
     duration: 1
