@@ -37,9 +37,6 @@ export function slideUp(): void {
   if (isAnimating.get() || !libLoaded) return
   isAnimating.set(true)
 
-  // load active image
-  galleryLoadImages()
-
   _gsap.to(curtain, {
     opacity: 1,
     duration: 1
@@ -61,6 +58,7 @@ export function slideUp(): void {
 function slideDown(): void {
   if (isAnimating.get()) return
   isAnimating.set(true)
+  lastIndex = -1 // cleanup
   scrollToActive()
 
   _gsap.to(gallery, {
@@ -103,17 +101,17 @@ export function initGallery(ijs: ImageJSON[]): void {
       ?.getElementsByTagName('img') ?? []
   ) as MobileImage[]
   // state watcher
-  state.addWatcher(() => {
-    const s = state.get()
-    // change slide only when index is changed
-    if (s.index === lastIndex) return
+  state.addWatcher((o) => {
+    if (o.index === lastIndex)
+      return // change slide only when index is changed
     else if (lastIndex === -1)
-      navigateVector.set('none') // lastIndex before first set
-    else if (s.index < lastIndex) navigateVector.set('prev')
-    else navigateVector.set('next')
-    changeSlide(s.index)
+      navigateVector.set('none') // lastIndex before set
+    else if (o.index < lastIndex) navigateVector.set('prev')
+    else if (o.index > lastIndex) navigateVector.set('next')
+    else navigateVector.set('none')
+    changeSlide(o.index)
     updateIndexText()
-    lastIndex = s.index
+    lastIndex = o.index
   })
   // mounted watcher
   mounted.addWatcher((o) => {
@@ -220,7 +218,7 @@ function createGallery(ijs: ImageJSON[]): void {
   const _swiperWrapper = document.createElement('div')
   _swiperWrapper.className = 'swiper-wrapper'
   // loading text
-  const loadingText = container.dataset.loading
+  const loadingText = container.dataset.loading + '...'
   for (const ij of ijs) {
     // swiper slide
     const _swiperSlide = document.createElement('div')
