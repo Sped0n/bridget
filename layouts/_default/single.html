@@ -1,11 +1,11 @@
 {{- define "main" -}}
-  <script>
-    document.getElementById("main").setAttribute("nextText", "{{- i18n "next" -}}")
-    document.getElementById("main").setAttribute("prevText", "{{- i18n "prev" -}}")
-    document.getElementById("main").setAttribute("closeText", "{{- i18n "close" -}}")
-    document.getElementById("main").setAttribute("loadingText", "{{- i18n "loading" -}}")
-  </script>
-  <div class="container">
+  <div
+    class="container"
+    data-next="{{- i18n "next" -}}"
+    data-prev="{{- i18n "prev" -}}"
+    data-close="{{- i18n "close" -}}"
+    data-loading="{{- i18n "loading" -}}"
+  >
     {{- partial "nav.html" . -}}
     {{- with .Content -}}
       <article class="info">

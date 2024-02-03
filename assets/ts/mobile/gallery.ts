@@ -214,15 +214,16 @@ function createGallery(ijs: ImageJSON[]): void {
   // swiper wrapper
   const _swiperWrapper = document.createElement('div')
   _swiperWrapper.className = 'swiper-wrapper'
-  // swiper slide
+  // loading text
+  const loadingText = container.dataset.loading
   for (const ij of ijs) {
+    // swiper slide
     const _swiperSlide = document.createElement('div')
     _swiperSlide.className = 'swiper-slide'
     // loading indicator
     const l = document.createElement('div')
     l.className = 'loadingText'
-    l.innerText =
-      (document.getElementById('main')?.getAttribute('loadingText') as string) + '...'
+    l.innerText = loadingText
     // img
     const e = document.createElement('img') as MobileImage
     e.dataset.src = ij.hiUrl

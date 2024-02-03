@@ -21,7 +21,7 @@ const navItems = [
   container.dataset.close,
   container.dataset.prev
 ] as const
-const loadingText = (mainDiv.getAttribute('loadingText') as string) + '...'
+const loadingText = container.dataset.loading + '...'
 let loadedText = ''
 
 /**
