@@ -17,9 +17,9 @@ type NavItem = (typeof navItems)[number]
  */
 
 const navItems = [
-  container.dataset.next,
+  container.dataset.prev,
   container.dataset.close,
-  container.dataset.prev
+  container.dataset.next
 ] as const
 const loadingText = container.dataset.loading + '...'
 let loadedText = ''
