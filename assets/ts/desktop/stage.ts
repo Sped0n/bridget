@@ -1,31 +1,20 @@
 import { type Power3, type gsap } from 'gsap'
 
 import { container } from '../container'
+import { incIndex, isAnimating, navigateVector, state } from '../globalState'
+import { decrement, increment, loadGsap } from '../globalUtils'
 import { type ImageJSON } from '../resources'
-import { incIndex, state } from '../state'
-import { Watchable, decrement, increment, loadGsap } from '../utils'
 
-/**
- * types
- */
-
-export interface HistoryItem {
-  i: number
-  x: number
-  y: number
-}
+import { active, cordHist, isLoading, isOpen } from './state'
+// eslint-disable-next-line sort-imports
+import { onMutation, type DesktopImage } from './utils'
 
 /**
  * variables
  */
 
-let imgs: HTMLImageElement[] = []
+let imgs: DesktopImage[] = []
 let last = { x: 0, y: 0 }
-export const cordHist = new Watchable<HistoryItem[]>([])
-export const isOpen = new Watchable<boolean>(false)
-export const isAnimating = new Watchable<boolean>(false)
-export const active = new Watchable<boolean>(false)
-export const isLoading = new Watchable<boolean>(false)
 
 let _gsap: typeof gsap
 let _Power3: typeof Power3
@@ -36,45 +25,34 @@ let gsapLoaded = false
  * getter
  */
 
-function getElTrail(): HTMLImageElement[] {
-  return cordHist.get().map((item) => imgs[item.i])
+function getTrailElsIndex(): number[] {
+  return cordHist.get().map((item) => item.i)
 }
 
-function getElTrailCurrent(): HTMLImageElement[] {
-  return getElTrail().slice(-state.get().trailLength)
+function getTrailCurrentElsIndex(): number[] {
+  return getTrailElsIndex().slice(-state.get().trailLength)
 }
 
-function getElTrailInactive(): HTMLImageElement[] {
-  const elTrailCurrent = getElTrailCurrent()
-  return elTrailCurrent.slice(0, elTrailCurrent.length - 1)
+function getTrailInactiveElsIndex(): number[] {
+  const trailCurrentElsIndex = getTrailCurrentElsIndex()
+  return trailCurrentElsIndex.slice(0, trailCurrentElsIndex.length - 1)
 }
 
-function getElCurrent(): HTMLImageElement {
-  const elTrail = getElTrail()
-  return elTrail[elTrail.length - 1]
+function getCurrentElIndex(): number {
+  const trailElsIndex = getTrailElsIndex()
+  return trailElsIndex[trailElsIndex.length - 1]
 }
 
-function getElNextSeven(): HTMLImageElement[] {
+function getPrevElIndex(): number {
   const c = cordHist.get()
   const s = state.get()
-  const c0 = c.length > 0 ? c[c.length - 1].i : s.index
-  const els = []
-  for (let i = 0; i < 7; i++) {
-    els.push(imgs[increment(c0 + i, s.length)])
-  }
-  return els
+  return decrement(c[c.length - 1].i, s.length)
 }
 
-function getElPrev(): HTMLImageElement {
+function getNextElIndex(): number {
   const c = cordHist.get()
   const s = state.get()
-  return imgs[decrement(c[c.length - 1].i, s.length)]
-}
-
-function getElNext(): HTMLImageElement {
-  const c = cordHist.get()
-  const s = state.get()
-  return imgs[increment(c[c.length - 1].i, s.length)]
+  return increment(c[c.length - 1].i, s.length)
 }
 
 /**
@@ -83,7 +61,11 @@ function getElNext(): HTMLImageElement {
 
 // on mouse
 function onMouse(e: MouseEvent): void {
-  if (isOpen.get() || isAnimating.get() || !gsapLoaded) return
+  if (isOpen.get() || isAnimating.get()) return
+  if (!gsapLoaded) {
+    loadLib()
+    return
+  }
   const cord = { x: e.clientX, y: e.clientY }
   const travelDist = Math.hypot(cord.x - last.x, cord.y - last.y)
 
@@ -96,15 +78,14 @@ function onMouse(e: MouseEvent): void {
   }
 }
 
-// set image position with gsap
+// set image position with gsap (in both stage and navigation)
 function setPositions(): void {
-  const elTrail = getElTrail()
-  if (elTrail.length === 0 || !gsapLoaded) return
+  const trailElsIndex = getTrailElsIndex()
+  if (trailElsIndex.length === 0 || !gsapLoaded) return
 
-  // preload
-  lores(getElNextSeven())
+  const elsTrail = getImagesWithIndexArray(trailElsIndex)
 
-  _gsap.set(elTrail, {
+  _gsap.set(elsTrail, {
     x: (i: number) => cordHist.get()[i].x - window.innerWidth / 2,
     y: (i: number) => cordHist.get()[i].y - window.innerHeight / 2,
     opacity: (i: number) =>
@@ -114,33 +95,47 @@ function setPositions(): void {
   })
 
   if (isOpen.get()) {
-    lores(getElTrail())
-    const elc = getElCurrent()
-    elc.src = '' // reset src to ensure we only display hires images
-    elc.classList.add('hide')
-    hires([elc, getElPrev(), getElNext()])
+    const elc = getImagesWithIndexArray([getCurrentElIndex()])[0]
+    elc.classList.add('hide') // hide image to prevent flash
+    const indexArrayToHires: number[] = []
+    switch (navigateVector.get()) {
+      case 'prev':
+        indexArrayToHires.push(getPrevElIndex())
+        break
+      case 'next':
+        indexArrayToHires.push(getNextElIndex())
+        break
+      default:
+        break
+    }
+    hires(getImagesWithIndexArray(indexArrayToHires)) // preload
+    setLoaderForImage(elc)
     _gsap.set(imgs, { opacity: 0 })
     _gsap.set(elc, { opacity: 1, x: 0, y: 0, scale: 1 })
-    loader(elc)
+  } else {
+    lores(elsTrail)
   }
 }
 
 // open image into navigation
 function expandImage(): void {
-  if (isAnimating.get() || !gsapLoaded) return
+  if (isAnimating.get()) return
 
   isOpen.set(true)
   isAnimating.set(true)
 
-  const elc = getElCurrent()
-  // don't clear src here because we want a better transition
+  const elcIndex = getCurrentElIndex()
+  const elc = getImagesWithIndexArray([elcIndex])[0]
+  // don't hide here because we want a better transition
+  // elc.classList.add('hide')
 
-  hires([elc, getElPrev(), getElNext()])
-  loader(elc)
+  hires(getImagesWithIndexArray([elcIndex, getPrevElIndex(), getNextElIndex()]))
+  setLoaderForImage(elc)
 
   const tl = _gsap.timeline()
+  const trailInactiveEls = getImagesWithIndexArray(getTrailInactiveElsIndex())
   // move down and hide trail inactive
-  tl.to(getElTrailInactive(), {
+  tl.to(trailInactiveEls, {
     y: '+=20',
     ease: _Power3.easeIn,
     stagger: 0.075,
@@ -149,7 +144,7 @@ function expandImage(): void {
     opacity: 0
   })
   // current move to center
-  tl.to(getElCurrent(), {
+  tl.to(elc, {
     x: 0,
     y: 0,
     ease: _Power3.easeInOut,
@@ -157,7 +152,7 @@ function expandImage(): void {
     delay: 0.3
   })
   // current expand
-  tl.to(getElCurrent(), {
+  tl.to(elc, {
     delay: 0.1,
     scale: 1,
     ease: _Power3.easeInOut
@@ -172,23 +167,27 @@ function expandImage(): void {
 
 // close navigation and back to stage
 export function minimizeImage(): void {
-  if (isAnimating.get() || !gsapLoaded) return
+  if (isAnimating.get()) return
 
   isOpen.set(false)
   isAnimating.set(true)
+  navigateVector.set('none') // cleanup
 
-  lores([getElCurrent()])
-  lores(getElTrailInactive())
+  lores(
+    getImagesWithIndexArray([...getTrailInactiveElsIndex(), ...[getCurrentElIndex()]])
+  )
 
   const tl = _gsap.timeline()
+  const elc = getImagesWithIndexArray([getCurrentElIndex()])[0]
+  const elsTrailInactive = getImagesWithIndexArray(getTrailInactiveElsIndex())
   // shrink current
-  tl.to(getElCurrent(), {
+  tl.to(elc, {
     scale: 0.6,
     duration: 0.6,
     ease: _Power3.easeInOut
   })
   // move current to original position
-  tl.to(getElCurrent(), {
+  tl.to(elc, {
     delay: 0.3,
     duration: 0.7,
     ease: _Power3.easeInOut,
@@ -196,7 +195,7 @@ export function minimizeImage(): void {
     y: cordHist.get()[cordHist.get().length - 1].y - window.innerHeight / 2
   })
   // show trail inactive
-  tl.to(getElTrailInactive(), {
+  tl.to(elsTrailInactive, {
     y: '-=20',
     ease: _Power3.easeOut,
     stagger: -0.1,
@@ -221,14 +220,47 @@ export function initStage(ijs: ImageJSON[]): void {
   // get stage
   const stage = document.getElementsByClassName('stage').item(0) as HTMLDivElement
   // get image elements
-  imgs = Array.from(stage.getElementsByTagName('img'))
+  imgs = Array.from(stage.getElementsByTagName('img')) as DesktopImage[]
+  imgs.forEach((img, i) => {
+    // preload first 5 images on page load
+    if (i < 5) {
+      img.src = img.dataset.loUrl
+    }
+    // lores preloader for rest of the images
+    onMutation(img, (mutations, observer) => {
+      mutations.every((mutation) => {
+        // if open or animating, skip
+        if (isOpen.get() || isAnimating.get()) return true
+        // if mutation is not about style attribute, skip
+        if (mutation.attributeName !== 'style') return true
+        const opacity = parseFloat(img.style.opacity)
+        // if opacity is not 1, skip
+        if (opacity !== 1) return true
+        // preload the i + 5th image
+        if (i + 5 < imgs.length) {
+          imgs[i + 5].src = imgs[i + 5].dataset.loUrl
+        }
+        // disconnect observer and return false to break the loop
+        observer.disconnect()
+        return false
+      })
+    })
+  })
   // event listeners
-  stage.addEventListener('click', () => {
-    expandImage()
-  })
-  stage.addEventListener('keydown', () => {
-    expandImage()
-  })
+  stage.addEventListener(
+    'click',
+    () => {
+      expandImage()
+    },
+    { passive: true }
+  )
+  stage.addEventListener(
+    'keydown',
+    () => {
+      expandImage()
+    },
+    { passive: true }
+  )
   window.addEventListener('mousemove', onMouse, { passive: true })
   // watchers
   isOpen.addWatcher((o) => {
@@ -240,21 +272,11 @@ export function initStage(ijs: ImageJSON[]): void {
   cordHist.addWatcher((_) => {
     setPositions()
   })
-  // preload
-  lores(getElNextSeven())
   // dynamic import
   window.addEventListener(
     'mousemove',
     () => {
-      loadGsap()
-        .then((g) => {
-          _gsap = g[0]
-          _Power3 = g[1]
-          gsapLoaded = true
-        })
-        .catch((e) => {
-          console.log(e)
-        })
+      loadLib()
     },
     { once: true, passive: true }
   )
@@ -270,7 +292,7 @@ function createStage(ijs: ImageJSON[]): void {
   stage.className = 'stage'
   // append images to container
   for (const ij of ijs) {
-    const e = document.createElement('img')
+    const e = document.createElement('img') as DesktopImage
     e.height = ij.loImgH
     e.width = ij.loImgW
     // set data attributes
@@ -281,28 +303,35 @@ function createStage(ijs: ImageJSON[]): void {
     e.dataset.loImgH = ij.loImgH.toString()
     e.dataset.loImgW = ij.loImgW.toString()
     e.alt = ij.alt
+    // append
     stage.append(e)
   }
   container.append(stage)
 }
 
-function hires(imgs: HTMLImageElement[]): void {
+function getImagesWithIndexArray(indexArray: number[]): DesktopImage[] {
+  return indexArray.map((i) => imgs[i])
+}
+
+function hires(imgs: DesktopImage[]): void {
   imgs.forEach((img) => {
-    img.src = img.dataset.hiUrl as string
-    img.height = parseInt(img.dataset.hiImgH as string)
-    img.width = parseInt(img.dataset.hiImgW as string)
+    if (img.src === img.dataset.hiUrl) return
+    img.src = img.dataset.hiUrl
+    img.height = parseInt(img.dataset.hiImgH)
+    img.width = parseInt(img.dataset.hiImgW)
   })
 }
 
-function lores(imgs: HTMLImageElement[]): void {
+function lores(imgs: DesktopImage[]): void {
   imgs.forEach((img) => {
-    img.src = img.dataset.loUrl as string
-    img.height = parseInt(img.dataset.loImgH as string)
-    img.width = parseInt(img.dataset.loImgW as string)
+    if (img.src === img.dataset.loUrl) return
+    img.src = img.dataset.loUrl
+    img.height = parseInt(img.dataset.loImgH)
+    img.width = parseInt(img.dataset.loImgW)
   })
 }
 
-function loader(e: HTMLImageElement): void {
+function setLoaderForImage(e: HTMLImageElement): void {
   if (!e.complete) {
     isLoading.set(true)
     e.addEventListener(
@@ -324,4 +353,16 @@ function loader(e: HTMLImageElement): void {
     e.classList.remove('hide')
     isLoading.set(false)
   }
+}
+
+function loadLib(): void {
+  loadGsap()
+    .then((g) => {
+      _gsap = g[0]
+      _Power3 = g[1]
+      gsapLoaded = true
+    })
+    .catch((e) => {
+      console.log(e)
+    })
 }

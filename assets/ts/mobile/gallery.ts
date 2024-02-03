@@ -1,19 +1,14 @@
 import { type Power3, type gsap } from 'gsap'
 import { type Swiper } from 'swiper'
 
-import { container } from '../container'
+import { container, scrollable } from '../container'
+import { isAnimating, navigateVector, setIndex, state } from '../globalState'
+import { expand, loadGsap, removeDuplicates } from '../globalUtils'
 import { type ImageJSON } from '../resources'
-import { setIndex, state } from '../state'
-import {
-  Watchable,
-  capitalizeFirstLetter,
-  expand,
-  loadGsap,
-  loadSwiper
-} from '../utils'
 
-import { mounted } from './mounted'
-import { scrollable } from './scroll'
+import { mounted } from './state'
+// eslint-disable-next-line sort-imports
+import { capitalizeFirstLetter, loadSwiper, type MobileImage } from './utils'
 
 /**
  * variables
@@ -23,11 +18,10 @@ let swiperNode: HTMLDivElement
 let gallery: HTMLDivElement
 let curtain: HTMLDivElement
 let swiper: Swiper
-const isAnimating = new Watchable<boolean>(false)
 let lastIndex = -1
 let indexDispNums: HTMLSpanElement[] = []
-let galleryImages: HTMLImageElement[] = []
-let collectionImages: HTMLImageElement[] = []
+let galleryImages: MobileImage[] = []
+let collectionImages: MobileImage[] = []
 
 let _Swiper: typeof Swiper
 let _gsap: typeof gsap
@@ -44,7 +38,7 @@ export function slideUp(): void {
   isAnimating.set(true)
 
   // load active image
-  loadImages()
+  galleryLoadImages()
 
   _gsap.to(curtain, {
     opacity: 1,
@@ -61,11 +55,12 @@ export function slideUp(): void {
   setTimeout(() => {
     scrollable.set(false)
     isAnimating.set(false)
-  }, 1200)
+  }, 1400)
 }
 
 function slideDown(): void {
-  scrollable.set(true)
+  if (isAnimating.get()) return
+  isAnimating.set(true)
   scrollToActive()
 
   _gsap.to(gallery, {
@@ -79,6 +74,11 @@ function slideDown(): void {
     duration: 1.2,
     delay: 0.4
   })
+
+  setTimeout(() => {
+    scrollable.set(true)
+    isAnimating.set(false)
+  }, 1600)
 }
 
 /**
@@ -95,18 +95,22 @@ export function initGallery(ijs: ImageJSON[]): void {
   swiperNode = document.getElementsByClassName('galleryInner').item(0) as HTMLDivElement
   gallery = document.getElementsByClassName('gallery').item(0) as HTMLDivElement
   curtain = document.getElementsByClassName('curtain').item(0) as HTMLDivElement
-  galleryImages = Array.from(gallery.getElementsByTagName('img'))
+  galleryImages = Array.from(gallery.getElementsByTagName('img')) as MobileImage[]
   collectionImages = Array.from(
     document
       .getElementsByClassName('collection')
       .item(0)
       ?.getElementsByTagName('img') ?? []
-  )
+  ) as MobileImage[]
   // state watcher
   state.addWatcher(() => {
     const s = state.get()
     // change slide only when index is changed
     if (s.index === lastIndex) return
+    else if (lastIndex === -1)
+      navigateVector.set('none') // lastIndex before first set
+    else if (s.index < lastIndex) navigateVector.set('prev')
+    else navigateVector.set('next')
     changeSlide(s.index)
     updateIndexText()
     lastIndex = s.index
@@ -152,7 +156,7 @@ export function initGallery(ijs: ImageJSON[]): void {
  */
 
 function changeSlide(slide: number): void {
-  loadImages()
+  galleryLoadImages()
   swiper.slideTo(slide, 0)
 }
 
@@ -175,6 +179,29 @@ function updateIndexText(): void {
   })
 }
 
+function galleryLoadImages(): void {
+  let activeImagesIndex: number[] = []
+  const currentIndex = state.get().index
+  const nextIndex = Math.min(currentIndex + 1, state.get().length - 1)
+  const prevIndex = Math.max(currentIndex - 1, 0)
+  switch (navigateVector.get()) {
+    case 'next':
+      activeImagesIndex = [nextIndex]
+      break
+    case 'prev':
+      activeImagesIndex = [prevIndex]
+      break
+    case 'none':
+      activeImagesIndex = [currentIndex, nextIndex, prevIndex]
+      break
+  }
+  removeDuplicates(activeImagesIndex).forEach((i) => {
+    const e = galleryImages[i]
+    if (e.src === e.dataset.src) return // already loaded
+    e.src = e.dataset.src
+  })
+}
+
 function createGallery(ijs: ImageJSON[]): void {
   /**
    * gallery
@@ -192,17 +219,18 @@ function createGallery(ijs: ImageJSON[]): void {
   // swiper wrapper
   const _swiperWrapper = document.createElement('div')
   _swiperWrapper.className = 'swiper-wrapper'
-  // swiper slide
+  // loading text
+  const loadingText = container.dataset.loading
   for (const ij of ijs) {
+    // swiper slide
     const _swiperSlide = document.createElement('div')
     _swiperSlide.className = 'swiper-slide'
     // loading indicator
     const l = document.createElement('div')
     l.className = 'loadingText'
-    l.innerText =
-      (document.getElementById('main')?.getAttribute('loadingText') as string) + '...'
+    l.innerText = loadingText
     // img
-    const e = document.createElement('img')
+    const e = document.createElement('img') as MobileImage
     e.dataset.src = ij.hiUrl
     e.height = ij.hiImgH
     e.width = ij.hiImgW
@@ -280,17 +308,4 @@ function createGallery(ijs: ImageJSON[]): void {
    * |- curtain
    */
   container.append(_gallery, _curtain)
-}
-
-function loadImages(): void {
-  const activeImages: HTMLImageElement[] = []
-  // load current, next, prev image
-  activeImages.push(galleryImages[swiper.activeIndex])
-  activeImages.push(
-    galleryImages[Math.min(swiper.activeIndex + 1, swiper.slides.length - 1)]
-  )
-  activeImages.push(galleryImages[Math.max(swiper.activeIndex - 1, 0)])
-  for (const e of activeImages) {
-    e.src = e.dataset.src as string
-  }
 }
