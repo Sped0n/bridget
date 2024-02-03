@@ -106,7 +106,6 @@ export function initGallery(ijs: ImageJSON[]): void {
   state.addWatcher(() => {
     const s = state.get()
     // change slide only when index is changed
-    console.log(s.index, lastIndex)
     if (s.index === lastIndex) return
     else if (lastIndex === -1)
       navigateVector.set('none') // lastIndex before first set
@@ -185,7 +184,6 @@ function galleryLoadImages(): void {
   const currentIndex = state.get().index
   const nextIndex = Math.min(currentIndex + 1, state.get().length - 1)
   const prevIndex = Math.max(currentIndex - 1, 0)
-  console.log(navigateVector.get())
   switch (navigateVector.get()) {
     case 'next':
       activeImagesIndex = [nextIndex]

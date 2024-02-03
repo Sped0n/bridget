@@ -46,7 +46,6 @@ export function initCollection(ijs: ImageJSON[]): void {
   imgs.forEach((img, i) => {
     // preload first 5 images on page load
     if (i < 5) {
-      console.log(`preload ${i + 1}th image`)
       img.src = img.dataset.src
     }
     // event listeners
@@ -71,7 +70,6 @@ export function initCollection(ijs: ImageJSON[]): void {
         if (entry.intersectionRatio <= 0) return true
         // preload the i + 5th image
         if (i + 5 < imgs.length) {
-          console.log(`preload ${i + 5 + 1}th image`)
           imgs[i + 5].src = imgs[i + 5].dataset.src
         }
         // disconnect observer and return false to break the loop

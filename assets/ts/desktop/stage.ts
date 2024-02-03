@@ -108,8 +108,6 @@ function setPositions(): void {
       default:
         break
     }
-    console.log(navigateVector.get())
-    console.log('hires', indexArrayToHires)
     hires(getImagesWithIndexArray(indexArrayToHires)) // preload
     setLoaderForImage(elc)
     _gsap.set(imgs, { opacity: 0 })
@@ -226,7 +224,6 @@ export function initStage(ijs: ImageJSON[]): void {
   imgs.forEach((img, i) => {
     // preload first 5 images on page load
     if (i < 5) {
-      console.log(`preload ${i + 1}th image`)
       img.src = img.dataset.loUrl
     }
     // lores preloader for rest of the images
@@ -241,7 +238,6 @@ export function initStage(ijs: ImageJSON[]): void {
         if (opacity !== 1) return true
         // preload the i + 5th image
         if (i + 5 < imgs.length) {
-          console.log(`preload ${i + 5 + 1}th image`)
           imgs[i + 5].src = imgs[i + 5].dataset.loUrl
         }
         // disconnect observer and return false to break the loop
