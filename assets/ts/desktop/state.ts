@@ -1,4 +1,4 @@
-import { Watchable } from '../utils'
+import { Watchable } from '../globalUtils'
 
 /**
  * types

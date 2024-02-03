@@ -3,16 +3,12 @@ import { type Swiper } from 'swiper'
 
 import { container, scrollable } from '../container'
 import { isAnimating, setIndex, state } from '../globalState'
+import { expand, loadGsap, loadSwiper, removeDuplicates } from '../globalUtils'
 import { type ImageJSON } from '../resources'
-import {
-  capitalizeFirstLetter,
-  expand,
-  loadGsap,
-  loadSwiper,
-  removeDuplicates
-} from '../utils'
 
 import { mounted } from './state'
+// eslint-disable-next-line sort-imports
+import { capitalizeFirstLetter, type MobileImage } from './utils'
 
 /**
  * variables
@@ -173,6 +169,18 @@ function updateIndexText(): void {
   })
 }
 
+function galleryLoadImages(): void {
+  const activeImagesIndex: number[] = []
+  // load current, next, prev image
+  activeImagesIndex.push(swiper.activeIndex)
+  activeImagesIndex.push(Math.min(swiper.activeIndex + 1, swiper.slides.length - 1))
+  activeImagesIndex.push(Math.max(swiper.activeIndex - 1, 0))
+  for (const i of removeDuplicates(activeImagesIndex)) {
+    const e = galleryImages[i]
+    e.src = e.dataset.src as string
+  }
+}
+
 function createGallery(ijs: ImageJSON[]): void {
   /**
    * gallery
@@ -200,7 +208,7 @@ function createGallery(ijs: ImageJSON[]): void {
     l.innerText =
       (document.getElementById('main')?.getAttribute('loadingText') as string) + '...'
     // img
-    const e = document.createElement('img')
+    const e = document.createElement('img') as MobileImage
     e.dataset.src = ij.hiUrl
     e.height = ij.hiImgH
     e.width = ij.hiImgW
@@ -278,16 +286,4 @@ function createGallery(ijs: ImageJSON[]): void {
    * |- curtain
    */
   container.append(_gallery, _curtain)
-}
-
-function galleryLoadImages(): void {
-  const activeImagesIndex: number[] = []
-  // load current, next, prev image
-  activeImagesIndex.push(swiper.activeIndex)
-  activeImagesIndex.push(Math.min(swiper.activeIndex + 1, swiper.slides.length - 1))
-  activeImagesIndex.push(Math.max(swiper.activeIndex - 1, 0))
-  for (const i of removeDuplicates(activeImagesIndex)) {
-    const e = galleryImages[i]
-    e.src = e.dataset.src as string
-  }
 }

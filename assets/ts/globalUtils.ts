@@ -2,7 +2,7 @@ import { type Power3, type gsap } from 'gsap'
 import { type Swiper } from 'swiper'
 
 /**
- * custom helpers
+ * utils
  */
 
 export function increment(num: number, length: number): number {
@@ -15,33 +15,6 @@ export function decrement(num: number, length: number): number {
 
 export function expand(num: number): string {
   return ('0000' + num.toString()).slice(-4)
-}
-
-export function getRandom(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min
-}
-
-export function onIntersection<T extends HTMLElement>(
-  element: T,
-  callback: (arg0: IntersectionObserverEntry[], arg1: IntersectionObserver) => void
-): void {
-  new IntersectionObserver((entries, observer) => {
-    callback(entries, observer)
-  }).observe(element)
-}
-
-export function onMutation<T extends HTMLElement>(
-  element: T,
-  callback: (arg0: MutationRecord[], arg1: MutationObserver) => void,
-  observeOptions: MutationObserverInit = { attributes: true }
-): void {
-  new MutationObserver((mutations, observer) => {
-    callback(mutations, observer)
-  }).observe(element, observeOptions)
-}
-
-export function capitalizeFirstLetter(str: string): string {
-  return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
 export async function loadGsap(): Promise<[typeof gsap, typeof Power3]> {
@@ -67,7 +40,7 @@ export function removeDuplicates<T>(arr: T[]): T[] {
 }
 
 /**
- * custom types
+ * custom "reactive" object
  */
 
 export class Watchable<T> {

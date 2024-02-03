@@ -1,5 +1,5 @@
 import { decThreshold, incThreshold, state } from './globalState'
-import { expand } from './utils'
+import { expand } from './globalUtils'
 
 /**
  * variables

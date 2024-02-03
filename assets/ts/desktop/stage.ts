@@ -2,16 +2,18 @@ import { type Power3, type gsap } from 'gsap'
 
 import { container } from '../container'
 import { incIndex, isAnimating, state } from '../globalState'
+import { decrement, increment, loadGsap } from '../globalUtils'
 import { type ImageJSON } from '../resources'
-import { decrement, increment, loadGsap, onMutation } from '../utils'
 
 import { active, cordHist, isLoading, isOpen } from './state'
+// eslint-disable-next-line sort-imports
+import { onMutation, type DesktopImage } from './utils'
 
 /**
  * variables
  */
 
-let imgs: HTMLImageElement[] = []
+let imgs: DesktopImage[] = []
 let last = { x: 0, y: 0 }
 
 let _gsap: typeof gsap
@@ -166,7 +168,7 @@ export function minimizeImage(): void {
   )
 
   const tl = _gsap.timeline()
-  const elc = getImagesWithIndexArray([getCurrentElIndex()])
+  const elc = getImagesWithIndexArray([getCurrentElIndex()])[0]
   const elsTrailInactive = getImagesWithIndexArray(getTrailInactiveElsIndex())
   // shrink current
   tl.to(elc, {
@@ -208,12 +210,12 @@ export function initStage(ijs: ImageJSON[]): void {
   // get stage
   const stage = document.getElementsByClassName('stage').item(0) as HTMLDivElement
   // get image elements
-  imgs = Array.from(stage.getElementsByTagName('img'))
+  imgs = Array.from(stage.getElementsByTagName('img')) as DesktopImage[]
   imgs.forEach((img, i) => {
     // preload first 5 images on page load
     if (i < 5) {
       console.log(`preload ${i + 1}th image`)
-      img.src = img.dataset.loUrl as string
+      img.src = img.dataset.loUrl
     }
     // preloader for rest of the images
     onMutation(img, (mutations, observer) => {
@@ -228,7 +230,7 @@ export function initStage(ijs: ImageJSON[]): void {
         // preload the i + 5th image
         if (i + 5 < imgs.length) {
           console.log(`preload ${i + 5 + 1}th image`)
-          imgs[i + 5].src = imgs[i + 5].dataset.loUrl as string
+          imgs[i + 5].src = imgs[i + 5].dataset.loUrl
         }
         // disconnect observer and return false to break the loop
         observer.disconnect()
@@ -274,7 +276,7 @@ function createStage(ijs: ImageJSON[]): void {
   stage.className = 'stage'
   // append images to container
   for (const ij of ijs) {
-    const e = document.createElement('img')
+    const e = document.createElement('img') as DesktopImage
     e.height = ij.loImgH
     e.width = ij.loImgW
     // set data attributes
@@ -291,23 +293,23 @@ function createStage(ijs: ImageJSON[]): void {
   container.append(stage)
 }
 
-function getImagesWithIndexArray(indexArray: number[]): HTMLImageElement[] {
+function getImagesWithIndexArray(indexArray: number[]): DesktopImage[] {
   return indexArray.map((i) => imgs[i])
 }
 
-function hires(imgs: HTMLImageElement[]): void {
+function hires(imgs: DesktopImage[]): void {
   imgs.forEach((img) => {
-    img.src = img.dataset.hiUrl as string
-    img.height = parseInt(img.dataset.hiImgH as string)
-    img.width = parseInt(img.dataset.hiImgW as string)
+    img.src = img.dataset.hiUrl
+    img.height = parseInt(img.dataset.hiImgH)
+    img.width = parseInt(img.dataset.hiImgW)
   })
 }
 
-function lores(imgs: HTMLImageElement[]): void {
+function lores(imgs: DesktopImage[]): void {
   imgs.forEach((img) => {
-    img.src = img.dataset.loUrl as string
-    img.height = parseInt(img.dataset.loImgH as string)
-    img.width = parseInt(img.dataset.loImgW as string)
+    img.src = img.dataset.loUrl
+    img.height = parseInt(img.dataset.loImgH)
+    img.width = parseInt(img.dataset.loImgW)
   })
 }
 

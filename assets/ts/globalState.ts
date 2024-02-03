@@ -1,4 +1,9 @@
-import { Watchable, decrement, getThresholdSessionIndex, increment } from './utils'
+import {
+  Watchable,
+  decrement,
+  getThresholdSessionIndex,
+  increment
+} from './globalUtils'
 
 /**
  * types
@@ -28,8 +33,6 @@ const defaultState = {
 export const state = new Watchable<State>(defaultState)
 
 export const isAnimating = new Watchable<boolean>(false)
-export const isLoresFullyLoaded = new Watchable<boolean>(false)
-export const isHiresFullyLoaded = new Watchable<boolean>(false)
 
 /**
  * main functions

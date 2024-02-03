@@ -1,6 +1,6 @@
 import { container } from '../container'
 import { decIndex, incIndex, isAnimating, state } from '../globalState'
-import { decrement, increment } from '../utils'
+import { decrement, increment } from '../globalUtils'
 
 import { setCustomCursor } from './customCursor'
 import { minimizeImage } from './stage'
