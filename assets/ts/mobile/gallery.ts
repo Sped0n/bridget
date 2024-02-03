@@ -218,7 +218,7 @@ function createGallery(ijs: ImageJSON[]): void {
   const _swiperWrapper = document.createElement('div')
   _swiperWrapper.className = 'swiper-wrapper'
   // loading text
-  const loadingText = container.dataset.loading
+  const loadingText = container.dataset.loading + '...'
   for (const ij of ijs) {
     // swiper slide
     const _swiperSlide = document.createElement('div')
