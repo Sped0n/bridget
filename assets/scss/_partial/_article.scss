@@ -1,4 +1,4 @@
-.info {
+article {
   padding: var(--space-standard);
   max-width: 25em;
 
@@ -42,7 +42,7 @@
 }
 
 @media (max-width: $tablet), (hover: none) {
-  .info {
+  article {
     margin-top: var(--nav-height);
   }
 }

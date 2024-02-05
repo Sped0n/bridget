@@ -11,6 +11,9 @@ export interface ImageJSON {
 }
 
 export async function initResources(): Promise<ImageJSON[]> {
+  if (document.title.split(' | ')[0] === '404') {
+    return [] // no images on 404 page
+  }
   try {
     const response = await fetch(`${window.location.href}index.json`, {
       headers: {

@@ -50,6 +50,7 @@ export function slideUp(): void {
   })
 
   setTimeout(() => {
+    // cleanup
     scrollable.set(false)
     isAnimating.set(false)
   }, 1400)
@@ -58,7 +59,6 @@ export function slideUp(): void {
 function slideDown(): void {
   if (isAnimating.get()) return
   isAnimating.set(true)
-  lastIndex = -1 // cleanup
   scrollToActive()
 
   _gsap.to(gallery, {
@@ -74,8 +74,10 @@ function slideDown(): void {
   })
 
   setTimeout(() => {
+    // cleanup
     scrollable.set(true)
     isAnimating.set(false)
+    lastIndex = -1
   }, 1600)
 }
 
@@ -106,12 +108,14 @@ export function initGallery(ijs: ImageJSON[]): void {
       return // change slide only when index is changed
     else if (lastIndex === -1)
       navigateVector.set('none') // lastIndex before set
-    else if (o.index < lastIndex) navigateVector.set('prev')
-    else if (o.index > lastIndex) navigateVector.set('next')
-    else navigateVector.set('none')
-    changeSlide(o.index)
-    updateIndexText()
-    lastIndex = o.index
+    else if (o.index < lastIndex)
+      navigateVector.set('prev') // set navigate vector for galleryLoadImages
+    else if (o.index > lastIndex)
+      navigateVector.set('next') // set navigate vector for galleryLoadImages
+    else navigateVector.set('none') // default
+    changeSlide(o.index) // change slide to new index
+    updateIndexText() // update index text
+    lastIndex = o.index // update last index
   })
   // mounted watcher
   mounted.addWatcher((o) => {

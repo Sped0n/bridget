@@ -6,11 +6,12 @@
     data-close="{{- i18n "close" -}}"
     data-loading="{{- i18n "loading" -}}"
   >
-    {{- partial "nav.html" . -}}
     {{- with .Content -}}
-      <article class="info">
+      <article>
         {{- . -}}
       </article>
     {{- end -}}
+
+    {{- partial "nav.html" . -}}
   </div>
 {{- end -}}

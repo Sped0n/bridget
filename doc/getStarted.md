@@ -163,12 +163,12 @@ replacements = "github.com/Sped0n/bridget -> ../.."
 path = "github.com/Sped0n/bridget"
 ```
 
-- If you have <u>installation with Git</u>
+- If you have _installation with Git_
 
-  - `replacement`: replace the <u>path after the arrow</u>(`../..`) with the location of your local theme file (⚠️⚠️⚠️**relative path only**, example: `themes/bridget`)
+  - `replacement`: replace the _path after the arrow_(`../..`) with the location of your local theme file (⚠️⚠️⚠️**relative path only**, example: `themes/bridget`)
   - `path`: no change
 
-- If you have <u>installation with Module</u>, **remove the `replacements` configuration**.
+- If you have _installation with Module_, **remove the `replacements` configuration**.
 
 ### `markup.toml`
 
@@ -199,17 +199,17 @@ https://gohugo.io/templates/sitemap-template/#configuration
 > If you want to modify js/ts file, please use option 2.
 
 1.  Use hugo create a site and move the bridget theme into the theme directory.
-2.  Run `npm install` in the <u>bridget theme root dir</u>, not <u>your hugo site root dir</u>.
-3.  After the command is done, copy the `node_modules` dir from <u>bridget theme root dir</u> to <u>your hugo site root dir</u>.
-4.  In <u>your hugo site root dir</u>, write/modify configuration files according to your needs, remember to set `bundled` option to `false`, so hugo will not use prebuilt css file.
-5.  Run `hugo server` in <u>your hugo site root dir</u>, and you are good to go.
+2.  Run `npm install` in the _bridget theme root dir_, not _your hugo site root dir_.
+3.  After the command is done, copy the `node_modules` dir from _bridget theme root dir_ to _your hugo site root dir_.
+4.  In _your hugo site root dir_, write/modify configuration files according to your needs, remember to set `bundled` option to `false`, so hugo will not use prebuilt css file.
+5.  Run `hugo server` in _your hugo site root dir_, and you are good to go.
 
 ### Option 2: recommended way
 
 1.  Use hugo create a site and move the bridget theme into the theme directory.
-2.  Run `npm install` in the <u>bridget theme root dir</u>, not <u>your hugo site root dir</u>.
-3.  Run `npm run dev` in the <u>bridget theme root dir</u>, we will use content in exampleSite to debug.
+2.  Run `npm install` in the _bridget theme root dir_, not _your hugo site root dir_.
+3.  Run `npm run dev` in the _bridget theme root dir_, we will use content in exampleSite to debug.
 4.  Make your customization.
-5.  After modification, run `npm run build` in the <u>bridget theme root dir</u> to build artifacts.
-6.  In <u>your hugo site root dir</u>, write/modify configuration files according to your needs, remember to set `bundled` option to `true`, so hugo will use the artifacts you built in step 5.
-7.  Run `hugo server` in <u>your hugo site root dir</u>, and you are good to go.
+5.  After modification, run `npm run build` in the _bridget theme root dir_ to build artifacts.
+6.  In _your hugo site root dir_, write/modify configuration files according to your needs, remember to set `bundled` option to `true`, so hugo will use the artifacts you built in step 5.
+7.  Run `hugo server` in _your hugo site root dir_, and you are good to go.
