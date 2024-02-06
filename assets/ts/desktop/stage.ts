@@ -237,23 +237,20 @@ export function initStage(ijs: ImageJSON[]): void {
       img.src = img.dataset.loUrl
     }
     // lores preloader for rest of the images
-    onMutation(img, (mutations, observer) => {
-      mutations.every((mutation) => {
-        // if open or animating, skip
-        if (isOpen.get() || isAnimating.get()) return true
-        // if mutation is not about style attribute, skip
-        if (mutation.attributeName !== 'style') return true
-        const opacity = parseFloat(img.style.opacity)
-        // if opacity is not 1, skip
-        if (opacity !== 1) return true
-        // preload the i + 5th image
-        if (i + 5 < imgs.length) {
-          imgs[i + 5].src = imgs[i + 5].dataset.loUrl
-        }
-        // disconnect observer and return false to break the loop
-        observer.disconnect()
-        return false
-      })
+    onMutation(img, (mutation) => {
+      // if open or animating, hold
+      if (isOpen.get() || isAnimating.get()) return false
+      // if mutation is not about style attribute, hold
+      if (mutation.attributeName !== 'style') return false
+      const opacity = parseFloat(img.style.opacity)
+      // if opacity is not 1, hold
+      if (opacity !== 1) return false
+      // preload the i + 5th image, if it exists
+      if (i + 5 < imgs.length) {
+        imgs[i + 5].src = imgs[i + 5].dataset.loUrl
+      }
+      // triggered
+      return true
     })
   })
   // event listeners
