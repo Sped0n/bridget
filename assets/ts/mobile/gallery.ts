@@ -18,7 +18,6 @@ let swiperNode: HTMLDivElement
 let gallery: HTMLDivElement
 let curtain: HTMLDivElement
 let swiper: Swiper
-let lastIndex = -1
 let indexDispNums: HTMLSpanElement[] = []
 let galleryImages: MobileImage[] = []
 let collectionImages: MobileImage[] = []
@@ -27,6 +26,11 @@ let _Swiper: typeof Swiper
 let _gsap: typeof gsap
 let _Power3: typeof Power3
 
+/**
+ * state
+ */
+
+let lastIndex = -1
 let libLoaded = false
 
 /**
