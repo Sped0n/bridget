@@ -1,6 +1,5 @@
 node_modules
 static
 exmapleSite
-*.yaml
-*.yml
 single.json
+pnpm-lock.yaml
