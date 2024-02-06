@@ -1,4 +1,4 @@
-import { type Power3, type gsap } from 'gsap'
+import { type gsap } from 'gsap'
 
 import { container } from '../container'
 import { incIndex, isAnimating, navigateVector, state } from '../globalState'
@@ -17,7 +17,10 @@ let imgs: DesktopImage[] = []
 let last = { x: 0, y: 0 }
 
 let _gsap: typeof gsap
-let _Power3: typeof Power3
+
+/**
+ * state
+ */
 
 let gsapLoaded = false
 
@@ -147,7 +150,7 @@ function expandImage(): void {
   // move down and hide trail inactive
   tl.to(trailInactiveEls, {
     y: '+=20',
-    ease: _Power3.easeIn,
+    ease: 'power3.in',
     stagger: 0.075,
     duration: 0.3,
     delay: 0.1,
@@ -157,7 +160,7 @@ function expandImage(): void {
   tl.to(elc, {
     x: 0,
     y: 0,
-    ease: _Power3.easeInOut,
+    ease: 'power3.inOut',
     duration: 0.7,
     delay: 0.3
   })
@@ -165,7 +168,7 @@ function expandImage(): void {
   tl.to(elc, {
     delay: 0.1,
     scale: 1,
-    ease: _Power3.easeInOut
+    ease: 'power3.inOut'
   })
   // finished
   tl.then(() => {
@@ -194,20 +197,20 @@ export function minimizeImage(): void {
   tl.to(elc, {
     scale: 0.6,
     duration: 0.6,
-    ease: _Power3.easeInOut
+    ease: 'power3.inOut'
   })
   // move current to original position
   tl.to(elc, {
     delay: 0.3,
     duration: 0.7,
-    ease: _Power3.easeInOut,
+    ease: 'power3.inOut',
     x: cordHist.get()[cordHist.get().length - 1].x - window.innerWidth / 2,
     y: cordHist.get()[cordHist.get().length - 1].y - window.innerHeight / 2
   })
   // show trail inactive
   tl.to(elsTrailInactive, {
     y: '-=20',
-    ease: _Power3.easeOut,
+    ease: 'power3.out',
     stagger: -0.1,
     duration: 0.3,
     opacity: 1
@@ -237,23 +240,20 @@ export function initStage(ijs: ImageJSON[]): void {
       img.src = img.dataset.loUrl
     }
     // lores preloader for rest of the images
-    onMutation(img, (mutations, observer) => {
-      mutations.every((mutation) => {
-        // if open or animating, skip
-        if (isOpen.get() || isAnimating.get()) return true
-        // if mutation is not about style attribute, skip
-        if (mutation.attributeName !== 'style') return true
-        const opacity = parseFloat(img.style.opacity)
-        // if opacity is not 1, skip
-        if (opacity !== 1) return true
-        // preload the i + 5th image
-        if (i + 5 < imgs.length) {
-          imgs[i + 5].src = imgs[i + 5].dataset.loUrl
-        }
-        // disconnect observer and return false to break the loop
-        observer.disconnect()
-        return false
-      })
+    onMutation(img, (mutation) => {
+      // if open or animating, hold
+      if (isOpen.get() || isAnimating.get()) return false
+      // if mutation is not about style attribute, hold
+      if (mutation.attributeName !== 'style') return false
+      const opacity = parseFloat(img.style.opacity)
+      // if opacity is not 1, hold
+      if (opacity !== 1) return false
+      // preload the i + 5th image, if it exists
+      if (i + 5 < imgs.length) {
+        imgs[i + 5].src = imgs[i + 5].dataset.loUrl
+      }
+      // triggered
+      return true
     })
   })
   // event listeners
@@ -348,7 +348,7 @@ function setLoaderForHiresImage(e: HTMLImageElement): void {
       'load',
       () => {
         _gsap
-          .to(e, { opacity: 1, ease: _Power3.easeIn, duration: 0.5 })
+          .to(e, { opacity: 1, ease: 'power3.out', duration: 0.5 })
           .then(() => {
             isLoading.set(false)
           })
@@ -387,8 +387,7 @@ function setLoaderForHiresImage(e: HTMLImageElement): void {
 function loadLib(): void {
   loadGsap()
     .then((g) => {
-      _gsap = g[0]
-      _Power3 = g[1]
+      _gsap = g
       gsapLoaded = true
     })
     .catch((e) => {
