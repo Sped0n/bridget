@@ -37,7 +37,11 @@ export function removeDuplicates<T>(arr: T[]): T[] {
  */
 
 export class Watchable<T> {
-  constructor(private obj: T) {}
+  constructor(
+    private obj: T,
+    private readonly lazy: boolean = true
+  ) {}
+
   private readonly watchers: Array<(arg0: T) => void> = []
 
   get(): T {
@@ -45,6 +49,7 @@ export class Watchable<T> {
   }
 
   set(e: T): void {
+    if (e === this.obj && this.lazy) return
     this.obj = e
     this.watchers.forEach((watcher) => {
       watcher(this.obj)
