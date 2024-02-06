@@ -85,33 +85,43 @@ function setPositions(): void {
 
   const elsTrail = getImagesWithIndexArray(trailElsIndex)
 
+  // cached state
+  const _isOpen = isOpen.get()
+  const _cordHist = cordHist.get()
+  const _state = state.get()
+
   _gsap.set(elsTrail, {
-    x: (i: number) => cordHist.get()[i].x - window.innerWidth / 2,
-    y: (i: number) => cordHist.get()[i].y - window.innerHeight / 2,
+    x: (i: number) => _cordHist[i].x - window.innerWidth / 2,
+    y: (i: number) => _cordHist[i].y - window.innerHeight / 2,
     opacity: (i: number) =>
-      i + 1 + state.get().trailLength <= cordHist.get().length ? 0 : 1,
+      Math.max(
+        (i + 1 + _state.trailLength <= _cordHist.length ? 0 : 1) - (_isOpen ? 1 : 0),
+        0
+      ),
     zIndex: (i: number) => i,
     scale: 0.6
   })
 
-  if (isOpen.get()) {
+  if (_isOpen) {
     const elc = getImagesWithIndexArray([getCurrentElIndex()])[0]
-    elc.classList.add('hide') // hide image to prevent flash
     const indexArrayToHires: number[] = []
+    const indexArrayToCleanup: number[] = []
     switch (navigateVector.get()) {
       case 'prev':
         indexArrayToHires.push(getPrevElIndex())
+        indexArrayToCleanup.push(getNextElIndex())
         break
       case 'next':
         indexArrayToHires.push(getNextElIndex())
+        indexArrayToCleanup.push(getPrevElIndex())
         break
       default:
         break
     }
     hires(getImagesWithIndexArray(indexArrayToHires)) // preload
-    setLoaderForImage(elc)
-    _gsap.set(imgs, { opacity: 0 })
-    _gsap.set(elc, { opacity: 1, x: 0, y: 0, scale: 1 })
+    _gsap.set(getImagesWithIndexArray(indexArrayToCleanup), { opacity: 0 })
+    _gsap.set(elc, { x: 0, y: 0, scale: 1 }) // set current to center
+    setLoaderForHiresImage(elc) // set loader, if loaded set current opacity to 1
   } else {
     lores(elsTrail)
   }
@@ -130,7 +140,7 @@ function expandImage(): void {
   // elc.classList.add('hide')
 
   hires(getImagesWithIndexArray([elcIndex, getPrevElIndex(), getNextElIndex()]))
-  setLoaderForImage(elc)
+  setLoaderForHiresImage(elc)
 
   const tl = _gsap.timeline()
   const trailInactiveEls = getImagesWithIndexArray(getTrailInactiveElsIndex())
@@ -331,27 +341,46 @@ function lores(imgs: DesktopImage[]): void {
   })
 }
 
-function setLoaderForImage(e: HTMLImageElement): void {
+function setLoaderForHiresImage(e: HTMLImageElement): void {
   if (!e.complete) {
     isLoading.set(true)
     e.addEventListener(
       'load',
       () => {
-        isLoading.set(false)
-        e.classList.remove('hide')
+        _gsap
+          .to(e, { opacity: 1, ease: _Power3.easeIn, duration: 0.5 })
+          .then(() => {
+            isLoading.set(false)
+          })
+          .catch((e) => {
+            console.log(e)
+          })
       },
       { once: true, passive: true }
     )
     e.addEventListener(
       'error',
       () => {
-        isLoading.set(false)
+        _gsap
+          .set(e, { opacity: 1 })
+          .then(() => {
+            isLoading.set(false)
+          })
+          .catch((e) => {
+            console.log(e)
+          })
       },
       { once: true, passive: true }
     )
   } else {
-    e.classList.remove('hide')
-    isLoading.set(false)
+    _gsap
+      .set(e, { opacity: 1 })
+      .then(() => {
+        isLoading.set(false)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
   }
 }
 
