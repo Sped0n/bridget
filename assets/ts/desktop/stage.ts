@@ -1,4 +1,4 @@
-import { type Power3, type gsap } from 'gsap'
+import { type gsap } from 'gsap'
 
 import { container } from '../container'
 import { incIndex, isAnimating, navigateVector, state } from '../globalState'
@@ -17,7 +17,10 @@ let imgs: DesktopImage[] = []
 let last = { x: 0, y: 0 }
 
 let _gsap: typeof gsap
-let _Power3: typeof Power3
+
+/**
+ * state
+ */
 
 let gsapLoaded = false
 
@@ -147,7 +150,7 @@ function expandImage(): void {
   // move down and hide trail inactive
   tl.to(trailInactiveEls, {
     y: '+=20',
-    ease: _Power3.easeIn,
+    ease: 'power3.in',
     stagger: 0.075,
     duration: 0.3,
     delay: 0.1,
@@ -157,7 +160,7 @@ function expandImage(): void {
   tl.to(elc, {
     x: 0,
     y: 0,
-    ease: _Power3.easeInOut,
+    ease: 'power3.inOut',
     duration: 0.7,
     delay: 0.3
   })
@@ -165,7 +168,7 @@ function expandImage(): void {
   tl.to(elc, {
     delay: 0.1,
     scale: 1,
-    ease: _Power3.easeInOut
+    ease: 'power3.inOut'
   })
   // finished
   tl.then(() => {
@@ -194,20 +197,20 @@ export function minimizeImage(): void {
   tl.to(elc, {
     scale: 0.6,
     duration: 0.6,
-    ease: _Power3.easeInOut
+    ease: 'power3.inOut'
   })
   // move current to original position
   tl.to(elc, {
     delay: 0.3,
     duration: 0.7,
-    ease: _Power3.easeInOut,
+    ease: 'power3.inOut',
     x: cordHist.get()[cordHist.get().length - 1].x - window.innerWidth / 2,
     y: cordHist.get()[cordHist.get().length - 1].y - window.innerHeight / 2
   })
   // show trail inactive
   tl.to(elsTrailInactive, {
     y: '-=20',
-    ease: _Power3.easeOut,
+    ease: 'power3.out',
     stagger: -0.1,
     duration: 0.3,
     opacity: 1
@@ -345,7 +348,7 @@ function setLoaderForHiresImage(e: HTMLImageElement): void {
       'load',
       () => {
         _gsap
-          .to(e, { opacity: 1, ease: _Power3.easeIn, duration: 0.5 })
+          .to(e, { opacity: 1, ease: 'power3.out', duration: 0.5 })
           .then(() => {
             isLoading.set(false)
           })
@@ -384,8 +387,7 @@ function setLoaderForHiresImage(e: HTMLImageElement): void {
 function loadLib(): void {
   loadGsap()
     .then((g) => {
-      _gsap = g[0]
-      _Power3 = g[1]
+      _gsap = g
       gsapLoaded = true
     })
     .catch((e) => {

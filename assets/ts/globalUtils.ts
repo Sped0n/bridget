@@ -1,4 +1,4 @@
-import { type Power3, type gsap } from 'gsap'
+import { type gsap } from 'gsap'
 
 /**
  * utils
@@ -16,9 +16,9 @@ export function expand(num: number): string {
   return ('0000' + num.toString()).slice(-4)
 }
 
-export async function loadGsap(): Promise<[typeof gsap, typeof Power3]> {
+export async function loadGsap(): Promise<typeof gsap> {
   const g = await import('gsap')
-  return [g.gsap, g.Power3]
+  return g.gsap
 }
 
 export function getThresholdSessionIndex(): number {

@@ -1,4 +1,4 @@
-import { type Power3, type gsap } from 'gsap'
+import { type gsap } from 'gsap'
 import { type Swiper } from 'swiper'
 
 import { container, scrollable } from '../container'
@@ -17,14 +17,12 @@ import { capitalizeFirstLetter, loadSwiper, type MobileImage } from './utils'
 let swiperNode: HTMLDivElement
 let gallery: HTMLDivElement
 let curtain: HTMLDivElement
-let swiper: Swiper
 let indexDispNums: HTMLSpanElement[] = []
 let galleryImages: MobileImage[] = []
 let collectionImages: MobileImage[] = []
 
-let _Swiper: typeof Swiper
 let _gsap: typeof gsap
-let _Power3: typeof Power3
+let _swiper: Swiper
 
 /**
  * state
@@ -48,7 +46,7 @@ export function slideUp(): void {
 
   _gsap.to(gallery, {
     y: 0,
-    ease: _Power3.easeInOut,
+    ease: 'power3.inOut',
     duration: 1,
     delay: 0.4
   })
@@ -67,7 +65,7 @@ function slideDown(): void {
 
   _gsap.to(gallery, {
     y: '100%',
-    ease: _Power3.easeInOut,
+    ease: 'power3.inOut',
     duration: 1
   })
 
@@ -132,17 +130,15 @@ export function initGallery(ijs: ImageJSON[]): void {
     () => {
       loadGsap()
         .then((g) => {
-          _gsap = g[0]
-          _Power3 = g[1]
+          _gsap = g
         })
         .catch((e) => {
           console.log(e)
         })
       loadSwiper()
-        .then((s) => {
-          _Swiper = s
-          swiper = new _Swiper(swiperNode, { spaceBetween: 20 })
-          swiper.on('slideChange', ({ realIndex }) => {
+        .then((S) => {
+          _swiper = new S(swiperNode, { spaceBetween: 20 })
+          _swiper.on('slideChange', ({ realIndex }) => {
             setIndex(realIndex)
           })
         })
@@ -163,7 +159,7 @@ export function initGallery(ijs: ImageJSON[]): void {
 
 function changeSlide(slide: number): void {
   galleryLoadImages()
-  swiper.slideTo(slide, 0)
+  _swiper.slideTo(slide, 0)
 }
 
 function scrollToActive(): void {
@@ -250,8 +246,8 @@ function createGallery(ijs: ImageJSON[]): void {
           _gsap.set(e, { opacity: 1 })
           _gsap.set(l, { opacity: 0 })
         } else {
-          _gsap.to(e, { opacity: 1, duration: 0.5, ease: _Power3.easeIn })
-          _gsap.to(l, { opacity: 0, duration: 0.5, ease: _Power3.easeIn })
+          _gsap.to(e, { opacity: 1, delay: 0.5, duration: 0.5, ease: 'power3.out' })
+          _gsap.to(l, { opacity: 0, duration: 0.5, ease: 'power3.in' })
         }
       },
       { once: true, passive: true }
