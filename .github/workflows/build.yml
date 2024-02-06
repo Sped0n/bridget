@@ -88,4 +88,4 @@ jobs:
         if: ${{ (github.event_name == 'push' || github.event.pull_request.merged == true) && needs.filter.outputs.any_changed == 'true' }}
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: 'ci: update bundled artifacts'
+          commit_message: 'ci: update bundled artifacts [skip ci]'
