@@ -17,7 +17,9 @@ jobs:
     name: Lint
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
@@ -38,5 +40,18 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Lint
+      - name: Lint Check
+        continue-on-error: true
+        id: check
         run: pnpm run lint:check
+
+      - name: Format manually
+        id: format
+        if: ${{ steps.check.outcome == 'failure' }}
+        run: pnpm run lint
+
+      - name: Commit
+        if: ${{ steps.format.outcome == 'success' }}
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'ci: format code'
