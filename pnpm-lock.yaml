@@ -21,8 +21,8 @@ dependencies:
     specifier: ^4.9.6
     version: 4.9.6
   swiper:
-    specifier: ^11.0.5
-    version: 11.0.5
+    specifier: ^11.0.6
+    version: 11.0.6
 
 devDependencies:
   '@typescript-eslint/eslint-plugin':
@@ -2274,8 +2274,8 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
-  /swiper@11.0.5:
-    resolution: {integrity: sha512-rhCwupqSyRnWrtNzWzemnBLMoyYuoDgGgspAm/8iBD3jCvAWycPLH4Z3TB0O5520DHLzMx94yUMH/B9Efpa48w==}
+  /swiper@11.0.6:
+    resolution: {integrity: sha512-W/Me7MQl5rNgdM5x9i3Gll76WsyVpnHn91GhBOyL7RCFUeg62aVnflzlVfIpXzZ/87FtJOfAoDH79ZH2Yq76zA==}
     engines: {node: '>= 4.7.0'}
     dev: false
 
