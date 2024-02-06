@@ -109,9 +109,9 @@ function setPositions(): void {
         break
     }
     hires(getImagesWithIndexArray(indexArrayToHires)) // preload
-    setLoaderForImage(elc)
+    _gsap.set(getImagesWithIndexArray(indexArrayToCleanup), { opacity: 0 })
     _gsap.set(imgs, { opacity: 0 })
-    _gsap.set(elc, { opacity: 1, x: 0, y: 0, scale: 1 })
+    setLoaderForHiresImage(elc) // set loader, if loaded set current opacity to 1
   } else {
     lores(elsTrail)
   }
@@ -130,7 +130,7 @@ function expandImage(): void {
   // elc.classList.add('hide')
 
   hires(getImagesWithIndexArray([elcIndex, getPrevElIndex(), getNextElIndex()]))
-  setLoaderForImage(elc)
+  setLoaderForHiresImage(elc)
 
   const tl = _gsap.timeline()
   const trailInactiveEls = getImagesWithIndexArray(getTrailInactiveElsIndex())
@@ -331,7 +331,7 @@ function lores(imgs: DesktopImage[]): void {
   })
 }
 
-function setLoaderForImage(e: HTMLImageElement): void {
+function setLoaderForHiresImage(e: HTMLImageElement): void {
   if (!e.complete) {
     isLoading.set(true)
     e.addEventListener(
