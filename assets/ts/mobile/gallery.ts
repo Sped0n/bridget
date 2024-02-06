@@ -237,13 +237,18 @@ function createGallery(ijs: ImageJSON[]): void {
     e.height = ij.hiImgH
     e.width = ij.hiImgW
     e.alt = ij.alt
-    e.classList.add('hide')
+    e.style.opacity = '0'
     // load event
     e.addEventListener(
       'load',
       () => {
-        e.classList.remove('hide')
-        l.classList.add('hide')
+        if (state.get().index !== ij.index) {
+          _gsap.set(e, { opacity: 1 })
+          _gsap.set(l, { opacity: 0 })
+        } else {
+          _gsap.to(e, { opacity: 1, duration: 0.5, ease: _Power3.easeIn })
+          _gsap.to(l, { opacity: 0, duration: 0.5, ease: _Power3.easeIn })
+        }
       },
       { once: true, passive: true }
     )
