@@ -18,7 +18,7 @@ jobs:
     outputs:
       any_changed: ${{ steps.changed-files-specific.outputs.any_changed }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -45,7 +45,9 @@ jobs:
         id: version
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT }}
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
@@ -84,10 +86,6 @@ jobs:
 
       - name: Push artifacts
         if: ${{ (github.event_name == 'push' || github.event.pull_request.merged == true) && needs.filter.outputs.any_changed == 'true' }}
-        uses: peter-evans/create-pull-request@v5
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          token: ${{ secrets.PAT }}
-          title: "ci: update bundled artifacts"
-          commit-message: "ci: update bundled artifacts"
-          branch: update-artifacts-${{ steps.version.outputs.builddate }}
-          base: main
+          commit_messages: 'ci: update bundled artifacts'
