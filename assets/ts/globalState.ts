@@ -31,7 +31,7 @@ const defaultState = {
   trailLength: thresholds[getThresholdSessionIndex()].trailLength
 }
 
-export const state = new Watchable<State>(defaultState)
+export const state = new Watchable<State>(defaultState, false)
 export const isAnimating = new Watchable<boolean>(false)
 export const navigateVector = new Watchable<NavVec>('none')
 

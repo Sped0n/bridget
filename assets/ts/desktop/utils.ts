@@ -19,10 +19,15 @@ export interface DesktopImage extends HTMLImageElement {
 
 export function onMutation<T extends HTMLElement>(
   element: T,
-  callback: (arg0: MutationRecord[], arg1: MutationObserver) => void,
+  trigger: (arg0: MutationRecord) => boolean,
   observeOptions: MutationObserverInit = { attributes: true }
 ): void {
   new MutationObserver((mutations, observer) => {
-    callback(mutations, observer)
+    for (const mutation of mutations) {
+      if (trigger(mutation)) {
+        observer.disconnect()
+        break
+      }
+    }
   }).observe(element, observeOptions)
 }

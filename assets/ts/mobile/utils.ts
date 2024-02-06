@@ -20,10 +20,15 @@ export function getRandom(min: number, max: number): number {
 
 export function onIntersection<T extends HTMLElement>(
   element: T,
-  callback: (arg0: IntersectionObserverEntry[], arg1: IntersectionObserver) => void
+  trigger: (arg0: IntersectionObserverEntry) => boolean
 ): void {
   new IntersectionObserver((entries, observer) => {
-    callback(entries, observer)
+    for (const entry of entries) {
+      if (trigger(entry)) {
+        observer.disconnect()
+        break
+      }
+    }
   }).observe(element)
 }
 

@@ -64,18 +64,15 @@ export function initCollection(ijs: ImageJSON[]): void {
       { passive: true }
     )
     // preload
-    onIntersection(img, (entries, observer) => {
-      entries.every((entry) => {
-        // no intersection, skip
-        if (entry.intersectionRatio <= 0) return true
-        // preload the i + 5th image
-        if (i + 5 < imgs.length) {
-          imgs[i + 5].src = imgs[i + 5].dataset.src
-        }
-        // disconnect observer and return false to break the loop
-        observer.disconnect()
-        return false
-      })
+    onIntersection(img, (entry) => {
+      // no intersection, hold
+      if (entry.intersectionRatio <= 0) return false
+      // preload the i + 5th image, if it exists
+      if (i + 5 < imgs.length) {
+        imgs[i + 5].src = imgs[i + 5].dataset.src
+      }
+      // triggered
+      return true
     })
   })
 }
