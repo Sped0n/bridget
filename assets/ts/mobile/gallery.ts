@@ -3,7 +3,7 @@ import { type Swiper } from 'swiper'
 
 import { container, scrollable } from '../container'
 import { isAnimating, navigateVector, setIndex, state } from '../globalState'
-import { expand, loadGsap, removeDuplicates } from '../globalUtils'
+import { createDivWithClass, expand, loadGsap, removeDuplicates } from '../globalUtils'
 import { type ImageJSON } from '../resources'
 
 import { mounted } from './state'
@@ -14,9 +14,11 @@ import { capitalizeFirstLetter, loadSwiper, type MobileImage } from './utils'
  * variables
  */
 
-let swiperNode: HTMLDivElement
+let galleryInner: HTMLDivElement
 let gallery: HTMLDivElement
 let curtain: HTMLDivElement
+let indexDiv: HTMLDivElement
+let navDiv: HTMLDivElement
 let indexDispNums: HTMLSpanElement[] = []
 let galleryImages: MobileImage[] = []
 let collectionImages: MobileImage[] = []
@@ -89,14 +91,11 @@ function slideDown(): void {
 
 export function initGallery(ijs: ImageJSON[]): void {
   // create gallery
-  createGallery(ijs)
+  constructGallery(ijs)
   // get elements
   indexDispNums = Array.from(
-    document.getElementsByClassName('nav').item(0)?.getElementsByClassName('num') ?? []
+    indexDiv.getElementsByClassName('num') ?? []
   ) as HTMLSpanElement[]
-  swiperNode = document.getElementsByClassName('galleryInner').item(0) as HTMLDivElement
-  gallery = document.getElementsByClassName('gallery').item(0) as HTMLDivElement
-  curtain = document.getElementsByClassName('curtain').item(0) as HTMLDivElement
   galleryImages = Array.from(gallery.getElementsByTagName('img')) as MobileImage[]
   collectionImages = Array.from(
     document
@@ -137,7 +136,7 @@ export function initGallery(ijs: ImageJSON[]): void {
         })
       loadSwiper()
         .then((S) => {
-          _swiper = new S(swiperNode, { spaceBetween: 20 })
+          _swiper = new S(galleryInner, { spaceBetween: 20 })
           _swiper.on('slideChange', ({ realIndex }) => {
             setIndex(realIndex)
           })
@@ -204,32 +203,47 @@ function galleryLoadImages(): void {
   })
 }
 
-function createGallery(ijs: ImageJSON[]): void {
-  /**
-   * gallery
-   * |- galleryInner
-   *    |- swiper-wrapper
-   *       |- swiper-slide
-   *          |- img
-   *       |- swiper-slide
-   *          |- img
-   *       |- ...
-   * |- nav
-   *    |- index
-   *    |- close
-   */
+function constructGalleryNav(): void {
+  // index
+  indexDiv = document.createElement('div')
+  indexDiv.insertAdjacentHTML(
+    'afterbegin',
+    `<span class="num"></span><span class="num"></span><span class="num"></span><span class="num"></span>
+    <span>/</span>
+    <span class="num"></span><span class="num"></span><span class="num"></span><span class="num"></span>`
+  )
+  // close
+  const closeDiv = document.createElement('div')
+  closeDiv.innerText = capitalizeFirstLetter(container.dataset.close)
+  closeDiv.addEventListener(
+    'click',
+    () => {
+      slideDown()
+    },
+    { passive: true }
+  )
+  closeDiv.addEventListener(
+    'keydown',
+    () => {
+      slideDown()
+    },
+    { passive: true }
+  )
+  // nav
+  navDiv = createDivWithClass('nav')
+  navDiv.append(indexDiv, closeDiv)
+}
+
+function constructGalleryInner(ijs: ImageJSON[]): void {
   // swiper wrapper
-  const _swiperWrapper = document.createElement('div')
-  _swiperWrapper.className = 'swiper-wrapper'
+  const swiperWrapper = createDivWithClass('swiper-wrapper')
   // loading text
   const loadingText = container.dataset.loading + '...'
   for (const ij of ijs) {
     // swiper slide
-    const _swiperSlide = document.createElement('div')
-    _swiperSlide.className = 'swiper-slide'
+    const swiperSlide = createDivWithClass('swiper-slide')
     // loading indicator
-    const l = document.createElement('div')
-    l.className = 'loadingText'
+    const l = createDivWithClass('loadingText')
     l.innerText = loadingText
     // img
     const e = document.createElement('img') as MobileImage
@@ -253,63 +267,46 @@ function createGallery(ijs: ImageJSON[]): void {
       { once: true, passive: true }
     )
     // parent container
-    const p = document.createElement('div')
-    p.className = 'slideContainer'
+    const p = createDivWithClass('slideContainer')
     // append
-    p.append(e)
-    p.append(l)
-    _swiperSlide.append(p)
-    _swiperWrapper.append(_swiperSlide)
+    p.append(e, l)
+    swiperSlide.append(p)
+    swiperWrapper.append(swiperSlide)
   }
   // swiper node
-  const _swiperNode = document.createElement('div')
-  _swiperNode.className = 'galleryInner'
-  _swiperNode.append(_swiperWrapper)
-  // index
-  const _index = document.createElement('div')
-  _index.insertAdjacentHTML(
-    'afterbegin',
-    `<span class="num"></span><span class="num"></span><span class="num"></span><span class="num"></span>
-    <span>/</span>
-    <span class="num"></span><span class="num"></span><span class="num"></span><span class="num"></span>`
-  )
-  // close
-  const _close = document.createElement('div')
-  _close.innerText = capitalizeFirstLetter(container.dataset.close)
-  _close.addEventListener(
-    'click',
-    () => {
-      slideDown()
-    },
-    { passive: true }
-  )
-  _close.addEventListener(
-    'keydown',
-    () => {
-      slideDown()
-    },
-    { passive: true }
-  )
-  // nav
-  const _navDiv = document.createElement('div')
-  _navDiv.className = 'nav'
-  _navDiv.append(_index, _close)
+  galleryInner = createDivWithClass('galleryInner')
+  galleryInner.append(swiperWrapper)
+}
+
+function constructGallery(ijs: ImageJSON[]): void {
+  /**
+   * gallery
+   * |- galleryInner
+   *    |- swiper-wrapper
+   *       |- swiper-slide
+   *          |- img
+   *       |- swiper-slide
+   *          |- img
+   *       |- ...
+   * |- nav
+   *    |- index
+   *    |- close
+   */
   // gallery
-  const _gallery = document.createElement('div')
-  _gallery.className = 'gallery'
-  _gallery.append(_swiperNode)
-  _gallery.append(_navDiv)
+  gallery = createDivWithClass('gallery')
+  constructGalleryInner(ijs)
+  constructGalleryNav()
+  gallery.append(galleryInner, navDiv)
 
   /**
    * curtain
    */
-  const _curtain = document.createElement('div')
-  _curtain.className = 'curtain'
+  curtain = createDivWithClass('curtain')
 
   /**
    * container
    * |- gallery
    * |- curtain
    */
-  container.append(_gallery, _curtain)
+  container.append(gallery, curtain)
 }
