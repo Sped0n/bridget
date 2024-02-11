@@ -8,4 +8,6 @@ menu:
     identifier: Gruyaert
     title: Gruyaert
 unifiedAlt: '© Harry Gruyaert'
+_build:
+  publishResources: false
 ---

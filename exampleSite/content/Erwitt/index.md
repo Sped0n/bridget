@@ -8,4 +8,6 @@ menu:
     identifier: Erwitt
     title: Erwitt
 unifiedAlt: '© Elliott Erwitt'
+_build:
+  publishResources: false
 ---

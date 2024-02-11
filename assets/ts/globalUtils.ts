@@ -32,6 +32,13 @@ export function removeDuplicates<T>(arr: T[]): T[] {
   return [...new Set(arr)]
 }
 
+export function createDivWithClass(className: string): HTMLDivElement {
+  const div = document.createElement('div')
+  if (className === '') return div // optimization
+  div.classList.add(className)
+  return div
+}
+
 /**
  * custom "reactive" object
  */
