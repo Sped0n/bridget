@@ -112,6 +112,8 @@ menu:
     identifier: Erwitt
     title: Erwitt
 unifiedAlt: '© Elliott Erwitt'
+_build:
+  publishResources: false
 ---
 ```
 
@@ -128,6 +130,8 @@ unifiedAlt: '© Elliott Erwitt'
 - `title` refers to the text that appears on the navigation bar;
 
 - `unifiedAlt` is **optional**, If you left it empty, the alt attribute of the image will default to its file name; if it is set, the alt attributes of all images will be unified to the value you have set;
+
+- `publishResources` is **optional but recommended**, setting it to false will hide unprocessed images in the `public` directory. By default, Hugo’s value for this option is true, which can potentially result in source image leakage.
 
 - If this is a **showcase** page, simply place the images in the same directory as index.md.
 
