@@ -344,6 +344,10 @@ function lores(imgs: DesktopImage[]): void {
 function setLoaderForHiresImage(e: HTMLImageElement): void {
   if (!e.complete) {
     isLoading.set(true)
+    // abort controller for cleanup
+    const controller = new AbortController()
+    const abortSignal = controller.signal
+    // event listeners
     e.addEventListener(
       'load',
       () => {
@@ -355,8 +359,11 @@ function setLoaderForHiresImage(e: HTMLImageElement): void {
           .catch((e) => {
             console.log(e)
           })
+          .finally(() => {
+            controller.abort()
+          })
       },
-      { once: true, passive: true }
+      { once: true, passive: true, signal: abortSignal }
     )
     e.addEventListener(
       'error',
@@ -369,8 +376,11 @@ function setLoaderForHiresImage(e: HTMLImageElement): void {
           .catch((e) => {
             console.log(e)
           })
+          .finally(() => {
+            controller.abort()
+          })
       },
-      { once: true, passive: true }
+      { once: true, passive: true, signal: abortSignal }
     )
   } else {
     _gsap
