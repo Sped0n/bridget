@@ -6,14 +6,15 @@
   "private": true,
   "sideEffects": false,
   "scripts": {
+    "vite": "vite build --no-watch",
     "lint": "eslint . --fix && prettier --write .",
     "lint:check": "eslint . && prettier . --check",
-    "dev": "run-p rollup:dev hugo:dev",
-    "build": "rm -f ./static/bundled/js/* && run-s rollup:build hugo:build && yes | cp -rf ./exampleSite/public/css/*.css ./static/bundled/css",
-    "server": "run-p rollup:server hugo:server",
-    "rollup:build": "rollup -c --environment BUILD:production",
-    "rollup:server": "rollup -c --watch --environment BUILD:production",
-    "rollup:dev": "rollup -c --watch --environment BUILD:development",
+    "dev": "run-p vite:dev hugo:dev",
+    "build": "rm -f ./static/bundled/js/* && run-s vite:build hugo:build && yes | cp -rf ./exampleSite/public/css/*.css ./static/bundled/css",
+    "server": "run-p vite:server hugo:server",
+    "vite:build": "vite build --no-watch --minify terser",
+    "vite:server": "vite build --minify terser",
+    "vite:dev": "vite build --mode development --minify false",
     "hugo:build": "hugo --logLevel info --source=exampleSite --gc",
     "hugo:preview": "hugo --logLevel info --source=exampleSite -D --gc",
     "hugo:dev": "hugo server --source=exampleSite --gc -D --disableFastRender --watch --logLevel info",
@@ -52,14 +53,13 @@
     "prettier": "3.2.5",
     "prettier-plugin-go-template": "^0.0.15",
     "prettier-plugin-organize-imports": "^3.2.4",
-    "typescript": "^5.3.3"
+    "terser": "^5.27.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.2",
+    "vite-plugin-solid": "^2.10.0"
   },
   "dependencies": {
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^11.1.6",
     "gsap": "^3.12.5",
-    "rollup": "^4.9.6",
     "solid-js": "^1.8.14",
     "swiper": "^11.0.6"
   }
