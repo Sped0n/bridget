@@ -3,7 +3,7 @@ import terser from '@rollup/plugin-terser'
 import typescript from '@rollup/plugin-typescript'
 
 export default {
-  input: './assets/ts/main.ts',
+  input: './assets/ts/main.tsx',
   output: {
     dir: './static/bundled/js',
     format: 'es',
