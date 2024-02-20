@@ -1,4 +1,11 @@
 import { type gsap } from 'gsap'
+import { type Component } from 'solid-js'
+
+/**
+ * types
+ */
+
+export type Vector = 'prev' | 'next' | 'none'
 
 /**
  * utils
@@ -32,38 +39,8 @@ export function removeDuplicates<T>(arr: T[]): T[] {
   return [...new Set(arr)]
 }
 
-export function createDivWithClass(className: string): HTMLDivElement {
-  const div = document.createElement('div')
-  if (className === '') return div // optimization
-  div.classList.add(className)
-  return div
-}
-
-/**
- * custom "reactive" object
- */
-
-export class Watchable<T> {
-  constructor(
-    private obj: T,
-    private readonly lazy: boolean = true
-  ) {}
-
-  private readonly watchers: Array<(arg0: T) => void> = []
-
-  get(): T {
-    return this.obj
-  }
-
-  set(e: T): void {
-    if (e === this.obj && this.lazy) return
-    this.obj = e
-    this.watchers.forEach((watcher) => {
-      watcher(this.obj)
-    })
-  }
-
-  addWatcher(watcher: (arg0: T) => void): void {
-    this.watchers.push(watcher)
-  }
+export function forwardRef<R, P>(
+  component: Component<P & { ref?: (val: R) => void }>
+): Component<P & { ref?: R }> {
+  return component as any
 }
