@@ -9,4 +9,4 @@ other = "threshold"
 [404]
 other = "page not found"
 [loading]
-other = "loading"
+other = "loading..."
