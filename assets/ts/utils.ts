@@ -1,6 +1,12 @@
 import { type gsap } from 'gsap'
 
 /**
+ * types
+ */
+
+export type Vector = 'prev' | 'next' | 'none'
+
+/**
  * utils
  */
 
@@ -30,40 +36,4 @@ export function getThresholdSessionIndex(): number {
 export function removeDuplicates<T>(arr: T[]): T[] {
   if (arr.length < 2) return arr // optimization
   return [...new Set(arr)]
-}
-
-export function createDivWithClass(className: string): HTMLDivElement {
-  const div = document.createElement('div')
-  if (className === '') return div // optimization
-  div.classList.add(className)
-  return div
-}
-
-/**
- * custom "reactive" object
- */
-
-export class Watchable<T> {
-  constructor(
-    private obj: T,
-    private readonly lazy: boolean = true
-  ) {}
-
-  private readonly watchers: Array<(arg0: T) => void> = []
-
-  get(): T {
-    return this.obj
-  }
-
-  set(e: T): void {
-    if (e === this.obj && this.lazy) return
-    this.obj = e
-    this.watchers.forEach((watcher) => {
-      watcher(this.obj)
-    })
-  }
-
-  addWatcher(watcher: (arg0: T) => void): void {
-    this.watchers.push(watcher)
-  }
 }

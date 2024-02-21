@@ -1,20 +1,18 @@
-import { decThreshold, incThreshold, state } from './globalState'
-import { expand } from './globalUtils'
+import { createEffect } from 'solid-js'
+
+import { useState } from '../state'
+import { expand } from '../utils'
 
 /**
- * variables
+ * constants
  */
 
 // threshold div
-const thresholdDiv = document
-  .getElementsByClassName('threshold')
-  .item(0) as HTMLDivElement
-
+const thresholdDiv = document.getElementsByClassName('threshold')[0] as HTMLDivElement
 // threshold nums span
 const thresholdDispNums = Array.from(
   thresholdDiv.getElementsByClassName('num')
 ) as HTMLSpanElement[]
-
 // threshold buttons
 const decButton = thresholdDiv
   .getElementsByClassName('dec')
@@ -22,52 +20,24 @@ const decButton = thresholdDiv
 const incButton = thresholdDiv
   .getElementsByClassName('inc')
   .item(0) as HTMLButtonElement
-
 // index div
 const indexDiv = document.getElementsByClassName('index').item(0) as HTMLDivElement
-
 // index nums span
 const indexDispNums = Array.from(
   indexDiv.getElementsByClassName('num')
 ) as HTMLSpanElement[]
 
 /**
- * init
+ * helper functions
  */
 
-export function initNav(): void {
-  // add watcher for updating nav text
-  state.addWatcher((o) => {
-    updateIndexText(expand(o.index + 1), expand(o.length))
-    updateThresholdText(expand(o.threshold))
-  })
-
-  // event listeners
-  decButton.addEventListener(
-    'click',
-    () => {
-      decThreshold()
-    },
-    { passive: true }
-  )
-  incButton.addEventListener(
-    'click',
-    () => {
-      incThreshold()
-    },
-    { passive: true }
-  )
-}
-
-// helper
-
-export function updateThresholdText(thresholdValue: string): void {
+function updateThresholdText(thresholdValue: string): void {
   thresholdDispNums.forEach((e: HTMLSpanElement, i: number) => {
     e.innerText = thresholdValue[i]
   })
 }
 
-export function updateIndexText(indexValue: string, indexLength: string): void {
+function updateIndexText(indexValue: string, indexLength: string): void {
   indexDispNums.forEach((e: HTMLSpanElement, i: number) => {
     if (i < 4) {
       e.innerText = indexValue[i]
@@ -75,4 +45,22 @@ export function updateIndexText(indexValue: string, indexLength: string): void {
       e.innerText = indexLength[i - 4]
     }
   })
+}
+
+/**
+ * Nav component
+ */
+
+export function Nav(): null {
+  const [state, { incThreshold, decThreshold }] = useState()
+
+  createEffect(() => {
+    updateIndexText(expand(state().index + 1), expand(state().length))
+    updateThresholdText(expand(state().threshold))
+  })
+
+  decButton.onclick = decThreshold
+  incButton.onclick = incThreshold
+
+  return null
 }

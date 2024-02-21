@@ -9,7 +9,9 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js"
   },
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Recommended"
