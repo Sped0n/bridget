@@ -1,4 +1,4 @@
-import { createSignal, type JSX, type Setter } from 'solid-js'
+import { Show, createSignal, type JSX, type Setter } from 'solid-js'
 
 import type { ImageJSON } from '../resources'
 
@@ -29,22 +29,24 @@ export default function Mobile(props: {
 
   return (
     <>
-      <Collection
-        ijs={props.ijs}
-        isAnimating={isAnimating}
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-      />
-      <Gallery
-        ijs={props.ijs}
-        closeText={props.closeText}
-        loadingText={props.loadingText}
-        isAnimating={isAnimating}
-        setIsAnimating={setIsAnimating}
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        setScrollable={props.setScrollable}
-      />
+      <Show when={props.ijs.length > 0}>
+        <Collection
+          ijs={props.ijs}
+          isAnimating={isAnimating}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+        />
+        <Gallery
+          ijs={props.ijs}
+          closeText={props.closeText}
+          loadingText={props.loadingText}
+          isAnimating={isAnimating}
+          setIsAnimating={setIsAnimating}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          setScrollable={props.setScrollable}
+        />
+      </Show>
     </>
   )
 }

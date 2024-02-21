@@ -55,34 +55,36 @@ export default function Desktop(props: {
   return (
     <>
       <Nav />
-      <Stage
-        ijs={props.ijs}
-        setIsLoading={setIsLoading}
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        isAnimating={isAnimating}
-        setIsAnimating={setIsAnimating}
-        cordHist={cordHist}
-        setCordHist={setCordHist}
-        navVector={navVector}
-        setNavVector={setNavVector}
-      />
-      <Show when={isOpen()}>
-        <CustomCursor cursorText={cursorText} active={active} isOpen={isOpen} />
-        <StageNav
-          prevText={props.prevText}
-          closeText={props.closeText}
-          nextText={props.nextText}
-          loadingText={props.loadingText}
-          active={active}
-          isAnimating={isAnimating}
-          setCordHist={setCordHist}
+      <Show when={props.ijs.length > 0}>
+        <Stage
+          ijs={props.ijs}
+          setIsLoading={setIsLoading}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-          setHoverText={setHoverText}
+          isAnimating={isAnimating}
+          setIsAnimating={setIsAnimating}
+          cordHist={cordHist}
+          setCordHist={setCordHist}
           navVector={navVector}
           setNavVector={setNavVector}
         />
+        <Show when={isOpen()}>
+          <CustomCursor cursorText={cursorText} active={active} isOpen={isOpen} />
+          <StageNav
+            prevText={props.prevText}
+            closeText={props.closeText}
+            nextText={props.nextText}
+            loadingText={props.loadingText}
+            active={active}
+            isAnimating={isAnimating}
+            setCordHist={setCordHist}
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            setHoverText={setHoverText}
+            navVector={navVector}
+            setNavVector={setNavVector}
+          />
+        </Show>
       </Show>
     </>
   )
