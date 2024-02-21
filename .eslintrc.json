@@ -12,11 +12,7 @@
     "plugin:solid/typescript"
   ],
   "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "prettier",
-    "@typescript-eslint",
-    "solid"
-  ],
+  "plugins": ["prettier", "@typescript-eslint", "solid"],
   "parserOptions": {
     "ecmaVersion": "latest",
     "project": "./tsconfig.json",
@@ -27,19 +23,13 @@
     "arrow-body-style": "off",
     "prefer-arrow-callback": "off",
     "import/no-cycle": "error",
-    "@typescript-eslint/non-nullable-type-assertion-style": "off",
     "sort-imports": [
       "error",
       {
         "ignoreCase": false,
         "ignoreDeclarationSort": true,
-        "ignoreMemberSort": false,
-        "memberSyntaxSortOrder": [
-          "none",
-          "all",
-          "multiple",
-          "single"
-        ],
+        "ignoreMemberSort": true,
+        "memberSyntaxSortOrder": ["none", "all", "multiple", "single"],
         "allowSeparatedGroups": true
       }
     ],
@@ -53,7 +43,8 @@
           "internal",
           "parent",
           "sibling",
-          "index"
+          "index",
+          "unknown"
         ],
         "newlines-between": "always",
         "alphabetize": {
