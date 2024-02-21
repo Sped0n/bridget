@@ -7,7 +7,10 @@ export function CustomCursor(props: {
   isOpen: Accessor<boolean>
 }): JSX.Element {
   // types
-  type XY = { x: number; y: number }
+  interface XY {
+    x: number
+    y: number
+  }
 
   // variables
   let controller: AbortController | undefined
@@ -16,7 +19,7 @@ export function CustomCursor(props: {
   const [xy, setXy] = createSignal<XY>({ x: 0, y: 0 })
 
   // helper functions
-  const onMouse = (e: MouseEvent) => {
+  const onMouse: (e: MouseEvent) => void = (e) => {
     const { clientX, clientY } = e
     setXy({ x: clientX, y: clientY })
   }

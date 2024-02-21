@@ -14,14 +14,14 @@ export function GalleryNav(props: {
   setIsOpen: Setter<boolean>
 }): JSX.Element {
   // variables
-  let indexNums: HTMLSpanElement[] = Array<HTMLSpanElement>(8)
+  const indexNums: HTMLSpanElement[] = Array<HTMLSpanElement>(8)
 
   // states
   const [state] = useState()
   const stateLength = state().length
 
   // helper functions
-  const updateIndexText = () => {
+  const updateIndexText: () => void = () => {
     const indexValue: string = expand(state().index + 1)
     const indexLength: string = expand(stateLength)
     indexNums.forEach((e: HTMLSpanElement, i: number) => {
@@ -33,7 +33,7 @@ export function GalleryNav(props: {
     })
   }
 
-  const onClick = () => {
+  const onClick: () => void = () => {
     if (props.isAnimating()) return
     props.setIsOpen(false)
   }
@@ -55,15 +55,15 @@ export function GalleryNav(props: {
     <>
       <div class="nav">
         <div>
-          <span ref={indexNums[0]} class="num"></span>
-          <span ref={indexNums[1]} class="num"></span>
-          <span ref={indexNums[2]} class="num"></span>
-          <span ref={indexNums[3]} class="num"></span>
+          <span ref={indexNums[0]} class="num" />
+          <span ref={indexNums[1]} class="num" />
+          <span ref={indexNums[2]} class="num" />
+          <span ref={indexNums[3]} class="num" />
           <span>/</span>
-          <span ref={indexNums[4]} class="num"></span>
-          <span ref={indexNums[5]} class="num"></span>
-          <span ref={indexNums[6]} class="num"></span>
-          <span ref={indexNums[7]} class="num"></span>
+          <span ref={indexNums[4]} class="num" />
+          <span ref={indexNums[5]} class="num" />
+          <span ref={indexNums[6]} class="num" />
+          <span ref={indexNums[7]} class="num" />
         </div>
         <div onClick={onClick} onKeyDown={onClick}>
           {capitalizeFirstLetter(props.closeText)}

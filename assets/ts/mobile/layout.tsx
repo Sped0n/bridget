@@ -1,6 +1,7 @@
 import { createSignal, type JSX, type Setter } from 'solid-js'
 
-import { type ImageJSON } from '../resources'
+import type { ImageJSON } from '../resources'
+
 import { Collection } from './collection'
 import { Gallery } from './gallery'
 

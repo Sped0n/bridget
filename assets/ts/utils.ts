@@ -1,5 +1,4 @@
 import { type gsap } from 'gsap'
-import { type Component } from 'solid-js'
 
 /**
  * types
@@ -37,10 +36,4 @@ export function getThresholdSessionIndex(): number {
 export function removeDuplicates<T>(arr: T[]): T[] {
   if (arr.length < 2) return arr // optimization
   return [...new Set(arr)]
-}
-
-export function forwardRef<R, P>(
-  component: Component<P & { ref?: (val: R) => void }>
-): Component<P & { ref?: R }> {
-  return component as any
 }

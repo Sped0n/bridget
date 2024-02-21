@@ -1,4 +1,5 @@
 import {
+  For,
   createEffect,
   on,
   onMount,
@@ -7,9 +8,10 @@ import {
   type Setter
 } from 'solid-js'
 
-import { type ImageJSON } from '../resources'
+import type { ImageJSON } from '../resources'
 import { useState } from '../state'
-import { type MobileImage } from './layout'
+
+import type { MobileImage } from './layout'
 
 function getRandom(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min
@@ -37,19 +39,20 @@ export function Collection(props: {
   setIsOpen: Setter<boolean>
 }): JSX.Element {
   // variables
-  let imgs: MobileImage[] = Array<MobileImage>(props.ijs.length)
+  // eslint-disable-next-line solid/reactivity
+  const imgs: MobileImage[] = Array<MobileImage>(props.ijs.length)
 
   // states
   const [state, { setIndex }] = useState()
 
   // helper functions
-  const handleClick = (i: number) => {
+  const handleClick: (i: number) => void = (i) => {
     if (props.isAnimating()) return
     setIndex(i)
     props.setIsOpen(true)
   }
 
-  const scrollToActive = () => {
+  const scrollToActive: () => void = () => {
     imgs[state().index].scrollIntoView({ behavior: 'auto', block: 'center' })
   }
 
@@ -104,20 +107,26 @@ export function Collection(props: {
   return (
     <>
       <div class="collection">
-        {props.ijs.map((ij, i) => (
-          <img
-            ref={imgs[i]}
-            height={ij.loImgH}
-            width={ij.loImgW}
-            data-src={ij.loUrl}
-            alt={ij.alt}
-            style={{
-              transform: `translate3d(${i !== 0 ? getRandom(-25, 25) : 0}%, ${i !== 0 ? getRandom(-30, 30) : 0}%, 0)`
-            }}
-            onClick={() => handleClick(i)}
-            onKeyDown={() => handleClick(i)}
-          />
-        ))}
+        <For each={props.ijs}>
+          {(ij, i) => (
+            <img
+              ref={imgs[i()]}
+              height={ij.loImgH}
+              width={ij.loImgW}
+              data-src={ij.loUrl}
+              alt={ij.alt}
+              style={{
+                transform: `translate3d(${i() !== 0 ? getRandom(-25, 25) : 0}%, ${i() !== 0 ? getRandom(-30, 30) : 0}%, 0)`
+              }}
+              onClick={() => {
+                handleClick(i())
+              }}
+              onKeyDown={() => {
+                handleClick(i())
+              }}
+            />
+          )}
+        </For>
       </div>
     </>
   )

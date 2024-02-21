@@ -6,6 +6,8 @@ import {
   type JSX,
   type Setter
 } from 'solid-js'
+import invariant from 'tiny-invariant'
+
 import { decrement, getThresholdSessionIndex, increment } from './utils'
 
 /**
@@ -24,52 +26,64 @@ export interface State {
   trailLength: number
 }
 
-export type StateContextType = ReturnType<typeof makeStateContext>
+export type StateContextType = readonly [
+  Accessor<State>,
+  {
+    readonly setIndex: (index: number) => void
+    readonly incIndex: () => void
+    readonly decIndex: () => void
+    readonly incThreshold: () => void
+    readonly decThreshold: () => void
+  }
+]
 
 /**
  * constants
  */
 
 const thresholds: ThresholdRelated[] = [
-    { threshold: 20, trailLength: 20 },
-    { threshold: 40, trailLength: 10 },
-    { threshold: 80, trailLength: 5 },
-    { threshold: 140, trailLength: 5 },
-    { threshold: 200, trailLength: 5 }
-  ],
-  makeStateContext = (state: Accessor<State>, setState: Setter<State>) => {
-    return [
-      state,
-      {
-        setIndex: (index: number) => {
-          setState((s) => {
-            return { ...s, index }
-          })
-        },
-        incIndex: () => {
-          setState((s) => {
-            return { ...s, index: increment(s.index, s.length) }
-          })
-        },
-        decIndex: () => {
-          setState((s) => {
-            return { ...s, index: decrement(s.index, s.length) }
-          })
-        },
-        incThreshold: () => {
-          setState((s) => {
-            return { ...s, ...updateThreshold(s.threshold, thresholds, 1) }
-          })
-        },
-        decThreshold: () => {
-          setState((s) => {
-            return { ...s, ...updateThreshold(s.threshold, thresholds, -1) }
-          })
-        }
+  { threshold: 20, trailLength: 20 },
+  { threshold: 40, trailLength: 10 },
+  { threshold: 80, trailLength: 5 },
+  { threshold: 140, trailLength: 5 },
+  { threshold: 200, trailLength: 5 }
+]
+const makeStateContext: (
+  state: Accessor<State>,
+  setState: Setter<State>
+) => StateContextType = (state: Accessor<State>, setState: Setter<State>) => {
+  return [
+    state,
+    {
+      setIndex: (index: number) => {
+        setState((s) => {
+          return { ...s, index }
+        })
+      },
+      incIndex: () => {
+        setState((s) => {
+          return { ...s, index: increment(s.index, s.length) }
+        })
+      },
+      decIndex: () => {
+        setState((s) => {
+          return { ...s, index: decrement(s.index, s.length) }
+        })
+      },
+      incThreshold: () => {
+        setState((s) => {
+          return { ...s, ...updateThreshold(s.threshold, thresholds, 1) }
+        })
+      },
+      decThreshold: () => {
+        setState((s) => {
+          return { ...s, ...updateThreshold(s.threshold, thresholds, -1) }
+        })
       }
-    ] as const
-  },
-  StateContext = createContext<StateContextType>()
+    }
+  ] as const
+}
+const StateContext = createContext<StateContextType>()
 
 /**
  * helper functions
@@ -91,16 +105,21 @@ function updateThreshold(
  * StateProvider
  */
 
-export function StateProvider(props: { children?: JSX.Element; length: number }) {
+export function StateProvider(props: {
+  children?: JSX.Element
+  length: number
+}): JSX.Element {
   const defaultState: State = {
     index: -1,
+    // eslint-disable-next-line solid/reactivity
     length: props.length,
     threshold: thresholds[getThresholdSessionIndex()].threshold,
     trailLength: thresholds[getThresholdSessionIndex()].trailLength
   }
 
-  const [state, setState] = createSignal(defaultState),
-    contextValue = makeStateContext(state, setState)
+  const [state, setState] = createSignal(defaultState)
+  // eslint-disable-next-line solid/reactivity
+  const contextValue = makeStateContext(state, setState)
   return (
     <StateContext.Provider value={contextValue}>{props.children}</StateContext.Provider>
   )
@@ -111,5 +130,7 @@ export function StateProvider(props: { children?: JSX.Element; length: number })
  */
 
 export function useState(): StateContextType {
-  return useContext(StateContext)!
+  const uc = useContext(StateContext)
+  invariant(uc, 'undefined context')
+  return uc
 }

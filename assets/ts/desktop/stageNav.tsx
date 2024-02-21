@@ -1,7 +1,8 @@
-import { type Accessor, type JSX, type Setter } from 'solid-js'
+import { For, type Accessor, type JSX, type Setter } from 'solid-js'
 
 import { useState } from '../state'
 import { decrement, increment, type Vector } from '../utils'
+
 import type { HistoryItem } from './layout'
 
 export function StageNav(props: {
@@ -23,6 +24,7 @@ export function StageNav(props: {
   type NavItem = (typeof navItems)[number]
 
   // variables
+  // eslint-disable-next-line solid/reactivity
   const navItems = [props.prevText, props.closeText, props.nextText] as const
 
   // states
@@ -30,7 +32,7 @@ export function StageNav(props: {
 
   const stateLength = state().length
 
-  const prevImage = () => {
+  const prevImage: () => void = () => {
     props.setNavVector('prev')
     props.setCordHist((c) =>
       c.map((item) => {
@@ -40,11 +42,11 @@ export function StageNav(props: {
     decIndex()
   }
 
-  const closeImage = () => {
+  const closeImage: () => void = () => {
     props.setIsOpen(false)
   }
 
-  const nextImage = () => {
+  const nextImage: () => void = () => {
     props.setNavVector('next')
     props.setCordHist((c) =>
       c.map((item) => {
@@ -54,14 +56,14 @@ export function StageNav(props: {
     incIndex()
   }
 
-  const handleClick = (item: NavItem) => {
+  const handleClick: (item: NavItem) => void = (item) => {
     if (!props.isOpen() || props.isAnimating()) return
     if (item === navItems[0]) prevImage()
     else if (item === navItems[1]) closeImage()
     else nextImage()
   }
 
-  const handleKey = (e: KeyboardEvent) => {
+  const handleKey: (e: KeyboardEvent) => void = (e) => {
     if (!props.isOpen() || props.isAnimating()) return
     if (e.key === 'ArrowLeft') prevImage()
     else if (e.key === 'Escape') closeImage()
@@ -71,15 +73,19 @@ export function StageNav(props: {
   return (
     <>
       <div class="navOverlay" classList={{ active: props.active() }}>
-        {navItems.map((item) => (
-          <div
-            class="overlay"
-            onClick={() => handleClick(item)}
-            onKeyDown={handleKey}
-            onFocus={() => props.setHoverText(item)}
-            onMouseOver={() => props.setHoverText(item)}
-          ></div>
-        ))}
+        <For each={navItems}>
+          {(item) => (
+            <div
+              class="overlay"
+              onClick={() => {
+                handleClick(item)
+              }}
+              onKeyDown={handleKey}
+              onFocus={() => props.setHoverText(item)}
+              onMouseOver={() => props.setHoverText(item)}
+            />
+          )}
+        </For>
       </div>
     </>
   )

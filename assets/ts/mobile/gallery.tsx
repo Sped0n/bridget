@@ -1,6 +1,7 @@
 import { type gsap } from 'gsap'
 import {
   createEffect,
+  For,
   on,
   onMount,
   type Accessor,
@@ -8,12 +9,14 @@ import {
   type Setter
 } from 'solid-js'
 import { type Swiper } from 'swiper'
+import invariant from 'tiny-invariant'
 
 import { type ImageJSON } from '../resources'
 import { useState } from '../state'
 import { loadGsap, type Vector } from '../utils'
+
 import { capitalizeFirstLetter, GalleryNav } from './galleryNav'
-import { type MobileImage } from './layout'
+import type { MobileImage } from './layout'
 
 function removeDuplicates<T>(arr: T[]): T[] {
   if (arr.length < 2) return arr // optimization
@@ -40,12 +43,15 @@ export function Gallery(props: {
   let _gsap: typeof gsap
   let _swiper: Swiper
 
-  let imgs: MobileImage[] = Array<MobileImage>(props.ijs.length)
-  let loadingDivs: HTMLDivElement[] = Array<HTMLDivElement>(props.ijs.length)
+  // eslint-disable-next-line solid/reactivity
+  const imgs: MobileImage[] = Array<MobileImage>(props.ijs.length)
+  // eslint-disable-next-line solid/reactivity
+  const loadingDivs: HTMLDivElement[] = Array<HTMLDivElement>(props.ijs.length)
   let curtain: HTMLDivElement | undefined
   let gallery: HTMLDivElement | undefined
   let galleryInner: HTMLDivElement | undefined
 
+  // eslint-disable-next-line solid/reactivity
   const _loadingText = capitalizeFirstLetter(props.loadingText)
 
   // states
@@ -57,17 +63,20 @@ export function Gallery(props: {
   const [state, { setIndex }] = useState()
 
   // helper functions
-  const slideUp = () => {
+  const slideUp: () => void = () => {
     // isAnimating is prechecked in isOpen effect
     if (!libLoaded || !mounted) return
     props.setIsAnimating(true)
 
-    _gsap.to(curtain!, {
+    invariant(curtain, 'curtain is not defined')
+    invariant(gallery, 'gallery is not defined')
+
+    _gsap.to(curtain, {
       opacity: 1,
       duration: 1
     })
 
-    _gsap.to(gallery!, {
+    _gsap.to(gallery, {
       y: 0,
       ease: 'power3.inOut',
       duration: 1,
@@ -75,23 +84,25 @@ export function Gallery(props: {
     })
 
     setTimeout(() => {
-      // cleanup
       props.setScrollable(false)
       props.setIsAnimating(false)
     }, 1200)
   }
 
-  const slideDown = () => {
+  const slideDown: () => void = () => {
     // isAnimating is prechecked in isOpen effect
     props.setIsAnimating(true)
 
-    _gsap.to(gallery!, {
+    invariant(gallery, 'curtain is not defined')
+    invariant(curtain, 'gallery is not defined')
+
+    _gsap.to(gallery, {
       y: '100%',
       ease: 'power3.inOut',
       duration: 1
     })
 
-    _gsap.to(curtain!, {
+    _gsap.to(curtain, {
       opacity: 0,
       duration: 1.2,
       delay: 0.4
@@ -105,7 +116,7 @@ export function Gallery(props: {
     }, 1400)
   }
 
-  const galleryLoadImages = () => {
+  const galleryLoadImages: () => void = () => {
     let activeImagesIndex: number[] = []
     const _state = state()
     const currentIndex = _state.index
@@ -129,7 +140,7 @@ export function Gallery(props: {
     })
   }
 
-  const changeSlide = (slide: number) => {
+  const changeSlide: (slide: number) => void = (slide) => {
     // we are already in the gallery, don't need to
     // check mounted or libLoaded
     galleryLoadImages()
@@ -166,7 +177,8 @@ export function Gallery(props: {
           })
         loadSwiper()
           .then((S) => {
-            _swiper = new S(galleryInner!, { spaceBetween: 20 })
+            invariant(galleryInner, 'galleryInner is not defined')
+            _swiper = new S(galleryInner, { spaceBetween: 20 })
             _swiper.on('slideChange', ({ realIndex }) => {
               setIndex(realIndex)
             })
@@ -209,6 +221,7 @@ export function Gallery(props: {
         props.isOpen()
       },
       () => {
+        if (props.isAnimating()) return
         if (props.isOpen()) slideUp()
         else slideDown()
       },
@@ -221,24 +234,26 @@ export function Gallery(props: {
       <div ref={gallery} class="gallery">
         <div ref={galleryInner} class="galleryInner">
           <div class="swiper-wrapper">
-            {props.ijs.map((ij, i) => (
-              <div class="swiper-slide">
-                <div class="slideContainer">
-                  <img
-                    ref={imgs[i]}
-                    height={ij.hiImgH}
-                    width={ij.hiImgW}
-                    data-src={ij.hiUrl}
-                    data-index={ij.index}
-                    alt={ij.alt}
-                    style={{ opacity: 0 }}
-                  />
-                  <div ref={loadingDivs[i]} class="loadingText">
-                    {_loadingText}
+            <For each={props.ijs}>
+              {(ij, i) => (
+                <div class="swiper-slide">
+                  <div class="slideContainer">
+                    <img
+                      ref={imgs[i()]}
+                      height={ij.hiImgH}
+                      width={ij.hiImgW}
+                      data-src={ij.hiUrl}
+                      data-index={ij.index}
+                      alt={ij.alt}
+                      style={{ opacity: 0 }}
+                    />
+                    <div ref={loadingDivs[i()]} class="loadingText">
+                      {_loadingText}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              )}
+            </For>
           </div>
         </div>
         <GalleryNav
@@ -247,7 +262,7 @@ export function Gallery(props: {
           setIsOpen={props.setIsOpen}
         />
       </div>
-      <div ref={curtain} class="curtain"></div>
+      <div ref={curtain} class="curtain" />
     </>
   )
 }
