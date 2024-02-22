@@ -13,6 +13,8 @@ import { render } from 'solid-js/web'
 import { getImageJSON } from './resources'
 import { StateProvider } from './state'
 
+import '../scss/style.scss'
+
 /**
  * interfaces
  */

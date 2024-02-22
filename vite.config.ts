@@ -4,17 +4,17 @@ import solidPlugin from 'vite-plugin-solid'
 export default defineConfig({
   plugins: [solidPlugin()],
   build: {
-    outDir: './static',
+    outDir: './static/bundled',
     watch: {
-      include: 'assets/ts/**'
+      include: 'assets/**'
     },
     rollupOptions: {
       input: './assets/ts/main.tsx',
       output: {
-        dir: './static/bundled/js',
         format: 'es',
-        entryFileNames: '[name].js',
-        chunkFileNames: '[hash:6].js',
+        entryFileNames: 'js/[name].js',
+        chunkFileNames: 'js/[hash:6].js',
+        assetFileNames: '[ext]/[name].[ext]',
         compact: true
       }
     },
