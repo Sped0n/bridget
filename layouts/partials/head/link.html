@@ -7,16 +7,8 @@
 {{- $style = dict "Context" . "ToCSS" $options "Inline" true | merge $style -}}
 {{- partial "plugin/style.html" $style -}}
 
-{{/* main style */}}
-{{- if (site.Params.bundled | default true) -}}
-  {{- $style := dict "Link" "/bundled/css/style.min.css" "Defer" true -}}
-  {{- partial "plugin/style.html" $style -}}
-{{- else -}}
-  {{- $style := dict "Source" "scss/style.scss" "Fingerprint" $fingerprint -}}
-  {{- $options := dict "targetPath" "css/style.css" "enableSourceMap" true "includePaths" (slice "node_modules") -}}
-  {{- $style = dict "Context" . "ToCSS" $options "Minify" hugo.IsProduction "Defer" true | merge $style -}}
-  {{- partial "plugin/style.html" $style -}}
-{{- end -}}
+{{- $style := dict "Link" "/bundled/css/main.css" "Defer" true -}}
+{{- partial "plugin/style.html" $style -}}
 
 {{/* fuck safari */}}
 <script>
