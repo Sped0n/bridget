@@ -10,7 +10,7 @@
     "lint": "eslint . --fix && prettier --write .",
     "lint:check": "eslint . && prettier . --check",
     "dev": "run-p vite:dev hugo:dev",
-    "build": "rm -f ./static/bundled/js/* && run-s vite:build hugo:build && yes | cp -rf ./exampleSite/public/css/*.css ./static/bundled/css",
+    "build": "run-s vite:build hugo:build",
     "server": "run-p vite:server hugo:server",
     "vite:build": "vite build --no-watch --minify terser",
     "vite:server": "vite build --minify terser",
