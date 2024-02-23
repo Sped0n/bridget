@@ -4,10 +4,10 @@ import { Show, createMemo, createSignal, type JSX } from 'solid-js'
 import type { ImageJSON } from '../resources'
 import type { Vector } from '../utils'
 
-import { CustomCursor } from './customCursor'
-import { Nav } from './nav'
-import { Stage } from './stage'
-import { StageNav } from './stageNav'
+import CustomCursor from './customCursor'
+import Nav from './nav'
+import Stage from './stage'
+import StageNav from './stageNav'
 
 /**
  * interfaces and types

@@ -5,7 +5,7 @@ import { decrement, increment, type Vector } from '../utils'
 
 import type { HistoryItem } from './layout'
 
-export function StageNav(props: {
+export default function StageNav(props: {
   children?: JSX.Element
   prevText: string
   closeText: string
