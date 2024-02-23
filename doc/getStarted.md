@@ -182,14 +182,6 @@ path = "github.com/Sped0n/bridget"
 
 Detailed description in the comments.
 
-> ⚠️⚠️⚠️
->
-> Only thing that you need to pay **extra attention** is the [`bundled`](https://github.com/Sped0n/bridget/blob/1e2f1fadde9c16989eef1ab771f2ac8463dec5a4/exampleSite/config/_default/params.toml#L6) option, please read the corresponding doc and set it as your need.
->
-> For users who have installation with module, please always set this option to `true`, unless you know what you are doing.
->
-> Or you might get the error related to `node_modules/swiper/swiper.scss`.
-
 ### `sitemap.toml`
 
 https://gohugo.io/templates/sitemap-template/#configuration
@@ -197,23 +189,9 @@ https://gohugo.io/templates/sitemap-template/#configuration
 ## Customization (AKA for developer)
 
 > Before heading to this section, please make sure you have **installation with Git**.
+>
+> You can use any package manager you want (npm/pnpm/yarn/bun).
 
-### Option 1: _it just works_ way
-
-> If you want to modify js/ts file, please use option 2.
-
-1.  Use hugo create a site and move the bridget theme into the theme directory.
-2.  Run `npm install` in the _bridget theme root dir_, not _your hugo site root dir_.
-3.  After the command is done, copy the `node_modules` dir from _bridget theme root dir_ to _your hugo site root dir_.
-4.  In _your hugo site root dir_, write/modify configuration files according to your needs, remember to set `bundled` option to `false`, so hugo will not use prebuilt css file.
-5.  Run `hugo server` in _your hugo site root dir_, and you are good to go.
-
-### Option 2: recommended way
-
-1.  Use hugo create a site and move the bridget theme into the theme directory.
-2.  Run `npm install` in the _bridget theme root dir_, not _your hugo site root dir_.
-3.  Run `npm run dev` in the _bridget theme root dir_, we will use content in exampleSite to debug.
-4.  Make your customization.
-5.  After modification, run `npm run build` in the _bridget theme root dir_ to build artifacts.
-6.  In _your hugo site root dir_, write/modify configuration files according to your needs, remember to set `bundled` option to `true`, so hugo will use the artifacts you built in step 5.
-7.  Run `hugo server` in _your hugo site root dir_, and you are good to go.
+- run `pnpm install` to install neceessary dependencies.
+- run `pnpm run dev` to host a dev server.
+- when you’re ready, run `pnpm run build` to update artifacts.
