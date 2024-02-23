@@ -1,0 +1,60 @@
+name: Feature request
+description: Suggest an idea
+labels:
+  - 'T: Feature'
+  - 'S: Untriaged'
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please finish verify steps which list in the end first before suggest an idea
+
+  - type: textarea
+    id: request
+    attributes:
+      label: Requirement
+      description: |
+        Ddescribe what you need here.
+      placeholder: |
+        I want ABC feature ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: impl
+    attributes:
+      label: Suggested implements
+      description: |
+        Describe your suggested implements here, It's recommend to add a photo if you are making a UI feature request.
+      placeholder: |
+        I recommend add ABC feature to DEF...
+        Photos (if exists)
+    validations:
+      required: true
+
+  - type: textarea
+    id: more
+    attributes:
+      label: Addition details
+      description: |
+        Describe addition details here
+      placeholder: |
+        Additional details and attachments
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: check
+    attributes:
+      label: Verify steps
+      description: |
+        Please ensure you have obtained all needed options
+      options:
+        - label: Pull request is welcome. Check this if you want to start a pull request
+          required: false
+
+        - label: I have searched on [Issue Tracker](https://github.com/Sped0n/bridget/issues), No duplicate or related open issue has been found
+          required: true
+
+        - label: Ensure there is only one feature request in this issue. Please make mutiply issue for mutiply feature request
+          required: true
