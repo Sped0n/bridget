@@ -51,7 +51,7 @@ function updateIndexText(indexValue: string, indexLength: string): void {
  * Nav component
  */
 
-export function Nav(): null {
+export default function Nav(): null {
   const [state, { incThreshold, decThreshold }] = useState()
 
   createEffect(() => {

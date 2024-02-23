@@ -1,6 +1,6 @@
 import { createSignal, onCleanup, onMount, type Accessor, type JSX } from 'solid-js'
 
-export function CustomCursor(props: {
+export default function CustomCursor(props: {
   children?: JSX.Element
   active: Accessor<boolean>
   cursorText: Accessor<string>

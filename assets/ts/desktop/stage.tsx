@@ -90,7 +90,7 @@ function onMutation<T extends HTMLElement>(
  * Stage component
  */
 
-export function Stage(props: {
+export default function Stage(props: {
   ijs: ImageJSON[]
   setIsLoading: Setter<boolean>
   isOpen: Accessor<boolean>

@@ -31,7 +31,7 @@ function onIntersection<T extends HTMLElement>(
   }).observe(element)
 }
 
-export function Collection(props: {
+export default function Collection(props: {
   children?: JSX.Element
   ijs: ImageJSON[]
   isAnimating: Accessor<boolean>

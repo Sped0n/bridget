@@ -1,13 +1,16 @@
 import { type gsap } from 'gsap'
 import {
   createEffect,
+  createSignal,
   For,
   on,
   onMount,
+  Show,
   type Accessor,
   type JSX,
   type Setter
 } from 'solid-js'
+import { createStore } from 'solid-js/store'
 import { type Swiper } from 'swiper'
 import invariant from 'tiny-invariant'
 
@@ -15,8 +18,8 @@ import { type ImageJSON } from '../resources'
 import { useState } from '../state'
 import { loadGsap, type Vector } from '../utils'
 
-import { capitalizeFirstLetter, GalleryNav } from './galleryNav'
-import type { MobileImage } from './layout'
+import GalleryImage from './galleryImage'
+import GalleryNav, { capitalizeFirstLetter } from './galleryNav'
 
 function removeDuplicates<T>(arr: T[]): T[] {
   if (arr.length < 2) return arr // optimization
@@ -28,7 +31,7 @@ async function loadSwiper(): Promise<typeof Swiper> {
   return s.Swiper
 }
 
-export function Gallery(props: {
+export default function Gallery(props: {
   children?: JSX.Element
   ijs: ImageJSON[]
   closeText: string
@@ -43,10 +46,6 @@ export function Gallery(props: {
   let _gsap: typeof gsap
   let _swiper: Swiper
 
-  // eslint-disable-next-line solid/reactivity
-  const imgs: MobileImage[] = Array<MobileImage>(props.ijs.length)
-  // eslint-disable-next-line solid/reactivity
-  const loadingDivs: HTMLDivElement[] = Array<HTMLDivElement>(props.ijs.length)
   let curtain: HTMLDivElement | undefined
   let gallery: HTMLDivElement | undefined
   let galleryInner: HTMLDivElement | undefined
@@ -56,16 +55,18 @@ export function Gallery(props: {
 
   // states
   let lastIndex = -1
-  let libLoaded = false
   let mounted = false
   let navigateVector: Vector = 'none'
 
   const [state, { setIndex }] = useState()
+  const [libLoaded, setLibLoaded] = createSignal(false)
+  // eslint-disable-next-line solid/reactivity
+  const [loads, setLoads] = createStore(Array<boolean>(props.ijs.length).fill(false))
 
   // helper functions
   const slideUp: () => void = () => {
     // isAnimating is prechecked in isOpen effect
-    if (!libLoaded || !mounted) return
+    if (!libLoaded() || !mounted) return
     props.setIsAnimating(true)
 
     invariant(curtain, 'curtain is not defined')
@@ -133,11 +134,7 @@ export function Gallery(props: {
         activeImagesIndex = [currentIndex, nextIndex, prevIndex]
         break
     }
-    removeDuplicates(activeImagesIndex).forEach((i) => {
-      const e = imgs[i]
-      if (e.src === e.dataset.src) return // already loaded
-      e.src = e.dataset.src
-    })
+    setLoads(removeDuplicates(activeImagesIndex), true)
   }
 
   const changeSlide: (slide: number) => void = (slide) => {
@@ -149,22 +146,6 @@ export function Gallery(props: {
 
   // effects
   onMount(() => {
-    imgs.forEach((img, i) => {
-      const loadingDiv = loadingDivs[i]
-      img.addEventListener(
-        'load',
-        () => {
-          if (state().index !== parseInt(img.dataset.index)) {
-            _gsap.set(img, { opacity: 1 })
-            _gsap.set(loadingDiv, { opacity: 0 })
-          } else {
-            _gsap.to(img, { opacity: 1, delay: 0.5, duration: 0.5, ease: 'power3.out' })
-            _gsap.to(loadingDiv, { opacity: 0, duration: 0.5, ease: 'power3.in' })
-          }
-        },
-        { once: true, passive: true }
-      )
-    })
     window.addEventListener(
       'touchstart',
       () => {
@@ -186,7 +167,7 @@ export function Gallery(props: {
           .catch((e) => {
             console.log(e)
           })
-        libLoaded = true
+        setLibLoaded(true)
       },
       { once: true, passive: true }
     )
@@ -234,26 +215,19 @@ export function Gallery(props: {
       <div ref={gallery} class="gallery">
         <div ref={galleryInner} class="galleryInner">
           <div class="swiper-wrapper">
-            <For each={props.ijs}>
-              {(ij, i) => (
-                <div class="swiper-slide">
-                  <div class="slideContainer">
-                    <img
-                      ref={imgs[i()]}
-                      height={ij.hiImgH}
-                      width={ij.hiImgW}
-                      data-src={ij.hiUrl}
-                      data-index={ij.index}
-                      alt={ij.alt}
-                      style={{ opacity: 0 }}
+            <Show when={libLoaded()}>
+              <For each={props.ijs}>
+                {(ij, i) => (
+                  <div class="swiper-slide">
+                    <GalleryImage
+                      load={loads[i()]}
+                      ij={ij}
+                      loadingText={_loadingText}
                     />
-                    <div ref={loadingDivs[i()]} class="loadingText">
-                      {_loadingText}
-                    </div>
                   </div>
-                </div>
-              )}
-            </For>
+                )}
+              </For>
+            </Show>
           </div>
         </div>
         <GalleryNav
