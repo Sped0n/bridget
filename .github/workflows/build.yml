@@ -50,13 +50,13 @@ jobs:
           token: ${{ secrets.PAT }}
 
       - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
+        uses: peaceiris/actions-hugo@v2.6.0
         with:
           hugo-version: '0.114.0'
           extended: true
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v3
         with:
           version: 8
 
@@ -65,17 +65,17 @@ jobs:
         run: echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
       - name: Setup pnpm cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-pnpm-store-
 
       - name: Setup hugo cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ./exampleSite/resources
-          key: ${{ runner.os }}-hugo-${{ hashFiles('./exampleSite') }}
+          key: ${{ runner.os }}-hugo-${{ hashFiles('./exampleSite/resources') }}
           restore-keys: ${{ runner.os }}-hugo-
 
       - name: Install dependencies
