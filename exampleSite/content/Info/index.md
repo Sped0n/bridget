@@ -18,7 +18,7 @@ The inspiration for this theme came from a video by <u>[Hyperlexed](https://www.
 
 Once again, great shout out to <u>[Tyler McRobert](https://tylermcrobert.com)</u> for his inspiration to this project.
 
-[GitHub Repo ↗](https://github.com/Sped0n/bridget)
+<u>[GitHub Repo ↗](https://github.com/Sped0n/bridget)</u>
 
 Original site design by <u>[Tyler McRobert](https://tylermcrobert.com)</u>.
 
