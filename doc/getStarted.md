@@ -60,7 +60,7 @@ Then import the theme as a dependency adding the following line to the `module` 
 # config/_default/hugo.toml
 [module]
 [[module.imports]]
-path = "github.com/Sped0n/bridget"
+path = "github.com/Sped0n/bridget/v2"
 ```
 
 If you want to upgrade the theme, just run:
@@ -162,9 +162,9 @@ We will focus on introducing the part about `theme as module`, detailed comments
 ```toml
 # theme as module
 [module]
-replacements = "github.com/Sped0n/bridget -> ../.."
+replacements = "github.com/Sped0n/bridget/v2 -> ../.."
 [[module.imports]]
-path = "github.com/Sped0n/bridget"
+path = "github.com/Sped0n/bridget/v2"
 ```
 
 - If you have _installation with Git_
