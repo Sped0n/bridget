@@ -77,11 +77,11 @@ devDependencies:
     specifier: ^5.4.2
     version: 5.4.2
   vite:
-    specifier: ^5.1.2
-    version: 5.1.2(sass@1.71.1)(terser@5.29.2)
+    specifier: ^5.1.6
+    version: 5.1.6(sass@1.71.1)(terser@5.29.2)
   vite-plugin-solid:
     specifier: ^2.10.0
-    version: 2.10.0(solid-js@1.8.14)(vite@5.1.2)
+    version: 2.10.0(solid-js@1.8.14)(vite@5.1.6)
 
 packages:
 
@@ -3097,7 +3097,7 @@ packages:
       spdx-expression-parse: 3.0.1
     dev: true
 
-  /vite-plugin-solid@2.10.0(solid-js@1.8.14)(vite@5.1.2):
+  /vite-plugin-solid@2.10.0(solid-js@1.8.14)(vite@5.1.6):
     resolution: {integrity: sha512-Hatl76PQt+Xtewq1o9WVSVwu0UGnOKx6iH3ieb0gm3+TqHw6rzeTwWNY5kw6wvubOWtTTNbxiXG51hbzeaC/mQ==}
     peerDependencies:
       '@testing-library/jest-dom': ^5.16.6 || ^5.17.0 || ^6.*
@@ -3113,14 +3113,14 @@ packages:
       merge-anything: 5.1.7
       solid-js: 1.8.14
       solid-refresh: 0.7.4(solid-js@1.8.14)
-      vite: 5.1.2(sass@1.71.1)(terser@5.29.2)
-      vitefu: 0.2.5(vite@5.1.2)
+      vite: 5.1.6(sass@1.71.1)(terser@5.29.2)
+      vitefu: 0.2.5(vite@5.1.6)
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /vite@5.1.2(sass@1.71.1)(terser@5.29.2):
-    resolution: {integrity: sha512-uwiFebQbTWRIGbCaTEBVAfKqgqKNKMJ2uPXsXeLIZxM8MVMjoS3j0cG8NrPxdDIadaWnPSjrkLWffLSC+uiP3Q==}
+  /vite@5.1.6(sass@1.71.1)(terser@5.29.2):
+    resolution: {integrity: sha512-yYIAZs9nVfRJ/AiOLCA91zzhjsHUgMjB+EigzFb6W2XTLO8JixBCKCjvhKZaye+NKYHCrkv3Oh50dH9EdLU2RA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -3156,7 +3156,7 @@ packages:
       fsevents: 2.3.3
     dev: true
 
-  /vitefu@0.2.5(vite@5.1.2):
+  /vitefu@0.2.5(vite@5.1.6):
     resolution: {integrity: sha512-SgHtMLoqaeeGnd2evZ849ZbACbnwQCIwRH57t18FxcXoZop0uQu0uzlIhJBlF/eWVzuce0sHeqPcDo+evVcg8Q==}
     peerDependencies:
       vite: ^3.0.0 || ^4.0.0 || ^5.0.0
@@ -3164,7 +3164,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 5.1.2(sass@1.71.1)(terser@5.29.2)
+      vite: 5.1.6(sass@1.71.1)(terser@5.29.2)
     dev: true
 
   /which-boxed-primitive@1.0.2:
