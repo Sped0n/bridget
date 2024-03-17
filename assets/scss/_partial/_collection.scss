@@ -3,12 +3,12 @@
   flex-direction: column;
   gap: 20vh;
 
-  padding-top: calc(var(--window-height) * 0.35);
+  padding-top: calc(var(--window-height) * 0.4);
   margin-top: calc(var(--nav-height) * -1);
 
   img {
     position: sticky;
-    top: calc(var(--window-height) * 0.35);
+    top: calc(var(--window-height) * 0.4);
 
     width: 60vw;
     height: 20vh;
@@ -19,7 +19,7 @@
     align-self: center;
 
     &:last-child {
-      margin-bottom: calc(var(--window-height) * 0.4);
+      margin-bottom: calc(var(--window-height) * 0.35);
     }
   }
 }
