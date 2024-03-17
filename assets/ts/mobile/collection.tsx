@@ -116,7 +116,7 @@ export default function Collection(props: {
               data-src={ij.loUrl}
               alt={ij.alt}
               style={{
-                transform: `translate3d(${i() !== 0 ? getRandom(-25, 25) : 0}%, ${i() !== 0 ? getRandom(-30, 30) : 0}%, 0)`
+                transform: `translate3d(${i() !== 0 ? getRandom(-25, 25) : 0}%, ${i() !== 0 ? getRandom(-35, 35) : 0}%, 0)`
               }}
               onClick={() => {
                 handleClick(i())
