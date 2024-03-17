@@ -2,7 +2,7 @@
 
 ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/Sped0n/bridget/build.yml?logo=github) ![GitHub deployments](https://img.shields.io/github/deployments/Sped0n/bridget/Production?logo=vercel&label=deploy)
 
-Bridget is a minimal [Hugo](https://gohugo.io) theme for photographers/visual artists, powered by Solid.js.
+Bridget is a minimal [Hugo](https://gohugo.io) theme for photographers/visual artists, powered by [Solid.js](https://www.solidjs.com).
 
 Based on the https://github.com/tylermcrobert/bridget-pictures-www.
 
