@@ -71,14 +71,14 @@ devDependencies:
     specifier: ^1.71.1
     version: 1.71.1
   terser:
-    specifier: ^5.29.2
-    version: 5.29.2
+    specifier: ^5.30.1
+    version: 5.30.1
   typescript:
     specifier: ^5.4.2
     version: 5.4.2
   vite:
     specifier: ^5.1.6
-    version: 5.1.6(sass@1.71.1)(terser@5.29.2)
+    version: 5.1.6(sass@1.71.1)(terser@5.30.1)
   vite-plugin-solid:
     specifier: ^2.10.2
     version: 2.10.2(solid-js@1.8.15)(vite@5.1.6)
@@ -2947,8 +2947,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /terser@5.29.2:
-    resolution: {integrity: sha512-ZiGkhUBIM+7LwkNjXYJq8svgkd+QK3UUr0wJqY4MieaezBSAIPgbSPZyIx0idM6XWK5CMzSWa8MJIzmRcB8Caw==}
+  /terser@5.30.1:
+    resolution: {integrity: sha512-PJhOnRttZqqmIujxOQOMu4QuFGvh43lR7Youln3k6OJvmxwZ5FxK5rbCEh8XABRCpLf7ZnhrZuclCNCASsScnA==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
@@ -3114,13 +3114,13 @@ packages:
       merge-anything: 5.1.7
       solid-js: 1.8.15
       solid-refresh: 0.6.3(solid-js@1.8.15)
-      vite: 5.1.6(sass@1.71.1)(terser@5.29.2)
+      vite: 5.1.6(sass@1.71.1)(terser@5.30.1)
       vitefu: 0.2.5(vite@5.1.6)
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /vite@5.1.6(sass@1.71.1)(terser@5.29.2):
+  /vite@5.1.6(sass@1.71.1)(terser@5.30.1):
     resolution: {integrity: sha512-yYIAZs9nVfRJ/AiOLCA91zzhjsHUgMjB+EigzFb6W2XTLO8JixBCKCjvhKZaye+NKYHCrkv3Oh50dH9EdLU2RA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -3152,7 +3152,7 @@ packages:
       postcss: 8.4.35
       rollup: 4.12.0
       sass: 1.71.1
-      terser: 5.29.2
+      terser: 5.30.1
     optionalDependencies:
       fsevents: 2.3.3
     dev: true
@@ -3165,7 +3165,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 5.1.6(sass@1.71.1)(terser@5.29.2)
+      vite: 5.1.6(sass@1.71.1)(terser@5.30.1)
     dev: true
 
   /which-boxed-primitive@1.0.2:
