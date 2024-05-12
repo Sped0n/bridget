@@ -57,7 +57,7 @@
     "prettier-plugin-organize-imports": "^3.2.4",
     "sass": "^1.77.1",
     "terser": "^5.31.0",
-    "typescript": "^5.4.4",
+    "typescript": "^5.4.5",
     "vite": "^5.2.11",
     "vite-plugin-solid": "^2.10.2"
   },
