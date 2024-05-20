@@ -8,9 +8,9 @@ Based on the https://github.com/tylermcrobert/bridget-pictures-www.
 
 ![thumbnail](images/tn.jpg)
 
-## [Demo Site](https://bridget-demo.sped0nwen.com)
+## [Demo Site](https://bridget-demo.sped0n.com)
 
-To see this theme in action, here is a live [demo site](https://bridget-demo.sped0nwen.com) which is rendered with **Bridget** theme.
+To see this theme in action, here is a live [demo site](https://bridget-demo.sped0n.com) which is rendered with **Bridget** theme.
 
 ## Getting Started
 
