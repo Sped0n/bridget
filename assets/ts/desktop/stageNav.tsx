@@ -83,6 +83,7 @@ export default function StageNav(props: {
               onKeyDown={handleKey}
               onFocus={() => props.setHoverText(item)}
               onMouseOver={() => props.setHoverText(item)}
+              tabIndex="-1"
             />
           )}
         </For>
