@@ -96,6 +96,7 @@ export default function StageNav(props: {
               }}
               onFocus={() => props.setHoverText(item)}
               onMouseOver={() => props.setHoverText(item)}
+              tabIndex="-1"
             />
           )}
         </For>
