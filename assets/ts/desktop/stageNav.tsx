@@ -1,4 +1,4 @@
-import { For, type Accessor, type JSX, type Setter } from 'solid-js'
+import { For, createEffect, type Accessor, type JSX, type Setter } from 'solid-js'
 
 import { useState } from '../state'
 import { decrement, increment, type Vector } from '../utils'
@@ -24,6 +24,7 @@ export default function StageNav(props: {
   type NavItem = (typeof navItems)[number]
 
   // variables
+  let controller: AbortController | undefined
   // eslint-disable-next-line solid/reactivity
   const navItems = [props.prevText, props.closeText, props.nextText] as const
 
@@ -70,6 +71,19 @@ export default function StageNav(props: {
     else if (e.key === 'ArrowRight') nextImage()
   }
 
+  createEffect(() => {
+    if (props.isOpen()) {
+      controller = new AbortController()
+      const abortSignal = controller.signal
+      window.addEventListener('keydown', handleKey, {
+        passive: true,
+        signal: abortSignal
+      })
+    } else {
+      controller?.abort()
+    }
+  })
+
   return (
     <>
       <div class="navOverlay" classList={{ active: props.active() }}>
@@ -80,10 +94,8 @@ export default function StageNav(props: {
               onClick={() => {
                 handleClick(item)
               }}
-              onKeyDown={handleKey}
               onFocus={() => props.setHoverText(item)}
               onMouseOver={() => props.setHoverText(item)}
-              tabIndex="-1"
             />
           )}
         </For>
