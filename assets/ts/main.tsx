@@ -38,7 +38,9 @@ const Mobile = lazy(async () => await import('./mobile/layout'))
 function Main(): JSX.Element {
   // variables
   const [ijs] = createResource(getImageJSON)
-  const isMobile = window.matchMedia('(hover: none)').matches
+  const isMobile =
+    window.matchMedia('(hover: none)').matches &&
+    window.navigator.userAgent.indexOf('Win') == -1
 
   // states
   const [scrollable, setScollable] = createSignal(true)
