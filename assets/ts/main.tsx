@@ -40,7 +40,7 @@ function Main(): JSX.Element {
   const [ijs] = createResource(getImageJSON)
   const isMobile =
     window.matchMedia('(hover: none)').matches &&
-    window.navigator.userAgent.indexOf('Win') == -1
+    !window.navigator.userAgent.includes('Win')
 
   // states
   const [scrollable, setScollable] = createSignal(true)
