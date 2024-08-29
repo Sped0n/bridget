@@ -53,8 +53,8 @@ devDependencies:
     specifier: ^6.4.0
     version: 6.4.0(eslint@8.57.0)
   eslint-plugin-solid:
-    specifier: ^0.14.1
-    version: 0.14.1(eslint@8.57.0)(typescript@5.5.3)
+    specifier: ^0.14.2
+    version: 0.14.2(eslint@8.57.0)(typescript@5.5.3)
   npm-run-all:
     specifier: ^4.1.5
     version: 4.1.5
@@ -296,7 +296,7 @@ packages:
       '@babel/helper-split-export-declaration': 7.22.6
       '@babel/parser': 7.23.9
       '@babel/types': 7.23.9
-      debug: 4.3.4
+      debug: 4.3.6
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -937,11 +937,11 @@ packages:
     dependencies:
       '@typescript-eslint/types': 7.15.0
       '@typescript-eslint/visitor-keys': 7.15.0
-      debug: 4.3.4
+      debug: 4.3.6
       globby: 11.1.0
       is-glob: 4.0.3
       minimatch: 9.0.4
-      semver: 7.6.2
+      semver: 7.6.3
       ts-api-utils: 1.3.0(typescript@5.5.3)
       typescript: 5.5.3
     transitivePeerDependencies:
@@ -1761,8 +1761,8 @@ packages:
       eslint: 8.57.0
     dev: true
 
-  /eslint-plugin-solid@0.14.1(eslint@8.57.0)(typescript@5.5.3):
-    resolution: {integrity: sha512-2bR21xTGhXufK5qqib0h8fQkoZbVm0Xmsgioj+D6ynLXvVq20Atf5F/qyu2WUVNukKJkpd6WsYW0JRWFo2yZvQ==}
+  /eslint-plugin-solid@0.14.2(eslint@8.57.0)(typescript@5.5.3):
+    resolution: {integrity: sha512-uyX+/ONsM0IoVBV9EBv7uAhhFXqTfAGd3lxUCNfC+XmJazme1f4UAPhPNbqSfqnzaCbXwB1rsD/9ZpAgO6mzew==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
