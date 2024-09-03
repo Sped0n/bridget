@@ -8,3 +8,5 @@
 
 {{- $gallery := site.GetPage $Path -}}
 {{- return $gallery.Resources.ByType "image" -}}
+
+<!-- Update to accomodate EXIF Orientation -->
