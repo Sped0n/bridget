@@ -53,8 +53,8 @@ devDependencies:
     specifier: ^6.6.0
     version: 6.6.0(eslint@8.57.0)
   eslint-plugin-solid:
-    specifier: ^0.14.2
-    version: 0.14.2(eslint@8.57.0)(typescript@5.5.4)
+    specifier: ^0.14.4
+    version: 0.14.4(eslint@8.57.0)(typescript@5.5.4)
   npm-run-all:
     specifier: ^4.1.5
     version: 4.1.5
@@ -1769,9 +1769,9 @@ packages:
       eslint: 8.57.0
     dev: true
 
-  /eslint-plugin-solid@0.14.2(eslint@8.57.0)(typescript@5.5.4):
-    resolution: {integrity: sha512-uyX+/ONsM0IoVBV9EBv7uAhhFXqTfAGd3lxUCNfC+XmJazme1f4UAPhPNbqSfqnzaCbXwB1rsD/9ZpAgO6mzew==}
-    engines: {node: '>=12.0.0'}
+  /eslint-plugin-solid@0.14.4(eslint@8.57.0)(typescript@5.5.4):
+    resolution: {integrity: sha512-uWsNA2okBgwBRPxjsQ7DxlRksq1EKdMhwQlViHdkkRDLnWqwnZEjQASWeckZ0DI24sVzPeETJhPv1BWKKiu99A==}
+    engines: {node: '>=18.0.0'}
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
     dependencies:
