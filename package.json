@@ -55,7 +55,7 @@
     "prettier": "3.3.3",
     "prettier-plugin-go-template": "^0.0.15",
     "prettier-plugin-organize-imports": "^4.0.0",
-    "sass": "^1.77.8",
+    "sass": "^1.81.0",
     "terser": "^5.31.6",
     "typescript": "^5.5.4",
     "vite": "^5.4.2",
