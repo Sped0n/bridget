@@ -38,6 +38,7 @@ Bridget supports the following languages:
 - Deutsch
 - Spanish
 - Italian
+- Tamil
 - [Contribute with a new language](https://github.com/Sped0n/bridget/pulls)
 
 ## Credits
