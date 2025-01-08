@@ -1,0 +1,12 @@
+[next]
+other = "அடுத்தது"
+[prev]
+other = "முந்தையது"
+[close]
+other = "வெளியே செல்ல"
+[threshold]
+other = "எல்லை"
+[404]
+other = "பக்கம் காணப்படவில்லை"
+[loading]
+other = "பதிவேற்றம் நடக்கிறது..."

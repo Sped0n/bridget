@@ -60,4 +60,12 @@
     as="font"
     crossorigin
   />
+{{- else if (partial "function/langCode.html" (slice "ta")) -}}
+  <link rel="preload" href="/lib/fonts/NotoSans-Regular.woff2" as="font" crossorigin />
+  <link
+    rel="preload"
+    href="/lib/fonts/NotoSansTamil-Regular.woff2"
+    as="font"
+    crossorigin
+  />
 {{- end -}}
