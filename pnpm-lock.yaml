@@ -53,8 +53,8 @@ devDependencies:
     specifier: ^6.6.0
     version: 6.6.0(eslint@8.57.0)
   eslint-plugin-solid:
-    specifier: ^0.14.2
-    version: 0.14.2(eslint@8.57.0)(typescript@5.7.2)
+    specifier: ^0.14.5
+    version: 0.14.5(eslint@8.57.0)(typescript@5.7.2)
   npm-run-all:
     specifier: ^4.1.5
     version: 4.1.5
@@ -1769,11 +1769,12 @@ packages:
       eslint: 8.57.0
     dev: true
 
-  /eslint-plugin-solid@0.14.2(eslint@8.57.0)(typescript@5.7.2):
-    resolution: {integrity: sha512-uyX+/ONsM0IoVBV9EBv7uAhhFXqTfAGd3lxUCNfC+XmJazme1f4UAPhPNbqSfqnzaCbXwB1rsD/9ZpAgO6mzew==}
-    engines: {node: '>=12.0.0'}
+  /eslint-plugin-solid@0.14.5(eslint@8.57.0)(typescript@5.7.2):
+    resolution: {integrity: sha512-nfuYK09ah5aJG/oEN6P1qziy1zLgW4PDWe75VNPi4CEFYk1x2AEqwFeQfEPR7gNn0F2jOeqKhx2E+5oNCOBYWQ==}
+    engines: {node: '>=18.0.0'}
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
+      typescript: '>=4.8.4'
     dependencies:
       '@typescript-eslint/utils': 7.15.0(eslint@8.57.0)(typescript@5.7.2)
       eslint: 8.57.0
@@ -1782,9 +1783,9 @@ packages:
       kebab-case: 1.0.2
       known-css-properties: 0.30.0
       style-to-object: 1.0.6
+      typescript: 5.7.2
     transitivePeerDependencies:
       - supports-color
-      - typescript
     dev: true
 
   /eslint-scope@7.2.2:
