@@ -59,7 +59,7 @@
     "terser": "^5.37.0",
     "typescript": "^5.7.2",
     "vite": "^5.4.2",
-    "vite-plugin-solid": "^2.10.2"
+    "vite-plugin-solid": "^2.11.2"
   },
   "dependencies": {
     "gsap": "^3.12.5",
