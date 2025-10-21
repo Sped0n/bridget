@@ -46,7 +46,7 @@ server = ""
 id = ""
 # Umami Analytics
 [analytics.umami]
-data_website_id = "44a4a42d-ec8e-44c9-a38c-7533929e9845"
+data_website_id = "942d4c0d-ebd0-4da7-936a-bd278af32e5e"
 src = "https://umami.sped0n.com/script.js"
 data_host_url = ""
 data_domains = "bridget-demo.sped0n.com"
