@@ -168,7 +168,6 @@ path = "github.com/Sped0n/bridget/v2"
 ```
 
 - If you have _installation with Git_
-
   - `replacement`: replace the _path after the arrow_(`../..`) with the location of your local theme file (⚠️⚠️⚠️**relative path to hugo site theme directory only([official doc](https://gohugo.io/hugo-modules/configuration/#module-configuration-top-level))**, example: `bridget`)
   - `path`: no change
 
