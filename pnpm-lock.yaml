@@ -12,8 +12,8 @@ dependencies:
     specifier: ^1.9.9
     version: 1.9.9
   swiper:
-    specifier: ^11.1.15
-    version: 11.1.15
+    specifier: ^12.0.3
+    version: 12.0.3
   tiny-invariant:
     specifier: ^1.3.3
     version: 1.3.3
@@ -3801,8 +3801,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /swiper@11.1.15:
-    resolution: {integrity: sha512-IzWeU34WwC7gbhjKsjkImTuCRf+lRbO6cnxMGs88iVNKDwV+xQpBCJxZ4bNH6gSrIbbyVJ1kuGzo3JTtz//CBw==}
+  /swiper@12.0.3:
+    resolution: {integrity: sha512-BHd6U1VPEIksrXlyXjMmRWO0onmdNPaTAFduzqR3pgjvi7KfmUCAm/0cj49u2D7B0zNjMw02TSeXfinC1hDCXg==}
     engines: {node: '>= 4.7.0'}
     dev: false
 
