@@ -26,5 +26,12 @@ export default defineConfig({
         comments: false
       }
     }
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern'
+      }
+    }
   }
 })

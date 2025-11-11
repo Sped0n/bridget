@@ -1,12 +1,9 @@
 @charset "utf-8";
 
-@import '_core/reset';
-@import '_core/font';
-@import '_core/typography';
-@import '_core/mixins';
-@import '_variables';
-@import '_core/base';
+@use '_core/foundation';
+@use '_variables';
+@use '_core/base';
 
-@import '_partial/nav';
-@import '_partial/article';
-@import '_partial/container';
+@use '_partial/nav';
+@use '_partial/article';
+@use '_partial/container';

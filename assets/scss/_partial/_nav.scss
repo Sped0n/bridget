@@ -1,4 +1,8 @@
-$tablet: map-get($breakpoints, 'tablet') - 1;
+@use 'sass:map';
+
+@use '_core/mixins' as *;
+
+$tablet: map.get($breakpoints, 'tablet') - 1;
 
 nav {
   display: flex;
