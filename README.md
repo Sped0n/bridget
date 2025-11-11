@@ -2,19 +2,27 @@
 
 ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/Sped0n/bridget/build.yml?logo=github) ![GitHub deployments](https://img.shields.io/github/deployments/Sped0n/bridget/Production?logo=vercel&label=deploy)
 
-Bridget is a minimal [Hugo](https://gohugo.io) theme for photographers/visual artists, powered by [Solid.js](https://www.solidjs.com).
+Bridget is a minimal [Hugo](https://gohugo.io) theme for photographers/visual artists, powered by [Solid.js](https://www.solidjs.com). Based on the https://github.com/tylermcrobert/bridget-pictures-www.
 
-Based on the https://github.com/tylermcrobert/bridget-pictures-www.
+Here is a [live demo](https://bridget-demo.sped0n.com).
 
 ![thumbnail](https://raw.githubusercontent.com/Sped0n/bridget/main/images/tn.jpg)
 
-## [Demo Site](https://bridget-demo.sped0n.com)
-
-To see this theme in action, here is a live [demo site](https://bridget-demo.sped0n.com) which is rendered with **Bridget** theme.
+> [!NOTE]
+> This repository is currently in **maintaince mode** for two reasons:
+>
+> 1. I want to keep this theme minimal.
+> 2. My bandwith after work is limited.
+>
+> BUT, bug fixes will be addressed (including related issues and PRs), and they are the **number one priority** for this project.
+>
+> Please understand that feature request might **NOT** be addressed or may take a long time to be implemented.
+>
+> Anyway, forks are welcomed, and I'm looking forward to seeing what you can do with the theme.
 
 ## Getting Started
 
-Head to this [documentation](https://github.com/Sped0n/bridget/blob/main/doc/getStarted.md) for a complete guidance to get started with the Bridget theme.
+Head to this [documentation](https://github.com/Sped0n/bridget/blob/main/docs.md) for a complete guidance to get started with the theme.
 
 ## Features
 

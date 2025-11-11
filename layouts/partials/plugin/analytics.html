@@ -65,10 +65,10 @@
   {{- /* Splitbee Analytics */ -}}
   {{- if $analytics.splitbee.enable -}}
     {{- $attr := "" -}}
-    {{- if $analytics.splitbee.Do_not_track -}}
+    {{- if $analytics.splitbee.do_not_track -}}
       {{- $attr = printf `%v data-respect-dnt` $attr -}}
     {{- end -}}
-    {{- if $analytics.splitbee.No_cookie -}}
+    {{- if $analytics.splitbee.no_cookie -}}
       {{- $attr = printf `%v data-no-cookie` $attr -}}
     {{- end -}}
     {{- with $analytics.splitbee.data_token -}}
