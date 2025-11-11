@@ -1,16 +1,16 @@
-{{/* fingerprint */}}
+{{- /* fingerprint */ -}}
 {{- $fingerprint := .Scratch.Get "fingerprint" | default "" -}}
 
-{{/* critical style */}}
+{{- /* critical style */ -}}
 {{- $style := dict "Source" "scss/critical.scss" "Fingerprint" $fingerprint -}}
 {{- $options := dict "enableSourceMap" true "includePaths" (slice "node_modules") "transpiler" "dartsass" -}}
 {{- $style = dict "Context" . "ToCSS" $options "Inline" true "Template" true | merge $style -}}
 {{- partial "plugin/style.html" $style -}}
 
-{{- $style := dict "Link" "/bundled/css/main.css" "Defer" true -}}
+{{- $style := dict "Link" ("bundled/css/main.css" | absURL) "Defer" true -}}
 {{- partial "plugin/style.html" $style -}}
 
-{{/* fuck safari */}}
+{{- /* fuck safari */ -}}
 <script>
   function z() {
     const r = document.querySelector(':root')
@@ -20,10 +20,20 @@
   window.addEventListener('resize', z, { passive: true })
 </script>
 
-{{/* main js */}}
-{{- $script := dict "Link" "/bundled/js/main.js" "Defer" true "Esm" true -}}
+{{- /* main js */ -}}
+{{- $script := dict "Link" ("bundled/js/main.js" | absURL) "Defer" true "Esm" true -}}
 {{- partial "plugin/script.html" $script -}}
 
-{{/* fonts */}}
-<link rel="preload" href="/lib/fonts/fw.woff2" as="font" crossorigin />
-<link rel="preload" href="/lib/fonts/GeistVF.woff2" as="font" crossorigin />
+{{- /* fonts */ -}}
+<link
+  rel="preload"
+  href="{{- "lib/fonts/fw.woff2" | absURL -}}"
+  as="font"
+  crossorigin
+/>
+<link
+  rel="preload"
+  href="{{- "lib/fonts/GeistVF.woff2" | absURL -}}"
+  as="font"
+  crossorigin
+/>

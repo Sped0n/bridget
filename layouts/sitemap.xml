@@ -22,9 +22,9 @@
                 {{- $weeks := div (sub now.Unix .Lastmod.Unix) 604800 -}}
                 {{- $priority := sub 1 (div $weeks 10.0 ) -}}
                 {{- if ge .Sitemap.Priority $priority -}}
-                    <priority>{{ .Sitemap.Priority }}</priority>
+                    <priority>{{- .Sitemap.Priority -}}</priority>
                 {{- else -}}
-                    <priority>{{ $priority }}</priority>
+                    <priority>{{- $priority -}}</priority>
                 {{- end -}}
             {{- end -}}
 
@@ -32,14 +32,14 @@
                 {{- range .Translations -}}
                     <xhtml:link
                         rel="alternate"
-                        hreflang="{{ .Lang }}"
-                        href="{{ .Permalink }}"
+                        hreflang="{{- .Lang -}}"
+                        href="{{- .Permalink -}}"
                         />
                 {{- end -}}
                 <xhtml:link
                     rel="alternate"
-                    hreflang="{{ .Lang }}"
-                    href="{{ .Permalink }}"
+                    hreflang="{{- .Lang -}}"
+                    href="{{- .Permalink -}}"
                     />
             {{- end -}}
         </url>

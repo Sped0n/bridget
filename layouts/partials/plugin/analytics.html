@@ -5,7 +5,7 @@
   {{- with $analytics.google.id -}}
         <script type="text/javascript">
             window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
-            gtag('config', '{{ . }}'{{ if $analytics.google.anonymizeIP }}, { 'anonymize_ip': true }{{ end }});
+            gtag('config', '{{- . -}}'{{- if $analytics.google.anonymizeIP -}}, { 'anonymize_ip': true }{{- end -}});
         </script> {{- printf "https://www.googletagmanager.com/gtag/js?id=%v" . | dict "Async" true "Source" | partial "plugin/script.html" -}}
   {{- end -}}
 
@@ -13,7 +13,7 @@
   {{- with $analytics.fathom.id -}}
         <script type="text/javascript">
             window.fathom=window.fathom||function(){(fathom.q=fathom.q||[]).push(arguments);};
-            fathom('set', 'siteId', '{{ . }}');
+            fathom('set', 'siteId', '{{- . -}}');
             fathom('trackPageview');
         </script> {{- dict "Source" ($analytics.fathom.server | default "cdn.usefathom.com" | printf "https://%v/tracker.js") "Async" true "Attr" "id=fathom-script" | partial "plugin/script.html" -}}
   {{- end -}}
@@ -24,7 +24,7 @@
 			var _hmt = _hmt || [];
 			(function() {
 			  var hm = document.createElement("script");
-			  hm.src = "https://hm.baidu.com/hm.js?{{ . }}";
+			  hm.src = "https://hm.baidu.com/hm.js?{{- . -}}";
 			  var s = document.getElementsByTagName("script")[0];
 			  s.parentNode.insertBefore(hm, s);
 			})();
@@ -36,10 +36,10 @@
     <script
       async
       defer
-      data-website-id="{{ . }}"
-      src="{{ $analytics.umami.src }}"
-      {{ with $analytics.umami.data_host_url }}data-host-url="{{ . }}"{{ end }}
-      {{ with $analytics.umami.data_domains }}data-domains="{{ . }}"{{ end }}
+      data-website-id="{{- . -}}"
+      src="{{- $analytics.umami.src -}}"
+      {{- with $analytics.umami.data_host_url -}}data-host-url="{{- . -}}"{{- end -}}
+      {{- with $analytics.umami.data_domains -}}data-domains="{{- . -}}"{{- end -}}
     ></script>
   {{- end -}}
 
@@ -48,8 +48,8 @@
     <script
       async
       defer
-      data-domain="{{ . }}"
-      src="{{ $analytics.plausible.src }}"
+      data-domain="{{- . -}}"
+      src="{{- $analytics.plausible.src -}}"
     ></script>
   {{- end -}}
 
@@ -58,7 +58,7 @@
     <script
       defer
       src="https://static.cloudflareinsights.com/beacon.min.js"
-      data-cf-beacon='{"token": "{{ $analytics.cloudflare.token }}"}'
+      data-cf-beacon='{"token": "{{- $analytics.cloudflare.token -}}"}'
     ></script>
   {{- end -}}
 
@@ -76,7 +76,7 @@
     {{- end -}}
     <script
       defer
-      {{ with $attr }}{{ . | safeHTMLAttr }}{{ end }}
+      {{- with $attr -}}{{- . | safeHTMLAttr -}}{{- end -}}
       src="https://cdn.splitbee.io/sb.js"
     ></script>
   {{- end -}}

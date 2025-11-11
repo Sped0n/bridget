@@ -1,6 +1,6 @@
 <nav>
   <div class="navArtist">
-    <a href="/">{{ site.Title }}</a>
+    <a href="/">{{- site.Title -}}</a>
   </div>
   <div class="links">
     {{- $index := 0 -}}
@@ -9,7 +9,7 @@
       {{- $currentIndex = sub .Weight 1 -}}
     {{- end -}}
     {{- $menus := .Site.Menus.main -}}
-    {{- $len := len $menus }}
+    {{- $len := len $menus -}}
     {{- range $menus -}}
       {{- $url := .URL | relURL -}}
       {{- if eq (add $index 1) $len -}}
