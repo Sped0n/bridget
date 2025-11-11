@@ -18,7 +18,7 @@ hiResOpt = "2500x webp Lanczos q75"
 # unified alt text for all images in the page
 unifiedAlt = ''
 
-# Site verification code for Google/Bing/Yandex/Pinterest/Baidu
+# site verification code for Google/Bing/Yandex/Pinterest/Baidu
 [verification]
 google = ""
 bing = ""
@@ -28,7 +28,7 @@ baidu = ""
 so = ""
 sogou = ""
 
-# Analytics config
+# analytics config
 [analytics]
 enable = true
 # Google Analytics
@@ -66,3 +66,12 @@ No_cookie = true
 Do_not_track = true
 # token(optional), more info on https://splitbee.io/docs/embed-the-script
 data_token = ""
+
+# labels
+[labels]
+next = "next"
+prev = "prev"
+close = "close"
+threshold = "Threshold"
+error = "page not found"
+other = "loading..."

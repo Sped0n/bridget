@@ -1,10 +1,10 @@
 {{- define "main" -}}
   <div
     class="container"
-    data-next="{{- i18n "next" -}}"
-    data-prev="{{- i18n "prev" -}}"
-    data-close="{{- i18n "close" -}}"
-    data-loading="{{- i18n "loading" -}}"
+    data-next="{{- site.Params.labels.next -}}"
+    data-prev="{{- site.Params.labels.prev -}}"
+    data-close="{{- site.Params.labels.close -}}"
+    data-loading="{{- site.Params.labels.loading -}}"
   >
     {{- with .Content -}}
       <article>

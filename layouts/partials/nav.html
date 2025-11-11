@@ -37,7 +37,7 @@
     {{- with partial "function/getImageSlice.html" . -}}
       {{- $length = len . -}}
     {{- end -}}
-    <span>{{- i18n "threshold" | strings.FirstUpper -}}:</span>
+    <span>{{- site.Params.labels.threshold -}}:</span>
     <span>
       <button class="dec">&#xFF0D;</button>
       <span class="num"></span><span class="num"></span><span class="num"></span
