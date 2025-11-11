@@ -1,8 +1,8 @@
 {{- if site.Params.favicon -}}
   {{- with site.Params.svgFavicon -}}
-    <link rel="icon" type="image/svg+xml" href="{{ . }}" />
+    <link rel="icon" type="image/svg+xml" href="{{- . -}}" />
     {{- with site.Params.svgFaviconFallback -}}
-      <link rel="icon" type="image/png" href="{{ . }}" />
+      <link rel="icon" type="image/png" href="{{- . -}}" />
     {{- end -}}
   {{- else -}}
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />

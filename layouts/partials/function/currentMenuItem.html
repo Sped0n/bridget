@@ -5,9 +5,9 @@
 {{- $weight := -1 -}}
 
 {{- range site.Menus.main -}}
-  {{ $menu_item_url := .URL | relLangURL }}
-  {{ $page_url:= $currentPage.RelPermalink | relLangURL }}
-  {{ if eq $menu_item_url $page_url }}
+  {{- $menu_item_url := .URL | relLangURL -}}
+  {{- $page_url:= $currentPage.RelPermalink | relLangURL -}}
+  {{- if eq $menu_item_url $page_url -}}
     {{- $identifier = .Identifier -}}
     {{- $title = .Title -}}
     {{- $weight = .Weight -}}
