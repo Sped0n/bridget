@@ -27,7 +27,8 @@ export async function getImageJSON(): Promise<ImageJSON[]> {
       }
       return 1
     })
-  } catch (_) {
+  } catch (e) {
+    console.error(e)
     return []
   }
 }

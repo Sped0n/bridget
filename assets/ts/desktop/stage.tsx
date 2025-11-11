@@ -135,7 +135,7 @@ export default function Stage(props: {
   }
 
   const onClick: () => void = () => {
-    !props.isAnimating() && props.setIsOpen(true)
+    if (!props.isAnimating()) props.setIsOpen(true)
   }
 
   const setPosition: () => void = () => {
@@ -422,7 +422,6 @@ export default function Stage(props: {
             .catch(() => {
               void 0
             })
-            // eslint-disable-next-line solid/reactivity
             .then(() => {
               // abort controller for cleanup
               abortController?.abort()
