@@ -24,10 +24,13 @@ jobs:
 
       - name: Get changed files in scope
         id: changed-files-specific
-        uses: tj-actions/changed-files@v46
+        uses: tj-actions/changed-files@v47
         with:
           files: |
             package.json
+            pnpm-lock.yaml
+            tsconfig.json
+            vite.config.ts
             assets/**
 
   build:
@@ -36,7 +39,6 @@ jobs:
     name: Build (Hugo ${{ matrix.hugo-version }})
     needs: [filter]
     if: |
-      github.ref == 'refs/heads/main' &&
       github.event.repository.fork == false
     strategy:
       matrix:

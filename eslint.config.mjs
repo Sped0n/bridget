@@ -1,4 +1,4 @@
-import { default as eslint, default as js } from '@eslint/js'
+import js from '@eslint/js'
 import tsParser from '@typescript-eslint/parser'
 import love from 'eslint-config-love'
 import importPlugin from 'eslint-plugin-import'
@@ -9,7 +9,6 @@ import tseslint from 'typescript-eslint'
 
 export default defineConfig([
   js.configs.recommended,
-  eslint.configs.recommended,
   tseslint.configs.recommended,
   importPlugin.flatConfigs.recommended,
   solid,
