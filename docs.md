@@ -32,17 +32,12 @@ _[Contents](#contents)_
   hugo v0.152.2+extended+withdeploy darwin/arm64 BuildDate=unknown VendorInfo=nixpkgs
   ```
 
-- [Dart Sass](https://gohugo.io/functions/css/sass/#dart-sass) (**DO NOT INSTALL IT FROM NPM**, since it is doesn't support `--embedded`)
+- pnpm and Node.js
 
   ```bash
-  ❯ sass --embedded --version
-  {
-    "protocolVersion": "2.4.0",
-    "compilerVersion": "1.70.0",
-    "implementationVersion": "1.70.0",
-    "implementationName": "dart-sass",
-    "id": 0
-  }
+  ❯ pnpm --version && node --version
+  10.20.0
+  v22.20.0
   ```
 
 ## Installation
