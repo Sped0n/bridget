@@ -3,7 +3,7 @@
 
 {{/* critical style */}}
 {{- $style := dict "Source" "scss/critical.scss" "Fingerprint" $fingerprint -}}
-{{- $options := dict "enableSourceMap" true "includePaths" (slice "node_modules") -}}
+{{- $options := dict "enableSourceMap" true "includePaths" (slice "node_modules") "transpiler" "dartsass" -}}
 {{- $style = dict "Context" . "ToCSS" $options "Inline" true | merge $style -}}
 {{- partial "plugin/style.html" $style -}}
 

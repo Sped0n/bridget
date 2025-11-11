@@ -11,7 +11,8 @@
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
     "jsx": "preserve",
-    "jsxImportSource": "solid-js"
+    "jsxImportSource": "solid-js",
+    "types": ["node"]
   },
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Recommended"

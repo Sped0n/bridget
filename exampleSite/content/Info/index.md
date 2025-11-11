@@ -8,7 +8,7 @@ menu:
     identifier: Info
     title: Info
 unifiedAlt: ''
-_build:
+build:
   publishResources: false
 ---
 

@@ -1,10 +1,9 @@
 @charset "utf-8";
 
-@import '_partial/customCursor';
-@import '_partial/stage';
-@import '_partial/stageNav';
+@use '_partial/customCursor';
+@use '_partial/stage';
+@use '_partial/stageNav';
+@use '_partial/collection';
+@use '_partial/gallery';
 
-@import '_partial/collection';
-@import '_partial/gallery';
-
-@import 'node_modules/swiper/swiper.scss';
+@use '../../node_modules/swiper/swiper.css';

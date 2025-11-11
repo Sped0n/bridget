@@ -1,4 +1,3 @@
-// eslint-disable-next-line sort-imports
 import { Show, createMemo, createSignal, type JSX } from 'solid-js'
 
 import type { ImageJSON } from '../resources'

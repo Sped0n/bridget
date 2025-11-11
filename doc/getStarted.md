@@ -112,7 +112,7 @@ menu:
     identifier: Erwitt
     title: Erwitt
 unifiedAlt: '© Elliott Erwitt'
-_build:
+build:
   publishResources: false
 ---
 ```
