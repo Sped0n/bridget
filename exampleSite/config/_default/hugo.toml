@@ -13,4 +13,4 @@ enableRobotsTXT = true
 [module]
 replacements = "github.com/Sped0n/bridget/v2 -> ../.." # deploy with local dir (relative to hugo site theme dir)  WARN: delete this line if you want to deploy with git
 [[module.imports]]
-path = "github.com/Sped0n/bridget/v2" # deploy with git (recommended)  WARN: you should also set `bundled` to true in params.toml !!!
+path = "github.com/Sped0n/bridget/v2" # deploy with git (recommended)
