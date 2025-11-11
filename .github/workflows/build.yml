@@ -58,9 +58,6 @@ jobs:
           hugo-version: ${{ matrix.hugo-version }}
           extended: true
 
-      - name: Setup Dart Sass
-        run: sudo snap install dart-sass
-
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
@@ -91,8 +88,7 @@ jobs:
 
       - name: Build
         run: |
-          pnpm run vite:build
-          hugo --logLevel info --source=exampleSite --gc --minify
+          pnpm run build
 
       - name: Push artifacts
         if: >

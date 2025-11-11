@@ -27,7 +27,6 @@
             packages = with pkgs; [
               nodejs
               nodePackages.pnpm
-              dart-sass
               hugo
               go
             ];
