@@ -16,10 +16,10 @@
     "vite:build": "DISABLE_WATCH=1 vite build",
     "vite:server": "vite build",
     "vite:dev": "vite build --mode development --minify false",
-    "hugo:build": "hugo --logLevel info --source=exampleSite --gc",
-    "hugo:preview": "hugo --logLevel info --source=exampleSite -D --gc",
-    "hugo:dev": "hugo server --source=exampleSite --gc -D --disableFastRender --watch --logLevel info",
-    "hugo:server": "hugo server --source=exampleSite --gc --disableFastRender -e production --watch --logLevel info"
+    "hugo:build": "hugo --logLevel info --source=exampleSite --minify",
+    "hugo:preview": "hugo --logLevel info --source=exampleSite -D",
+    "hugo:dev": "hugo server --source=exampleSite -D --disableFastRender --watch --logLevel info",
+    "hugo:server": "hugo server --source=exampleSite --disableFastRender -e production --watch --logLevel info"
   },
   "repository": {
     "type": "git",
