@@ -6,7 +6,7 @@ Bridget is a minimal [Hugo](https://gohugo.io) theme for photographers/visual ar
 
 Based on the https://github.com/tylermcrobert/bridget-pictures-www.
 
-![thumbnail](images/tn.jpg)
+![thumbnail](https://raw.githubusercontent.com/Sped0n/bridget/main/images/tn.jpg)
 
 ## [Demo Site](https://bridget-demo.sped0n.com)
 
