@@ -8,6 +8,6 @@ menu:
     identifier: Webb
     title: Webb
 unifiedAlt: '© Alex Webb'
-_build:
+build:
   publishResources: false
 ---
