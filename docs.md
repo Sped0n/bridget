@@ -15,6 +15,7 @@
   - [`outputs.toml`](#outputstoml)
   - [`params.toml`](#paramstoml)
   - [`sitemap.toml`](#sitemaptoml)
+- [Usage](#usage)
 - [Customizations](#customizations)
   - [Change Font](#change-font)
   - [Add a Custom Analytic Script](#add-a-custom-analytic-script)
@@ -25,14 +26,27 @@
 
 _[Contents](#contents)_
 
-- Hugo (extended), minimum required version can be seen in the [`theme.toml`](https://github.com/Sped0n/bridget/blob/main/theme.toml#L19)
+- [Hugo (extended)](https://gohugo.io/installation/), minimum required version can be seen in the [`theme.toml`](https://github.com/Sped0n/bridget/blob/main/theme.toml#L19)
 
   ```bash
   ❯ hugo version
   hugo v0.152.2+extended+withdeploy darwin/arm64 BuildDate=unknown VendorInfo=nixpkgs
   ```
 
-- pnpm and Node.js
+- [Dart Sass](https://gohugo.io/functions/css/sass/#dart-sass) (or install it with `npm install -g sass-embedded`)
+
+  ```bash
+  ❯ sass --embedded --version
+  {
+    "protocolVersion": "2.4.0",
+    "compilerVersion": "1.70.0",
+    "implementationVersion": "1.70.0",
+    "implementationName": "dart-sass",
+    "id": 0
+  }
+  ```
+
+- [pnpm](https://pnpm.io/installation) and [Node.js](https://nodejs.org/en/download), please note that these two are only needed for customizations or development.
 
   ```bash
   ❯ pnpm --version && node --version
@@ -255,6 +269,15 @@ _[Contents](#contents)_
 
 https://gohugo.io/templates/sitemap-template/#configuration
 
+## Usage
+
+_[Contents](#contents)_
+
+- Ensure `sass --embedded --version` return a valid result.
+- Run `hugo` command.
+
+For further reading, you can refer to the `scripts` field of `package.json`.
+
 ## Customizations
 
 _[Contents](#contents)_
@@ -262,9 +285,11 @@ _[Contents](#contents)_
 > [!IMPORTANT]
 > Please make sure you have [installation with Git](#git-repository-for-customizations).
 >
-> - Use `pnpm install` to install neceessary dependencies.
-> - Use `pnpm run dev` to start a dev server (`http://localhost:1313`).
-> - When you’re ready, run `pnpm run build` to update artifacts.
+> If you want to try some changes on the `exampleSite`, below are some commands you might need:
+>
+> - `pnpm install` to install dependencies.
+> - `pnpm run dev` to start a dev server (`http://localhost:1313`).
+> - `pnpm run build` to update artifacts.
 
 ### Change Font
 
