@@ -1,5 +1,22 @@
+# --- REQUIRED -----------------------------------------------------------------
+
 # description of the site (will be placed in meta)
 description = "Bridget is a minimal Hugo theme designed for photographers/visual artists."
+
+# resize options for dynamic resolution, please refer to https://gohugo.io/content-management/image-processing/#image-processing-options
+loResOpt = "800x webp Lanczos q60"
+hiResOpt = "2500x webp Lanczos q75"
+
+# labels (text shown on the UI)
+[labels]
+next = "next"
+prev = "prev"
+close = "close"
+threshold = "Threshold"
+error = "page not found"
+loading = "loading..."
+
+# --- OPTIONAL -----------------------------------------------------------------
 
 # whether to use favicon resource links
 # generate these with https://realfavicongenerator.net
@@ -8,15 +25,6 @@ favicon = true
 svgFavicon = "/dot.svg"
 # fallback png favicon for unsupported browsers
 svgFaviconFallback = "/dot.png"
-
-# resize options for dynamic resolution, please refer to https://gohugo.io/content-management/image-processing/#image-processing-options
-loResOpt = "800x webp Lanczos q60"
-hiResOpt = "2500x webp Lanczos q75"
-
-# page config
-[page]
-# unified alt text for all images in the page
-unifiedAlt = ''
 
 # site verification code for Google/Bing/Yandex/Pinterest/Baidu
 [verification]
@@ -61,17 +69,8 @@ token = ""
 [analytics.splitbee]
 enable = false
 # no cookie mode
-No_cookie = true
+no_cookie = true
 # respect the do not track setting of the browser
-Do_not_track = true
+do_not_track = true
 # token(optional), more info on https://splitbee.io/docs/embed-the-script
 data_token = ""
-
-# labels
-[labels]
-next = "next"
-prev = "prev"
-close = "close"
-threshold = "Threshold"
-error = "page not found"
-other = "loading..."
