@@ -19,27 +19,12 @@ Head to this [documentation](https://github.com/Sped0n/bridget/blob/main/doc/get
 ## Features
 
 - **Blazingly fast**: 100/100 on both desktop and mobile in [Google PageSpeed Insights](https://developers.google.com/speed/pagespeed/insights)
-- Powered by **[Solid.js](https://www.solidjs.com)**, a declarative, efficient, and flexible JavaScript library for building user interfaces
-- JS **dynamic loading** (powered by ESM)
-- Image **Preloading**/**Lazy loading**
+- Powered by **[SolidJS](https://www.solidjs.com)**, a declarative, efficient, and flexible JavaScript library for building user interfaces
+- JS **dynamic loading**
+- Image **preloading** + **lazy loading**
 - **Dynamic resolution** based on view mode
 - Multiple **analytics** services supported
 - Search engine **verification** supported (Google, Bind, Yandex and Baidu)
-
-## Multilingual and i18n
-
-Bridget supports the following languages:
-
-- English
-- Simplified Chinese
-- Traditional Chinese
-- Japanese
-- Korean
-- Deutsch
-- Spanish
-- Italian
-- Tamil
-- [Contribute with a new language](https://github.com/Sped0n/bridget/pulls)
 
 ## Credits
 
