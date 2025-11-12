@@ -2,8 +2,8 @@
 {{- $fingerprint := .Scratch.Get "fingerprint" | default "" -}}
 
 {{- /* critical style */ -}}
-{{- $style := dict "Source" "scss/critical.scss" "Fingerprint" $fingerprint -}}
-{{- $options := dict "enableSourceMap" true "includePaths" (slice "node_modules") "transpiler" "dartsass" -}}
+{{- $style := dict "Source" "bundled/critical.css" "Fingerprint" $fingerprint -}}
+{{- $options := dict "enableSourceMap" false -}}
 {{- $style = dict "Context" . "ToCSS" $options "Inline" true "Template" true | merge $style -}}
 {{- partial "plugin/style.html" $style -}}
 
