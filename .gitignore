@@ -1,6 +1,6 @@
 # Hugo default output directory
 public/
-/exampleSite/resources/
+exampleSite/resources/
 
 node_modules/
 build/
@@ -25,3 +25,6 @@ jsconfig.json
 
 # css map
 *.css.map
+
+# dummmy file
+assets/bundled/critical.js

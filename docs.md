@@ -33,19 +33,6 @@ _[Contents](#contents)_
   hugo v0.152.2+extended+withdeploy darwin/arm64 BuildDate=unknown VendorInfo=nixpkgs
   ```
 
-- [Dart Sass](https://gohugo.io/functions/css/sass/#dart-sass) (or install it with `npm install -g sass-embedded`)
-
-  ```bash
-  ❯ sass --embedded --version
-  {
-    "protocolVersion": "2.4.0",
-    "compilerVersion": "1.70.0",
-    "implementationVersion": "1.70.0",
-    "implementationName": "dart-sass",
-    "id": 0
-  }
-  ```
-
 - [pnpm](https://pnpm.io/installation) and [Node.js](https://nodejs.org/en/download), please note that these two are only needed for customizations or development.
 
   ```bash
@@ -273,8 +260,7 @@ https://gohugo.io/templates/sitemap-template/#configuration
 
 _[Contents](#contents)_
 
-- Ensure `sass --embedded --version` return a valid result.
-- Run `hugo` command.
+Bridget will work as a normal Hugo theme (if you don't have needs to customize), https://gohugo.io/getting-started/usage/ is a great start.
 
 For further reading, you can refer to the `scripts` field of `package.json`.
 
