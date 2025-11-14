@@ -3,5 +3,4 @@ static/
 exmapleSite/
 single.json
 pnpm-lock.yaml
-assets/bundled/
-assets/bundled/
+bundled/

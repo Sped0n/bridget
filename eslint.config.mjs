@@ -12,13 +12,7 @@ export default defineConfig([
   tseslint.configs.recommended,
   importPlugin.flatConfigs.recommended,
   solid,
-  globalIgnores([
-    'node_modules/',
-    'static/',
-    'exampleSite/',
-    '*.mjs',
-    'assets/bundled/'
-  ]),
+  globalIgnores(['node_modules/', 'static/', 'exampleSite/', '*.mjs', 'bundled/']),
   {
     ...love,
     ...prettier,
