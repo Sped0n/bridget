@@ -4,7 +4,7 @@ import solidPlugin from 'vite-plugin-solid'
 export default defineConfig({
   plugins: [solidPlugin()],
   build: {
-    outDir: './',
+    outDir: './bundled',
     watch: process.env.DISABLE_WATCH
       ? null
       : {
@@ -17,15 +17,9 @@ export default defineConfig({
       },
       output: {
         format: 'es',
-        entryFileNames: (chunkInfo) =>
-          chunkInfo.name === 'critical'
-            ? 'assets/bundled/[name].js'
-            : 'static/bundled/js/[name].js',
-        chunkFileNames: 'static/bundled/js/[hash:6].js',
-        assetFileNames: (assetInfo) =>
-          assetInfo.names[0]?.startsWith('critical')
-            ? 'assets/bundled/[name].[ext]'
-            : 'static/bundled/[ext]/[name].[ext]',
+        entryFileNames: 'js/[name].js',
+        chunkFileNames: 'js/[hash:6].js',
+        assetFileNames: '[ext]/[name].[ext]',
         compact: true
       }
     }
