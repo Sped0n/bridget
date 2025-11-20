@@ -25,8 +25,8 @@ importers:
         specifier: ^9.39.1
         version: 9.39.1
       '@types/node':
-        specifier: ^24.10.0
-        version: 24.10.0
+        specifier: ^24.10.1
+        version: 24.10.1
       '@typescript-eslint/parser':
         specifier: ^8.47.0
         version: 8.47.0(eslint@9.39.1)(typescript@5.9.3)
@@ -74,10 +74,10 @@ importers:
         version: 8.46.4(eslint@9.39.1)(typescript@5.9.3)
       vite:
         specifier: ^7.2.2
-        version: 7.2.2(@types/node@24.10.0)(sass-embedded@1.93.3)(sass@1.93.3)
+        version: 7.2.2(@types/node@24.10.1)(sass-embedded@1.93.3)(sass@1.93.3)
       vite-plugin-solid:
         specifier: ^2.11.10
-        version: 2.11.10(solid-js@1.9.10)(vite@7.2.2(@types/node@24.10.0)(sass-embedded@1.93.3)(sass@1.93.3))
+        version: 2.11.10(solid-js@1.9.10)(vite@7.2.2(@types/node@24.10.1)(sass-embedded@1.93.3)(sass@1.93.3))
 
 packages:
 
@@ -638,8 +638,8 @@ packages:
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
 
-  '@types/node@24.10.0':
-    resolution: {integrity: sha512-qzQZRBqkFsYyaSWXuEHc2WR9c0a0CXwiE5FWUvn7ZM+vdy1uZLfCunD38UzhuB7YN/J11ndbDBcTmOdxJo9Q7A==}
+  '@types/node@24.10.1':
+    resolution: {integrity: sha512-GNWcUTRBgIRJD5zj+Tq0fKOJ5XZajIiBroOF0yvj2bSU1WvNdYS/dn9UxwsujGW4JX06dnHyjV2y9rRaybH0iQ==}
 
   '@typescript-eslint/eslint-plugin@8.46.4':
     resolution: {integrity: sha512-R48VhmTJqplNyDxCyqqVkFSZIx1qX6PzwqgcXn1olLrzxcSBDlOsbtcnQuQhNtnNiJ4Xe5gREI1foajYaYU2Vg==}
@@ -2818,7 +2818,7 @@ snapshots:
 
   '@types/json5@0.0.29': {}
 
-  '@types/node@24.10.0':
+  '@types/node@24.10.1':
     dependencies:
       undici-types: 7.16.0
 
@@ -4653,7 +4653,7 @@ snapshots:
 
   varint@6.0.0: {}
 
-  vite-plugin-solid@2.11.10(solid-js@1.9.10)(vite@7.2.2(@types/node@24.10.0)(sass-embedded@1.93.3)(sass@1.93.3)):
+  vite-plugin-solid@2.11.10(solid-js@1.9.10)(vite@7.2.2(@types/node@24.10.1)(sass-embedded@1.93.3)(sass@1.93.3)):
     dependencies:
       '@babel/core': 7.28.5
       '@types/babel__core': 7.20.5
@@ -4661,12 +4661,12 @@ snapshots:
       merge-anything: 5.1.7
       solid-js: 1.9.10
       solid-refresh: 0.6.3(solid-js@1.9.10)
-      vite: 7.2.2(@types/node@24.10.0)(sass-embedded@1.93.3)(sass@1.93.3)
-      vitefu: 1.1.1(vite@7.2.2(@types/node@24.10.0)(sass-embedded@1.93.3)(sass@1.93.3))
+      vite: 7.2.2(@types/node@24.10.1)(sass-embedded@1.93.3)(sass@1.93.3)
+      vitefu: 1.1.1(vite@7.2.2(@types/node@24.10.1)(sass-embedded@1.93.3)(sass@1.93.3))
     transitivePeerDependencies:
       - supports-color
 
-  vite@7.2.2(@types/node@24.10.0)(sass-embedded@1.93.3)(sass@1.93.3):
+  vite@7.2.2(@types/node@24.10.1)(sass-embedded@1.93.3)(sass@1.93.3):
     dependencies:
       esbuild: 0.25.12
       fdir: 6.5.0(picomatch@4.0.3)
@@ -4675,14 +4675,14 @@ snapshots:
       rollup: 4.53.2
       tinyglobby: 0.2.15
     optionalDependencies:
-      '@types/node': 24.10.0
+      '@types/node': 24.10.1
       fsevents: 2.3.3
       sass: 1.93.3
       sass-embedded: 1.93.3
 
-  vitefu@1.1.1(vite@7.2.2(@types/node@24.10.0)(sass-embedded@1.93.3)(sass@1.93.3)):
+  vitefu@1.1.1(vite@7.2.2(@types/node@24.10.1)(sass-embedded@1.93.3)(sass@1.93.3)):
     optionalDependencies:
-      vite: 7.2.2(@types/node@24.10.0)(sass-embedded@1.93.3)(sass@1.93.3)
+      vite: 7.2.2(@types/node@24.10.1)(sass-embedded@1.93.3)(sass@1.93.3)
 
   which-boxed-primitive@1.1.1:
     dependencies:
