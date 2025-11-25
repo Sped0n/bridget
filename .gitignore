@@ -27,4 +27,4 @@ jsconfig.json
 *.css.map
 
 # dummmy file
-bundled/css/critical.js
+bundled/js/critical.js
