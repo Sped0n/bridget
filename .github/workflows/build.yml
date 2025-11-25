@@ -36,13 +36,18 @@ jobs:
   build:
     timeout-minutes: 30
     runs-on: ubuntu-latest
-    name: Build (Hugo ${{ matrix.hugo-version }})
+    name: Build (Hugo ${{ matrix.hugo-label }})
     needs: [filter]
     if: |
       github.event.repository.fork == false
     strategy:
       matrix:
         hugo-version: ['latest', '0.114.0']
+        include:
+          - hugo-version: latest
+            hugo-label: Latest
+          - hugo-version: '0.114.0'
+            hugo-label: 'v0.114.0'
     steps:
       - name: Set current date as env variable
         run: |
