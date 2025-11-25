@@ -51,6 +51,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    .navClose {
+      min-width: 30%;
+      text-align: right;
+      cursor: pointer;
+    }
   }
 }
 
