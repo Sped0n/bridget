@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-node_modules_generated_dir="./node_modules/exampleSite/resources/_gen"
-project_generated_dir="./exampleSite/resources/_gen"
+node_modules_generated_dir="./node_modules/exampleSite/resources/_gen/images"
+project_generated_dir="./exampleSite/resources/_gen/images"
 
 copy_generated_assets_to_project() {
   if [ -d "${node_modules_generated_dir}" ]; then
@@ -16,7 +16,8 @@ copy_generated_assets_to_project() {
 }
 
 run_site_build() {
-  pnpm run vite:build && hugo --logLevel info --source=exampleSite --gc --minify
+  rm -rf bundled
+  pnpm run build
 }
 
 copy_generated_assets_to_node_modules() {
