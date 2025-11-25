@@ -53,9 +53,18 @@
     align-items: center;
 
     .navClose {
-      min-width: 25%;
-      text-align: right;
       cursor: pointer;
+      z-index: calc(var(--z-nav-gallery) + 1);
+
+      min-width: 25%;
+      height: calc(var(--nav-height) * 2.5);
+
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+
+      margin-right: calc(var(--space-standard) * -1);
+      padding-right: var(--space-standard);
     }
   }
 }
