@@ -4,6 +4,7 @@
   position: fixed;
   top: var(--nav-height);
   z-index: var(--z-nav-gallery);
+  overflow: hidden;
 
   display: flex;
   flex-direction: column;
