@@ -60,7 +60,7 @@
     "vite-plugin-solid": "^2.11.10"
   },
   "dependencies": {
-    "gsap": "^3.14.1",
+    "gsap": "^3.14.2",
     "solid-js": "^1.9.10",
     "swiper": "^12.0.3",
     "tiny-invariant": "^1.3.3"
