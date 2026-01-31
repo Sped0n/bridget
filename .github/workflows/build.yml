@@ -12,34 +12,11 @@ permissions:
   contents: write
 
 jobs:
-  filter:
-    runs-on: ubuntu-latest
-    name: Filter
-    outputs:
-      any_changed: ${{ steps.changed-files-specific.outputs.any_changed }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Get changed files in scope
-        id: changed-files-specific
-        uses: tj-actions/changed-files@v47
-        with:
-          files: |
-            package.json
-            pnpm-lock.yaml
-            tsconfig.json
-            vite.config.ts
-            assets/**
-
   build:
     timeout-minutes: 30
     runs-on: ubuntu-latest
     name: Build (Hugo ${{ matrix.hugo-label }})
-    needs: [filter]
-    if: |
-      github.event.repository.fork == false
+    if: github.event.repository.fork == false
     strategy:
       matrix:
         hugo-version: ['latest', '0.114.0']
@@ -49,59 +26,52 @@ jobs:
           - hugo-version: '0.114.0'
             hugo-label: 'v0.114.0'
     steps:
-      - name: Set current date as env variable
-        run: |
-          echo "builddate=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
-        id: version
-
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           token: ${{ secrets.PAT }}
 
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2.6.0
+      - name: Setup Mise
+        uses: jdx/mise-action@v3
         with:
-          hugo-version: ${{ matrix.hugo-version }}
-          extended: true
+          install_args: node@latest pnpm@10 hugo-extended@${{ matrix.hugo-version }}
+          tool_versions: |
+            node latest
+            pnpm 10
+            hugo-extended ${{ matrix.hugo-version }}
+          cache: true
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 10
-
-      - name: Get pnpm store directory
+      - name: Get pnpm store path
         id: pnpm-cache
-        run: echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+        run: 'echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT'
 
       - name: Setup pnpm cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('./pnpm-lock.yaml') }}
+          key: pnpm-store-${{ hashFiles('./pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+            pnpm-store-
 
-      - name: Setup hugo cache
-        uses: actions/cache@v4
+      - name: Setup Hugo cache
+        uses: actions/cache@v5
         with:
-          path: ./exampleSite/resources
-          key: ${{ runner.os }}-hugo-${{ matrix.hugo-version }}-${{ hashFiles('./exampleSite') }}
+          path: exampleSite/resources/_gen
+          key: hugo-${{ matrix.hugo-version }}-${{ hashFiles('./exampleSite/**/*.jpg') }}
           restore-keys: |
-            ${{ runner.os }}-hugo-${{ matrix.hugo-version }}-
+            hugo-${{ matrix.hugo-version }}-
 
-      - name: Install dependencies
-        run: pnpm install
+      - name: Install project dependencies
+        run: 'pnpm install'
 
       - name: Build
-        run: |
-          pnpm run build
+        run: 'pnpm run build'
 
-      - name: Push artifacts
+      - name: Commit
         if: >
           matrix.hugo-version == 'latest' &&
-          (github.event_name == 'push' || github.event.pull_request.merged == true) &&
-          needs.filter.outputs.any_changed == 'true'
-        uses: stefanzweifel/git-auto-commit-action@v5
+          (github.event_name == 'push' || github.event.pull_request.merged == true)
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
+          file_pattern: 'bundled/**/*.js bundled/**/*.css'
           commit_message: 'ci: update bundled artifacts [skip ci]'
