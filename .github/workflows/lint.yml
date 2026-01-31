@@ -1,0 +1,58 @@
+name: 'Lint'
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    name: Lint
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          # github.token as a fallback, since other user might trigger this
+          # workflow in their pull request
+          token: ${{ secrets.PAT || github.token }}
+
+      - name: Setup Mise
+        uses: jdx/mise-action@v3
+        with:
+          install_args: node@latest pnpm@10
+          tool_versions: |
+            node latest
+            pnpm 10
+          cache: true
+
+      - name: Get pnpm store path
+        id: pnpm-cache
+        run: 'echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT'
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v5
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: pnpm-store-${{ hashFiles('./pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-store-
+
+      - name: Install project dependencies
+        run: 'pnpm install'
+
+      - name: Lint
+        id: lint
+        run: 'pnpm run lint:check || pnpm run lint'
+
+      - name: Commit
+        if: ${{ steps.format.lint == 'success' }}
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: 'ci: lint [skip ci]'
