@@ -53,7 +53,7 @@
     "prettier": "3.8.1",
     "prettier-plugin-go-template": "^0.0.15",
     "prettier-plugin-organize-imports": "^4.3.0",
-    "sass-embedded": "^1.97.2",
+    "sass-embedded": "^1.97.3",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.53.1",
     "vite": "^7.3.1",
