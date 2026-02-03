@@ -64,10 +64,16 @@ jobs:
       - name: Install project dependencies
         run: 'pnpm install'
 
+      - name: Pre-build cleanup
+        if: >
+          matrix.hugo-version == 'latest' &&
+          (github.event_name == 'push' || github.event.pull_request.merged == true)
+        run: 'rm -rf bundled'
+
       - name: Build
         run: 'pnpm run build'
 
-      - name: Commit
+      - name: Push artifacts
         if: >
           matrix.hugo-version == 'latest' &&
           (github.event_name == 'push' || github.event.pull_request.merged == true)
