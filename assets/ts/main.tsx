@@ -38,9 +38,14 @@ const Mobile = lazy(async () => await import('./mobile/layout'))
 function Main(): JSX.Element {
   // variables
   const [ijs] = createResource(getImageJSON)
-  const isMobile =
-    window.matchMedia('(hover: none)').matches &&
-    !window.navigator.userAgent.includes('Win')
+  const ua = window.navigator.userAgent.toLowerCase()
+  const hasTouchInput = 'ontouchstart' in window || window.navigator.maxTouchPoints > 0
+  const hasTouchLayout =
+    window.matchMedia('(pointer: coarse)').matches ||
+    window.matchMedia('(hover: none)').matches
+  const isMobileUA = /android|iphone|ipad|ipod|mobile/.test(ua)
+  const isWindowsDesktop = /windows nt/.test(ua)
+  const isMobile = isMobileUA || (hasTouchInput && hasTouchLayout && !isWindowsDesktop)
 
   // states
   const [scrollable, setScollable] = createSignal(true)
