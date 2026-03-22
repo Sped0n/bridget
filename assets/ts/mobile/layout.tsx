@@ -1,9 +1,10 @@
-import { Show, createSignal, type JSX, type Setter } from 'solid-js'
+import { Show, createEffect, onCleanup, type JSX } from 'solid-js'
 
-import type { ImageJSON } from '../resources'
+import { useImageState } from '../imageState'
 
 import Collection from './collection'
 import Gallery from './gallery'
+import { useMobileState } from './state'
 
 /**
  * interfaces
@@ -18,34 +19,33 @@ export interface MobileImage extends HTMLImageElement {
 
 export default function Mobile(props: {
   children?: JSX.Element
-  ijs: ImageJSON[]
   closeText: string
   loadingText: string
-  setScrollable: Setter<boolean>
 }): JSX.Element {
-  // states
-  const [isOpen, setIsOpen] = createSignal(false)
-  const [isAnimating, setIsAnimating] = createSignal(false)
+  const imageState = useImageState()
+  const [mobile] = useMobileState()
+
+  createEffect(() => {
+    const container = document.getElementsByClassName('container').item(0)
+    if (container === null) return
+
+    if (mobile.isScrollLocked()) {
+      container.classList.add('disableScroll')
+    } else {
+      container.classList.remove('disableScroll')
+    }
+  })
+
+  onCleanup(() => {
+    const container = document.getElementsByClassName('container').item(0)
+    container?.classList.remove('disableScroll')
+  })
 
   return (
     <>
-      <Show when={props.ijs.length > 0}>
-        <Collection
-          ijs={props.ijs}
-          isAnimating={isAnimating}
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-        />
-        <Gallery
-          ijs={props.ijs}
-          closeText={props.closeText}
-          loadingText={props.loadingText}
-          isAnimating={isAnimating}
-          setIsAnimating={setIsAnimating}
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          setScrollable={props.setScrollable}
-        />
+      <Show when={imageState().length > 0}>
+        <Collection />
+        <Gallery closeText={props.closeText} loadingText={props.loadingText} />
       </Show>
     </>
   )

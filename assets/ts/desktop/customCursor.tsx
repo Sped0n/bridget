@@ -4,7 +4,6 @@ export default function CustomCursor(props: {
   children?: JSX.Element
   active: Accessor<boolean>
   cursorText: Accessor<string>
-  isOpen: Accessor<boolean>
 }): JSX.Element {
   // types
   interface XY {

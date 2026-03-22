@@ -3,8 +3,9 @@ import { createEffect, on, onMount, type JSX } from 'solid-js'
 import invariant from 'tiny-invariant'
 
 import type { ImageJSON } from '../resources'
-import { useState } from '../state'
 import { loadGsap } from '../utils'
+
+import { useMobileState } from './state'
 
 export default function GalleryImage(props: {
   children?: JSX.Element
@@ -19,7 +20,7 @@ export default function GalleryImage(props: {
   let gsapPromise: Promise<typeof gsap> | undefined
   let revealed = false
 
-  const [state] = useState()
+  const [mobile] = useMobileState()
 
   const revealImage = async (): Promise<void> => {
     if (revealed) return
@@ -42,7 +43,7 @@ export default function GalleryImage(props: {
       return
     }
 
-    if (state().index !== props.ij.index) {
+    if (mobile.index() !== props.ij.index) {
       _gsap.set(img, { opacity: 1 })
       _gsap.set(loadingDiv, { opacity: 0 })
       return
