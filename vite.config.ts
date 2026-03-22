@@ -5,6 +5,7 @@ export default defineConfig({
   plugins: [solidPlugin()],
   build: {
     outDir: './bundled',
+    cssMinify: 'esbuild',
     watch: process.env.DISABLE_WATCH
       ? null
       : {
@@ -19,8 +20,7 @@ export default defineConfig({
         format: 'es',
         entryFileNames: 'js/[name].js',
         chunkFileNames: 'js/[hash:6].js',
-        assetFileNames: '[ext]/[name].[ext]',
-        compact: true
+        assetFileNames: '[ext]/[name].[ext]'
       }
     }
   },
