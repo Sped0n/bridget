@@ -1,17 +1,9 @@
-import {
-  For,
-  createEffect,
-  on,
-  onMount,
-  type Accessor,
-  type JSX,
-  type Setter
-} from 'solid-js'
+import { For, createEffect, on, onMount, type JSX } from 'solid-js'
 
-import type { ImageJSON } from '../resources'
-import { useState } from '../state'
+import { useImageState } from '../imageState'
 
 import type { MobileImage } from './layout'
+import { useMobileState } from './state'
 
 function getRandom(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min
@@ -31,29 +23,26 @@ function onIntersection<T extends HTMLElement>(
   }).observe(element)
 }
 
-export default function Collection(props: {
-  children?: JSX.Element
-  ijs: ImageJSON[]
-  isAnimating: Accessor<boolean>
-  isOpen: Accessor<boolean>
-  setIsOpen: Setter<boolean>
-}): JSX.Element {
+export default function Collection(): JSX.Element {
   // variables
-  // eslint-disable-next-line solid/reactivity
-  const imgs: MobileImage[] = Array<MobileImage>(props.ijs.length)
+  const imageState = useImageState()
+  const imgs: MobileImage[] = Array<MobileImage>(imageState().length)
 
   // states
-  const [state, { setIndex }] = useState()
+  const [mobile, { setIndex, setIsOpen }] = useMobileState()
 
   // helper functions
   const handleClick: (i: number) => void = (i) => {
-    if (props.isAnimating()) return
+    if (mobile.isAnimating()) return
     setIndex(i)
-    props.setIsOpen(true)
+    setIsOpen(true)
   }
 
   const scrollToActive: () => void = () => {
-    imgs[state().index].scrollIntoView({ behavior: 'auto', block: 'center' })
+    const index = mobile.index()
+
+    if (index < 0) return
+    imgs[index].scrollIntoView({ behavior: 'auto', block: 'center' })
   }
 
   // effects
@@ -94,11 +83,9 @@ export default function Collection(props: {
 
   createEffect(
     on(
+      mobile.isOpen,
       () => {
-        props.isOpen()
-      },
-      () => {
-        if (!props.isOpen()) scrollToActive() // scroll to active when closed
+        if (!mobile.isOpen()) scrollToActive() // scroll to active when closed
       },
       { defer: true }
     )
@@ -107,7 +94,7 @@ export default function Collection(props: {
   return (
     <>
       <div class="collection">
-        <For each={props.ijs}>
+        <For each={imageState().images}>
           {(ij, i) => (
             <img
               ref={imgs[i()]}

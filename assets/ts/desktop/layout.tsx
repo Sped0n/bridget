@@ -1,12 +1,12 @@
-import { Show, createMemo, createSignal, type JSX } from 'solid-js'
+import { Show, createMemo, type JSX } from 'solid-js'
 
-import type { ImageJSON } from '../resources'
-import type { Vector } from '../utils'
+import { useImageState } from '../imageState'
 
 import CustomCursor from './customCursor'
 import Nav from './nav'
 import Stage from './stage'
 import StageNav from './stageNav'
+import { useDesktopState } from './state'
 
 /**
  * interfaces and types
@@ -23,65 +23,36 @@ export interface DesktopImage extends HTMLImageElement {
   }
 }
 
-export interface HistoryItem {
-  i: number
-  x: number
-  y: number
-}
-
 /**
  * components
  */
 
 export default function Desktop(props: {
   children?: JSX.Element
-  ijs: ImageJSON[]
   prevText: string
   closeText: string
   nextText: string
   loadingText: string
 }): JSX.Element {
-  const [cordHist, setCordHist] = createSignal<HistoryItem[]>([])
-  const [isLoading, setIsLoading] = createSignal(false)
-  const [isOpen, setIsOpen] = createSignal(false)
-  const [isAnimating, setIsAnimating] = createSignal(false)
-  const [hoverText, setHoverText] = createSignal('')
-  const [navVector, setNavVector] = createSignal<Vector>('none')
+  const imageState = useImageState()
+  const [desktop] = useDesktopState()
 
-  const active = createMemo(() => isOpen() && !isAnimating())
-  const cursorText = createMemo(() => (isLoading() ? props.loadingText : hoverText()))
+  const active = createMemo(() => desktop.isOpen() && !desktop.isAnimating())
+  const cursorText = createMemo(() =>
+    desktop.isLoading() ? props.loadingText : desktop.hoverText()
+  )
 
   return (
     <>
       <Nav />
-      <Show when={props.ijs.length > 0}>
-        <Stage
-          ijs={props.ijs}
-          setIsLoading={setIsLoading}
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          isAnimating={isAnimating}
-          setIsAnimating={setIsAnimating}
-          cordHist={cordHist}
-          setCordHist={setCordHist}
-          navVector={navVector}
-          setNavVector={setNavVector}
-        />
-        <Show when={isOpen()}>
-          <CustomCursor cursorText={cursorText} active={active} isOpen={isOpen} />
+      <Show when={imageState().length > 0}>
+        <Stage />
+        <Show when={desktop.isOpen()}>
+          <CustomCursor cursorText={cursorText} active={active} />
           <StageNav
             prevText={props.prevText}
             closeText={props.closeText}
             nextText={props.nextText}
-            loadingText={props.loadingText}
-            active={active}
-            isAnimating={isAnimating}
-            setCordHist={setCordHist}
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-            setHoverText={setHoverText}
-            navVector={navVector}
-            setNavVector={setNavVector}
           />
         </Show>
       </Show>
