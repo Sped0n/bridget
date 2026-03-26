@@ -24,7 +24,7 @@ jobs:
           token: ${{ secrets.PAT || github.token }}
 
       - name: Setup Mise
-        uses: jdx/mise-action@v3
+        uses: jdx/mise-action@v4
         with:
           install_args: node@latest pnpm@10
           tool_versions: |
