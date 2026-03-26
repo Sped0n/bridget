@@ -9,7 +9,7 @@ Here is a [live demo](https://bridget-demo.sped0n.com).
 ![thumbnail](https://raw.githubusercontent.com/Sped0n/bridget/main/images/tn.jpg)
 
 > [!NOTE]
-> This repository is currently in **maintaince mode** for two reasons:
+> This repository is currently in **maintenance mode** for two reasons:
 >
 > 1. I want to keep this theme minimal.
 > 2. My bandwith after work is limited.
