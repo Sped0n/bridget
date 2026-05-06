@@ -41,7 +41,7 @@
   "devDependencies": {
     "@eslint/js": "^9.39.4",
     "@types/node": "^25.6.0",
-    "@typescript-eslint/parser": "^8.59.1",
+    "@typescript-eslint/parser": "^8.59.2",
     "eslint": "^9.39.2",
     "eslint-config-love": "^153.0.0",
     "eslint-config-prettier": "^10.1.8",
