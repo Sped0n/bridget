@@ -15,24 +15,24 @@ jobs:
   build:
     timeout-minutes: 30
     runs-on: ubuntu-latest
-    name: Build (Hugo ${{ matrix.hugo-version }})
+    name: Build (Hugo ${{ matrix.hugo_variant_to_install }})
     if: github.event.repository.fork == false
     strategy:
       matrix:
-        hugo-version: ['Minimum', 'Latest']
+        hugo_variant_to_install: ['Minimum', 'Latest']
     steps:
       - name: Checkout
         uses: actions/checkout@v6
         with:
           token: ${{ secrets.PAT }}
 
-      - name: Resolve Hugo version
-        id: hugo_version
+      - name: Resolve Hugo variant to install
+        id: resolve_hugo_variant_to_install
         run: |
-          if [ '${{ matrix.hugo-version }}' = 'Minimum' ]; then
+          if [ '${{ matrix.hugo_variant_to_install }}' = 'Minimum' ]; then
             version=$(awk -F '"' '/^min = / { print $2; exit }' theme.toml)
           else
-            version=$(printf '%s' '${{ matrix.hugo-version }}' | tr '[:upper:]' '[:lower:]')
+            version=$(printf '%s' '${{ matrix.hugo_variant_to_install }}' | tr '[:upper:]' '[:lower:]')
           fi
 
           if [ -z "$version" ]; then
@@ -40,17 +40,31 @@ jobs:
             exit 1
           fi
 
+          echo "Resolved Hugo variant to install: $version"
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
       - name: Setup Mise
         uses: jdx/mise-action@v4
         with:
-          install_args: node@latest pnpm@10 hugo-extended@${{ steps.hugo_version.outputs.version }}
+          install_args: node@latest pnpm@10 hugo-extended@${{ steps.resolve_hugo_variant_to_install.outputs.version }}
           tool_versions: |
             node latest
             pnpm 10
-            hugo-extended ${{ steps.hugo_version.outputs.version }}
+            hugo-extended ${{ steps.resolve_hugo_variant_to_install.outputs.version }}
           cache: true
+
+      - name: Detect installed Hugo version
+        id: detect_hugo_installed_version
+        run: |
+          version=$(hugo version | awk '{ print $2 }')
+
+          if [ -z "$version" ]; then
+            echo 'Could not detect installed Hugo version' >&2
+            exit 1
+          fi
+
+          echo "Detected installed Hugo version: $version"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
 
       - name: Get pnpm store path
         id: pnpm-cache
@@ -68,16 +82,18 @@ jobs:
         uses: actions/cache@v5
         with:
           path: exampleSite/resources/_gen
-          key: hugo-${{ steps.hugo_version.outputs.version }}-${{ hashFiles('./exampleSite/**/*.jpg') }}
+          key: hugo-${{ hashFiles('./exampleSite/**/*.jpg') }}-${{ steps.detect_hugo_installed_version.outputs.version }}-${{ hashFiles('./assets/**', './layouts/**') }}
           restore-keys: |
-            hugo-${{ steps.hugo_version.outputs.version }}-
+            hugo-${{ hashFiles('./exampleSite/**/*.jpg') }}-${{ steps.detect_hugo_installed_version.outputs.version }}-
+            hugo-${{ hashFiles('./exampleSite/**/*.jpg') }}-
+            hugo-
 
       - name: Install project dependencies
         run: 'pnpm install'
 
       - name: Pre-build cleanup
         if: >
-          matrix.hugo-version == 'Latest' &&
+          matrix.hugo_variant_to_install == 'Latest' &&
           (github.event_name == 'push' || github.event.pull_request.merged == true)
         run: 'rm -rf bundled'
 
@@ -86,7 +102,7 @@ jobs:
 
       - name: Push artifacts
         if: >
-          matrix.hugo-version == 'Latest' &&
+          matrix.hugo_variant_to_install == 'Latest' &&
           (github.event_name == 'push' || github.event.pull_request.merged == true)
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
