@@ -5,7 +5,10 @@
   {{- $index := len . -}}
   {{- $context.Scratch.Add "img" slice -}}
   {{- range sort . "Name" "desc" -}}
-    {{- $image := . | images.Filter (images.AutoOrient) -}}
+    {{- $image := . -}}
+    {{- if ne site.Params.autoOrient false -}}
+      {{- $image = $image | images.Filter (images.AutoOrient) -}}
+    {{- end -}}
     {{- $index = sub $index 1 -}}
     {{- $alt := .Name -}}
     {{- with $params.unifiedAlt -}}

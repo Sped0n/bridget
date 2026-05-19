@@ -7,6 +7,9 @@ description = "Bridget is a minimal Hugo theme designed for photographers/visual
 loResOpt = "800x webp Lanczos q60"
 hiResOpt = "2500x webp Lanczos q75"
 
+# auto-orient gallery images from EXIF orientation before resizing; only false disables it
+autoOrient = true
+
 # labels (text shown on the UI)
 [labels]
 next = "next"
