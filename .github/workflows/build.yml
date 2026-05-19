@@ -15,35 +15,46 @@ jobs:
   build:
     timeout-minutes: 30
     runs-on: ubuntu-latest
-    name: Build (Hugo ${{ matrix.hugo-label }})
+    name: Build (Hugo ${{ matrix.hugo-version }})
     if: github.event.repository.fork == false
     strategy:
       matrix:
-        hugo-version: ['latest', '0.114.0']
-        include:
-          - hugo-version: latest
-            hugo-label: Latest
-          - hugo-version: '0.114.0'
-            hugo-label: 'v0.114.0'
+        hugo-version: ['Minimum', 'Latest']
     steps:
       - name: Checkout
         uses: actions/checkout@v6
         with:
           token: ${{ secrets.PAT }}
 
+      - name: Resolve Hugo version
+        id: hugo_version
+        run: |
+          if [ '${{ matrix.hugo-version }}' = 'Minimum' ]; then
+            version=$(awk -F '"' '/^min = / { print $2; exit }' theme.toml)
+          else
+            version=$(printf '%s' '${{ matrix.hugo-version }}' | tr '[:upper:]' '[:lower:]')
+          fi
+
+          if [ -z "$version" ]; then
+            echo 'Could not resolve Hugo version from theme.toml' >&2
+            exit 1
+          fi
+
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
       - name: Setup Mise
         uses: jdx/mise-action@v4
         with:
-          install_args: node@latest pnpm@10 hugo-extended@${{ matrix.hugo-version }}
+          install_args: node@latest pnpm@10 hugo-extended@${{ steps.hugo_version.outputs.version }}
           tool_versions: |
             node latest
             pnpm 10
-            hugo-extended ${{ matrix.hugo-version }}
+            hugo-extended ${{ steps.hugo_version.outputs.version }}
           cache: true
 
       - name: Get pnpm store path
         id: pnpm-cache
-        run: 'echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT'
+        run: 'echo "STORE_PATH=$(pnpm store path)" >> "$GITHUB_OUTPUT"'
 
       - name: Setup pnpm cache
         uses: actions/cache@v5
@@ -57,16 +68,16 @@ jobs:
         uses: actions/cache@v5
         with:
           path: exampleSite/resources/_gen
-          key: hugo-${{ matrix.hugo-version }}-${{ hashFiles('./exampleSite/**/*.jpg') }}
+          key: hugo-${{ steps.hugo_version.outputs.version }}-${{ hashFiles('./exampleSite/**/*.jpg') }}
           restore-keys: |
-            hugo-${{ matrix.hugo-version }}-
+            hugo-${{ steps.hugo_version.outputs.version }}-
 
       - name: Install project dependencies
         run: 'pnpm install'
 
       - name: Pre-build cleanup
         if: >
-          matrix.hugo-version == 'latest' &&
+          matrix.hugo-version == 'Latest' &&
           (github.event_name == 'push' || github.event.pull_request.merged == true)
         run: 'rm -rf bundled'
 
@@ -75,7 +86,7 @@ jobs:
 
       - name: Push artifacts
         if: >
-          matrix.hugo-version == 'latest' &&
+          matrix.hugo-version == 'Latest' &&
           (github.event_name == 'push' || github.event.pull_request.merged == true)
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
