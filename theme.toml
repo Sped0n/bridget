@@ -22,4 +22,4 @@ repo = "https://github.com/tylermcrobert/bridget-pictures-www"
 [module]
 [module.hugoVersion]
 extended = true
-min = "0.114.0"
+min = "0.121.2"
