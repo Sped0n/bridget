@@ -6,6 +6,7 @@ import { DesktopStateProvider } from './desktop/state'
 import { ImageStateProvider } from './imageState'
 import { MobileStateProvider } from './mobile/state'
 import { getImageJSON } from './resources'
+import { isMobile } from './utils'
 
 import '../scss/style.scss'
 
@@ -61,22 +62,13 @@ function AppContent(props: {
 function Main(): JSX.Element {
   // variables
   const [ijs] = createResource(getImageJSON)
-  const ua = window.navigator.userAgent.toLowerCase()
-  const hasTouchInput = 'ontouchstart' in window || window.navigator.maxTouchPoints > 0
-  const hasTouchLayout =
-    window.matchMedia('(pointer: coarse)').matches ||
-    window.matchMedia('(hover: none)').matches
-  const isMobileUA = /android|iphone|ipad|ipod|mobile/.test(ua)
-  const isWindowsDesktop = /windows nt/.test(ua)
-  const isMobile = isMobileUA || (hasTouchInput && hasTouchLayout && !isWindowsDesktop)
-
   return (
     <>
       <Show when={ijs.state === 'ready'}>
         <ImageStateProvider images={ijs() ?? []}>
           <ConfigStateProvider>
             <AppContent
-              isMobile={isMobile}
+              isMobile={isMobile()}
               prevText={container.dataset.prev}
               closeText={container.dataset.close}
               nextText={container.dataset.next}
@@ -89,12 +81,22 @@ function Main(): JSX.Element {
   )
 }
 
-if (container?.dataset.page === 'post') {
+const page = container?.dataset.page
+
+if (page === 'post') {
   // blog-style post: augment server-rendered prose with the click-to-open
   // lightbox instead of booting the scatter gallery.
   void import('./post').then((m) => {
     m.initPost()
   })
+} else if (page === 'postlist') {
+  // scattered post index. Desktop gets hover cycling; mobile is a static
+  // server-rendered column, so it needs no JS at all.
+  if (!isMobile()) {
+    void import('./postList').then((m) => {
+      m.initPostList()
+    })
+  }
 } else {
   render(() => <Main />, container)
 }

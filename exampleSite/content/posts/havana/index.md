@@ -5,11 +5,6 @@ outputs: ["HTML"]
 title: "Notes from Havana"
 date: 2026-07-14
 url: /posts/havana/
-menu:
-  main:
-    weight: 3
-    identifier: havana
-    title: Havana
 eyebrow: "Field Notes"
 lede: "A week spent chasing colour and shade down the Malecón — where the light does most of the composing for you."
 meta:

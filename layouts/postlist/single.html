@@ -1,0 +1,56 @@
+{{- define "main" -}}
+  <div class="container" data-page="postlist">
+    {{- /* quiet site nav — same as the post view */ -}}
+    <nav class="postNav">
+      <div class="navArtist">
+        <a href="{{- "/" | relURL -}}">{{- site.Title -}}</a>
+      </div>
+      <div class="links">
+        {{- $index := 0 -}}
+        {{- $menus := .Site.Menus.main -}}
+        {{- $len := len $menus -}}
+        {{- range $menus -}}
+          <a href="{{- .URL | relURL -}}" class="link">{{- .Title -}}</a>
+          {{- if ne (add $index 1) $len -}},&nbsp{{- end -}}
+          {{- $index = add $index 1 -}}
+        {{- end -}}
+      </div>
+    </nav>
+
+    <main class="postScatter">
+      {{- $posts := where site.RegularPages "Type" "post" -}}
+      {{- range $posts.ByDate.Reverse -}}
+        {{- $frames := .Resources.ByType "image" -}}
+        {{- if $frames -}}
+          <a class="tile" href="{{- .RelPermalink -}}" aria-label="{{- .Title -}}">
+            {{- range $i, $img := first 5 $frames -}}
+              {{- if ne site.Params.autoOrient false -}}
+                {{- $img = $img | images.Filter (images.AutoOrient) -}}
+              {{- end -}}
+              {{- $lo := $img.Resize (site.Params.loResOpt | default "800x webp Lanczos q60") -}}
+              {{- if eq $i 0 -}}
+                <img
+                  class="tileFrame"
+                  src="{{- $lo.RelPermalink -}}"
+                  width="{{- $lo.Width -}}"
+                  height="{{- $lo.Height -}}"
+                  alt="{{- $.Title -}}"
+                />
+              {{- else -}}
+                <img
+                  class="tileFrame"
+                  data-src="{{- $lo.RelPermalink -}}"
+                  width="{{- $lo.Width -}}"
+                  height="{{- $lo.Height -}}"
+                  alt=""
+                  loading="lazy"
+                />
+              {{- end -}}
+            {{- end -}}
+            <span class="tileTitle" data-slot="0">{{- .Title -}}</span>
+          </a>
+        {{- end -}}
+      {{- end -}}
+    </main>
+  </div>
+{{- end -}}

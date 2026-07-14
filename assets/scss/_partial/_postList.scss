@@ -1,0 +1,158 @@
+@use 'sass:map';
+
+@use '_core/mixins' as *;
+
+$tablet: map.get($breakpoints, 'tablet');
+
+/* ======================================================================
+   Mobile-first: a quiet, static single column. No hover, no JS.
+   ====================================================================== */
+.postScatter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9vh;
+
+  padding: calc(var(--nav-height) + 8vh) 6vw 16vh;
+}
+
+.tile {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 30rem;
+
+  color: inherit;
+  text-decoration: none;
+}
+
+.tileFrame {
+  display: block;
+  width: 100%;
+  height: auto;
+
+  // extra frames only exist to cycle on desktop hover
+  &:not(:first-child) {
+    display: none;
+  }
+}
+
+.tileTitle {
+  display: block;
+  margin-top: 0.8em;
+
+  font-family: 'FW', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* ======================================================================
+   Desktop (pointer + width): scattered tiles, frames cycle on hover,
+   title hops corner to corner in sync.
+   ====================================================================== */
+@media (min-width: $tablet) and (hover: hover) {
+  .postScatter {
+    display: block;
+    padding: calc(var(--nav-height) + 6vh) 5vw 18vh;
+  }
+
+  .tile {
+    max-width: none;
+    margin-bottom: 5vh;
+
+    // scatter: repeating art-directed slots, varied width + offset
+    &:nth-child(5n + 1) {
+      width: 32vw;
+      margin-left: 3vw;
+    }
+    &:nth-child(5n + 2) {
+      width: 24vw;
+      margin-left: 60vw;
+      margin-top: -8vh;
+    }
+    &:nth-child(5n + 3) {
+      width: 30vw;
+      margin-left: 24vw;
+    }
+    &:nth-child(5n + 4) {
+      width: 22vw;
+      margin-left: 66vw;
+      margin-top: -4vh;
+    }
+    &:nth-child(5n + 5) {
+      width: 36vw;
+      margin-left: 10vw;
+      margin-top: -6vh;
+    }
+  }
+
+  .tileFrame {
+    opacity: 0;
+
+    // resting frame establishes the tile's box; the rest overlay it.
+    // visibility is driven solely by .active (JS marks frame 0 at rest) so
+    // no frame bleeds through underneath while the others decode.
+    &:not(:first-child) {
+      display: block;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    &.active {
+      opacity: 1;
+    }
+  }
+
+  .tileTitle {
+    position: absolute;
+    z-index: 2;
+    margin: 0;
+    white-space: nowrap;
+
+    color: #000;
+    font-size: 1.5rem;
+    letter-spacing: 0.02em;
+
+    opacity: 0;
+    pointer-events: none;
+    // no animation — the label jumps between edges in step with the frames
+
+    // walk the perimeter OUTSIDE the tile: bottom → left → top → right.
+    // JS sets data-slot = frame index mod 4; the cycle starts at 0 (bottom).
+    // Vertical edges rotate the type via writing-mode.
+    &[data-slot='0'] {
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      padding-top: 0.5rem;
+    }
+    &[data-slot='1'] {
+      right: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      padding-right: 0.5rem;
+      writing-mode: sideways-rl;
+    }
+    &[data-slot='2'] {
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%) rotate(180deg);
+      padding-bottom: 0.5rem;
+    }
+    &[data-slot='3'] {
+      left: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      padding-left: 0.5rem;
+      writing-mode: sideways-lr;
+    }
+  }
+
+  .tile.hovered .tileTitle {
+    opacity: 1;
+  }
+}

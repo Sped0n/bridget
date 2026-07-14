@@ -33,6 +33,17 @@ export function getThresholdSessionIndex(): number {
   return parseInt(s)
 }
 
+export function isMobile(): boolean {
+  const ua = window.navigator.userAgent.toLowerCase()
+  const hasTouchInput = 'ontouchstart' in window || window.navigator.maxTouchPoints > 0
+  const hasTouchLayout =
+    window.matchMedia('(pointer: coarse)').matches ||
+    window.matchMedia('(hover: none)').matches
+  const isMobileUA = /android|iphone|ipad|ipod|mobile/.test(ua)
+  const isWindowsDesktop = /windows nt/.test(ua)
+  return isMobileUA || (hasTouchInput && hasTouchLayout && !isWindowsDesktop)
+}
+
 export function removeDuplicates<T>(arr: T[]): T[] {
   if (arr.length < 2) return arr // optimization
   return [...new Set(arr)]

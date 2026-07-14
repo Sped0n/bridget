@@ -29,3 +29,13 @@ jsconfig.json
 
 # dummmy file
 bundled/js/critical.js
+
+# stray hugo site output that leaks into bundled/ on build (not theme source)
+bundled/404.html
+bundled/index.xml
+bundled/sitemap.xml
+bundled/categories/
+bundled/tags/
+bundled/bundled/
+bundled/scss/
+bundled/true.min
