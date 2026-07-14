@@ -5,6 +5,7 @@ exampleSite/resources/
 node_modules/
 build/
 gen_/
+graphify-out/
 
 ## OS Files
 # Windows
