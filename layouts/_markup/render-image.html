@@ -1,0 +1,46 @@
+{{- /*
+  Post image render hook.
+  Markdown:  ![caption](file.jpg "size")
+  size ∈ small | medium (default) | large | wide | full  — also used as flex weight inside {{< row
+>}}.
+Destination resolves as a page resource; falls back to a raw src (static/remote)
+otherwise. */ -}}
+{{- $size := .Title | default "medium" -}}
+{{- $alt := .Text -}}
+{{- $img := .Page.Resources.GetMatch .Destination -}}
+
+
+<figure class="postFigure postFigure--{{- $size -}}">
+  {{- with $img -}}
+    {{- $src := . -}}
+    {{- if ne site.Params.autoOrient false -}}
+      {{- $src = $src | images.Filter (images.AutoOrient) -}}
+    {{- end -}}
+    {{- $lo := $src.Resize (site.Params.loResOpt | default "800x webp Lanczos q60") -}}
+    {{- $hi := $src.Resize (site.Params.hiResOpt | default "2500x webp Lanczos q75") -}}
+    <button
+      type="button"
+      class="postImage"
+      data-hi-url="{{- $hi.RelPermalink -}}"
+      data-hi-w="{{- $hi.Width -}}"
+      data-hi-h="{{- $hi.Height -}}"
+      aria-label="{{- with $alt -}}
+        {{- printf "Open image: %s" . -}}
+      {{- else -}}
+        Open image
+      {{- end -}}"
+    >
+      <img
+        src="{{- $lo.RelPermalink -}}"
+        width="{{- $lo.Width -}}"
+        height="{{- $lo.Height -}}"
+        alt="{{- $alt -}}"
+        loading="lazy"
+        decoding="async"
+      />
+    </button>
+  {{- else -}}
+    <img src="{{- .Destination | safeURL -}}" alt="{{- $alt -}}" loading="lazy" />
+  {{- end -}}
+  {{- with $alt -}}<figcaption>{{- . -}}</figcaption>{{- end -}}
+</figure>

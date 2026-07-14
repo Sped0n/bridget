@@ -1,0 +1,262 @@
+@use 'sass:map';
+
+@use '_core/mixins' as *;
+
+$tablet: map.get($breakpoints, 'tablet') - 1;
+
+/* --- tokens -------------------------------------------------------------- */
+:root {
+  --post-column: 34em; // reading measure
+  --post-gutter: 1.25rem;
+  --post-rhythm: clamp(4rem, 11vh, 9rem); // space around imagery
+  --z-post-overlay: 900;
+  --z-post-cursor: 1000;
+}
+
+/* --- quiet top nav ------------------------------------------------------- */
+.postNav {
+  // keeps the theme default: fixed bottom (desktop), top on mobile
+  .link {
+    text-decoration: none;
+  }
+}
+
+/* --- article shell ------------------------------------------------------- */
+.postArticle {
+  // override the terse gallery `article` rule (max-width: 25em)
+  max-width: none;
+  // bottom pad clears the fixed bottom nav
+  padding: 0 0 calc(var(--nav-height) + var(--post-rhythm));
+
+  // long-form copy is meant to be read and selected
+  user-select: text;
+  line-height: 1.5;
+}
+
+/* --- header -------------------------------------------------------------- */
+.postHeader {
+  max-width: var(--post-column);
+  margin: 0 auto;
+  padding: calc(var(--nav-height) + var(--post-rhythm)) var(--post-gutter)
+    var(--post-rhythm);
+  text-align: center;
+}
+
+.postEyebrow {
+  font-family: 'FW', sans-serif;
+  font-size: 0.75em;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 1.6em;
+}
+
+.postTitle {
+  font-size: clamp(2rem, 5.5vw, 3.5rem);
+  font-weight: bold;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+.postLede {
+  margin-top: 1.4em;
+  font-size: 1.15em;
+  line-height: 1.45;
+  text-wrap: balance;
+}
+
+.postMeta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5em;
+  margin-top: 2.4em;
+
+  font-family: 'FW', sans-serif;
+  font-size: 0.7em;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+
+  dt {
+    opacity: 0.5;
+    margin-bottom: 0.4em;
+  }
+}
+
+/* --- body copy ----------------------------------------------------------- */
+.postBody {
+  // prose blocks sit in the reading column…
+  > p,
+  > h2,
+  > h3,
+  > blockquote,
+  > ul,
+  > ol {
+    max-width: var(--post-column);
+    margin-inline: auto;
+    padding-inline: var(--post-gutter);
+  }
+
+  > * + * {
+    margin-top: 1.15em;
+  }
+
+  h2,
+  h3 {
+    font-weight: bold;
+    margin-top: 2em;
+  }
+
+  h2 {
+    font-size: 1.5em;
+  }
+  h3 {
+    font-size: 1.25em;
+  }
+
+  blockquote {
+    font-size: 1.3em;
+    line-height: 1.35;
+    text-align: center;
+    text-wrap: balance;
+    padding-block: 0.5em;
+  }
+
+  a {
+    color: inherit;
+  }
+}
+
+/* --- figures (…imagery breaks out organically) --------------------------- */
+.postFigure {
+  margin: var(--post-rhythm) auto;
+  padding-inline: var(--post-gutter);
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  figcaption {
+    margin-top: 0.9em;
+    font-family: 'FW', sans-serif;
+    font-size: 0.72em;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    opacity: 0.55;
+  }
+}
+
+// clickable image = bare button
+.postImage {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  overflow: hidden;
+
+  &:focus-visible {
+    outline: 2px solid black;
+    outline-offset: 4px;
+  }
+}
+
+// standalone sizes, all centred
+.postFigure--small {
+  max-width: 22em;
+}
+.postFigure--medium {
+  max-width: var(--post-column);
+}
+.postFigure--large {
+  max-width: 52em;
+}
+.postFigure--wide {
+  max-width: 76em;
+}
+.postFigure--full {
+  max-width: none;
+  padding-inline: 0;
+}
+
+/* --- side-by-side rows --------------------------------------------------- */
+.postRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(1rem, 4vw, 3rem);
+
+  max-width: 76em;
+  margin: var(--post-rhythm) auto;
+  padding-inline: var(--post-gutter);
+
+  .postFigure {
+    flex: 1 1 0;
+    min-width: 15rem; // rows collapse to a column below tablet
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  // size keyword becomes flex weight → asymmetric pairs
+  .postFigure--small {
+    flex-grow: 1;
+  }
+  .postFigure--medium {
+    flex-grow: 1.5;
+  }
+  .postFigure--large,
+  .postFigure--wide {
+    flex-grow: 2.2;
+  }
+}
+
+@media (max-width: $tablet), (hover: none) {
+  .postRow {
+    flex-direction: column;
+    align-items: center;
+
+    .postFigure {
+      width: 100%;
+      max-width: var(--post-column);
+    }
+  }
+}
+
+/* --- lightbox (JS-mounted island) --------------------------------------- */
+.postOverlayRoot {
+  .cursor {
+    // must ride above the overlay backdrop
+    z-index: var(--z-post-cursor);
+  }
+}
+
+.postLightbox {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-post-overlay);
+
+  display: none;
+  background: white;
+  cursor: pointer;
+
+  &.active {
+    display: block;
+  }
+
+  .postLightboxFrame {
+    position: fixed;
+    inset: 0;
+    will-change: top, left, width, height;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}

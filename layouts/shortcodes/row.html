@@ -1,0 +1,6 @@
+{{- /* Side-by-side images. Inner markdown images render via the image hook; each
+  image's size keyword ("small"/"large"/…) sets its flex weight in the row. */
+-}}
+<div class="postRow">
+  {{- .Inner | .Page.RenderString (dict "display" "block") -}}
+</div>

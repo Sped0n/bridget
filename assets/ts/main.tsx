@@ -19,6 +19,7 @@ export interface Container extends HTMLDivElement {
     close: string
     prev: string
     loading: string
+    page?: string
   }
 }
 
@@ -88,4 +89,12 @@ function Main(): JSX.Element {
   )
 }
 
-render(() => <Main />, container)
+if (container?.dataset.page === 'post') {
+  // blog-style post: augment server-rendered prose with the click-to-open
+  // lightbox instead of booting the scatter gallery.
+  void import('./post').then((m) => {
+    m.initPost()
+  })
+} else {
+  render(() => <Main />, container)
+}

@@ -1,0 +1,42 @@
+{{- define "main" -}}
+  <div class="container" data-page="post" data-close="{{- site.Params.labels.close -}}">
+    {{- /* quiet site nav — artist + menu, no gallery threshold/index chrome */ -}}
+    <nav class="postNav">
+      <div class="navArtist">
+        <a href="{{- "/" | relURL -}}">{{- site.Title -}}</a>
+      </div>
+      <div class="links">
+        {{- $index := 0 -}}
+        {{- $menus := .Site.Menus.main -}}
+        {{- $len := len $menus -}}
+        {{- range $menus -}}
+          <a href="{{- .URL | relURL -}}" class="link">{{- .Title -}}</a>
+          {{- if ne (add $index 1) $len -}},&nbsp{{- end -}}
+          {{- $index = add $index 1 -}}
+        {{- end -}}
+      </div>
+    </nav>
+
+    <article class="postArticle">
+      <header class="postHeader">
+        {{- with .Params.eyebrow -}}<p class="postEyebrow">{{- . -}}</p>{{- end -}}
+        <h1 class="postTitle">{{- .Title -}}</h1>
+        {{- with .Params.lede -}}<p class="postLede">{{- . -}}</p>{{- end -}}
+        {{- with .Params.meta -}}
+          <dl class="postMeta">
+            {{- range . -}}
+              <div>
+                <dt>{{- .label -}}</dt>
+                <dd>{{- .value -}}</dd>
+              </div>
+            {{- end -}}
+          </dl>
+        {{- end -}}
+      </header>
+
+      <div class="postBody">
+        {{- .Content -}}
+      </div>
+    </article>
+  </div>
+{{- end -}}
