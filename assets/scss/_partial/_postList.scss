@@ -64,37 +64,41 @@ $tablet: map.get($breakpoints, 'tablet');
 
   .tile {
     max-width: none;
-    // vertical breathing room between rows so the perimeter titles of one
-    // tile never crowd the next. Generous because titles live OUTSIDE the box.
-    margin-bottom: 14vh;
+    // Tight vertical rhythm. The negative margin-tops below pull alternating
+    // tiles UP into the whitespace beside their predecessor — and every
+    // nesting tile sits in the opposite horizontal column from the tile above,
+    // so they overlap vertically without ever colliding.
+    margin-bottom: 4vh;
 
-    // scatter: repeating art-directed slots, varied width + offset — all in
-    // % of the padded content box so `left + width` is bounded by the box, not
-    // the viewport. Right edges stay <= ~93% to leave a gutter for the title
-    // that hops onto the right side. These (narrow-desktop) fractions are the
-    // LARGEST: the tighter the viewport, the more of it each tile claims. A
-    // height clamp (below) keeps a tall portrait plus its titles on screen.
+    // Two loose columns (left / right) sized purely in % of the padded content
+    // box — no viewport breakpoint — so images scale down smoothly as the
+    // window narrows, with no jump. The centre gutter between the columns is
+    // kept >= ~8% so the rotating perimeter title of a hovered tile clears its
+    // vertically-nested neighbour even at the narrowest desktop width.
     &:nth-child(5n + 1) {
-      width: 52%;
+      // column start (left) — no nest; sits a gap below the previous cycle
+      width: 40%;
       margin-left: 5%;
     }
     &:nth-child(5n + 2) {
-      width: 40%;
-      margin-left: 52%;
-      margin-top: -4vh;
+      width: 39%;
+      margin-left: 53%; // right column — >= 8% gutter from slot 1
+      margin-top: -8vh;
     }
     &:nth-child(5n + 3) {
-      width: 50%;
-      margin-left: 21%;
+      width: 40%;
+      margin-left: 5%; // left column — clear of slot 2
+      margin-top: -8vh;
     }
     &:nth-child(5n + 4) {
-      width: 38%;
-      margin-left: 54%;
+      width: 33%;
+      margin-left: 54%; // right column — clear of slot 3
+      margin-top: -6vh;
     }
     &:nth-child(5n + 5) {
-      width: 56%;
-      margin-left: 6%;
-      margin-top: -3vh;
+      width: 40%;
+      margin-left: 5%; // left column — clear of slot 4
+      margin-top: -8vh;
     }
   }
 
@@ -169,37 +173,5 @@ $tablet: map.get($breakpoints, 'tablet');
 
   .tile.hovered .tileTitle {
     opacity: 1;
-  }
-}
-
-/* ======================================================================
-   Wide screens: taper the scatter fractions back down. As the viewport
-   grows, each tile needs a smaller slice of it to stay a comfortable size
-   — so the widest screens claim the least, narrow desktops the most.
-   ====================================================================== */
-@media (min-width: map.get($breakpoints, 'laptop')) and (hover: hover) {
-  .tile {
-    // Left- and right-leaning slots reach symmetric edges (~6% / ~92%) so the
-    // scatter stays centred on very wide screens — no drift toward one side.
-    &:nth-child(5n + 1) {
-      width: 40%;
-      margin-left: 6%;
-    }
-    &:nth-child(5n + 2) {
-      width: 30%;
-      margin-left: 62%;
-    }
-    &:nth-child(5n + 3) {
-      width: 37%;
-      margin-left: 22%;
-    }
-    &:nth-child(5n + 4) {
-      width: 28%;
-      margin-left: 64%;
-    }
-    &:nth-child(5n + 5) {
-      width: 44%;
-      margin-left: 8%;
-    }
   }
 }
