@@ -1,0 +1,38 @@
+{{- /* Quiet site nav for post + journal views: artist + menu only.
+       The threshold/index are rendered as invisible placeholders (hidden via
+       CSS) purely to reserve the same flex slots as the homepage/gallery nav,
+       so `space-between` keeps the menu links in the identical position. */ -}}
+<nav class="postNav">
+  <div class="navArtist">
+    <a href="{{- "/" | relURL -}}">{{- site.Title -}}</a>
+  </div>
+  <div class="links">
+    {{- $index := 0 -}}
+    {{- $menus := .Site.Menus.main -}}
+    {{- $len := len $menus -}}
+    {{- range $menus -}}
+      <a href="{{- .URL | relURL -}}" class="link">{{- .Title -}}</a>
+      {{- if ne (add $index 1) $len -}},&nbsp{{- end -}}
+      {{- $index = add $index 1 -}}
+    {{- end -}}
+  </div>
+  {{- /* placeholders — mirror the homepage nav's right cluster to reserve its
+         width; hidden with visibility so they take space but never show. */ -}}
+  <div class="threshold" aria-hidden="true">
+    <span>{{- site.Params.labels.threshold -}}:</span>
+    <span>
+      <button class="dec" tabindex="-1">&#xFF0D;</button>
+      <span class="num">0</span><span class="num">0</span><span class="num"
+        >8</span
+      ><span class="num">0</span>
+      <button class="inc" tabindex="-1">&#xFF0B;</button>
+    </span>
+  </div>
+  <div class="index" aria-hidden="true">
+    <span class="num">0</span><span class="num">0</span><span class="num">0</span
+    ><span class="num">0</span>
+    <span>/</span>
+    <span class="num">0</span><span class="num">0</span><span class="num">0</span
+    ><span class="num">0</span>
+  </div>
+</nav>

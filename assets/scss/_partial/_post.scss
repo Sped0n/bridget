@@ -15,7 +15,16 @@ $tablet: map.get($breakpoints, 'tablet') - 1;
 
 /* --- quiet top nav ------------------------------------------------------- */
 .postNav {
-  // keeps the theme default: fixed bottom (desktop), top on mobile
+  // keeps the theme default: fixed bottom (desktop), top on mobile.
+  // The threshold/index are rendered as invisible placeholders (below) so the
+  // base `space-between` lands the links in the exact same spot as the
+  // homepage nav — without the gallery chrome actually showing.
+  .threshold,
+  .index {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
   .link {
     text-decoration: none;
   }

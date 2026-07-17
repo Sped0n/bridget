@@ -1,21 +1,6 @@
 {{- define "main" -}}
   <div class="container" data-page="postlist">
-    {{- /* quiet site nav — same as the post view */ -}}
-    <nav class="postNav">
-      <div class="navArtist">
-        <a href="{{- "/" | relURL -}}">{{- site.Title -}}</a>
-      </div>
-      <div class="links">
-        {{- $index := 0 -}}
-        {{- $menus := .Site.Menus.main -}}
-        {{- $len := len $menus -}}
-        {{- range $menus -}}
-          <a href="{{- .URL | relURL -}}" class="link">{{- .Title -}}</a>
-          {{- if ne (add $index 1) $len -}},&nbsp{{- end -}}
-          {{- $index = add $index 1 -}}
-        {{- end -}}
-      </div>
-    </nav>
+    {{- partial "postNav.html" . -}}
 
     <main class="postScatter">
       {{- $posts := where site.RegularPages "Type" "post" -}}

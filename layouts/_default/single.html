@@ -12,6 +12,12 @@
       </article>
     {{- end -}}
 
-    {{- partial "nav.html" . -}}
+    {{- /* galleries (pages with images) keep the full nav with the
+           threshold/index chrome; text pages like Info get the quiet nav. */ -}}
+    {{- if .Resources.ByType "image" -}}
+      {{- partial "nav.html" . -}}
+    {{- else -}}
+      {{- partial "postNav.html" . -}}
+    {{- end -}}
   </div>
 {{- end -}}
