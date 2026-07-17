@@ -1,5 +1,5 @@
 import { type gsap } from 'gsap'
-import { createSignal, onCleanup, onMount, type JSX } from 'solid-js'
+import { createEffect, createSignal, onCleanup, onMount, type JSX } from 'solid-js'
 import { render } from 'solid-js/web'
 
 import CustomCursor from './desktop/customCursor'
@@ -93,6 +93,15 @@ function Lightbox(props: {
   const onKey = (e: KeyboardEvent): void => {
     if (open() && e.key === 'Escape') void close()
   }
+
+  // lock page scroll while the lightbox covers the viewport, so no scrollbar
+  // shows behind the overlay
+  createEffect(() => {
+    document.body.style.overflow = open() ? 'hidden' : ''
+  })
+  onCleanup(() => {
+    document.body.style.overflow = ''
+  })
 
   onMount(() => {
     const controller = new AbortController()
