@@ -1,6 +1,7 @@
 /**
  * Desktop-only enhancement for the scattered post index.
- * Tiles are fully server-rendered; on hover we riffle through a post's frames
+ * Tiles are fully server-rendered (up to 4 frames, one per corner); on hover
+ * we riffle through a post's frames
  * and hop its title from corner to corner in sync with the frames.
  * Mobile is a static column and never loads this module.
  */

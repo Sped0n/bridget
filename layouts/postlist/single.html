@@ -23,7 +23,7 @@
         {{- $frames := .Resources.ByType "image" -}}
         {{- if $frames -}}
           <a class="tile" href="{{- .RelPermalink -}}" aria-label="{{- .Title -}}">
-            {{- range $i, $img := first 5 $frames -}}
+            {{- range $i, $img := first 4 $frames -}}
               {{- if ne site.Params.autoOrient false -}}
                 {{- $img = $img | images.Filter (images.AutoOrient) -}}
               {{- end -}}
