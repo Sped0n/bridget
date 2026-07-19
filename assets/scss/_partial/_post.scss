@@ -262,7 +262,7 @@ $tablet: map.get($breakpoints, 'tablet') - 1;
 
   display: none;
   background: white;
-  cursor: pointer;
+  cursor: none; // custom cursor supplies the "close" affordance
 
   &.active {
     display: block;
