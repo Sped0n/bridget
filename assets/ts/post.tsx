@@ -3,7 +3,8 @@ import { createEffect, createSignal, onCleanup, onMount, type JSX } from 'solid-
 import { render } from 'solid-js/web'
 
 import CustomCursor from './desktop/customCursor'
-import { loadGsap } from './utils'
+import { initPostDrag } from './postDrag'
+import { isMobile, loadGsap } from './utils'
 
 interface Shot {
   url: string
@@ -137,8 +138,12 @@ function Lightbox(props: {
 }
 
 export function initPost(): void {
-  const article = document.querySelector('.postArticle')
+  const article = document.querySelector<HTMLElement>('.postArticle')
   if (article == null) return
+
+  // pick-up-and-toss prose is a desktop pointer flourish; touch keeps the
+  // static server-rendered read
+  if (!isMobile()) initPostDrag(article)
 
   const buttons = Array.from(
     article.querySelectorAll<HTMLButtonElement>('button.postImage')

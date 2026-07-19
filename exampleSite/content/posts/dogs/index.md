@@ -5,15 +5,7 @@ outputs: ["HTML"]
 title: "Dog Days"
 date: 2026-06-02
 url: /posts/dogs/
-eyebrow: "Field Notes"
 lede: "Waist-height and below — a week photographing the city from a dog's point of view."
-meta:
-  - label: "Location"
-    value: "New York, USA"
-  - label: "Camera"
-    value: "Leica M6"
-  - label: "Year"
-    value: "2026"
 ---
 
 The best low angles come from not caring how you look getting them. Crouch, wait,

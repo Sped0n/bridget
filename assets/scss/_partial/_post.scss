@@ -37,9 +37,18 @@ $tablet: map.get($breakpoints, 'tablet') - 1;
   // bottom pad clears the fixed bottom nav
   padding: 0 0 calc(var(--nav-height) + var(--post-rhythm));
 
-  // long-form copy is meant to be read and selected
-  user-select: text;
+  // copy is not selectable — every block is grab-and-toss instead
+  user-select: none;
   line-height: 1.5;
+}
+
+/* --- draggable prose + imagery (desktop pointer flourish) ---------------- */
+// no cursor affordance — the drag is a discovery, not a signalled control.
+// once moved, a block floats above its siblings and stays where it was dropped.
+.postDraggable.is-dragging {
+  position: relative;
+  z-index: 20;
+  will-change: transform;
 }
 
 /* --- header -------------------------------------------------------------- */
@@ -164,7 +173,7 @@ $tablet: map.get($breakpoints, 'tablet') - 1;
   padding: 0;
   border: 0;
   background: none;
-  cursor: pointer;
+  cursor: default; // no hover affordance — matches the draggable prose
   overflow: hidden;
 
   &:focus-visible {

@@ -5,15 +5,7 @@ outputs: ["HTML"]
 title: "Notes from Havana"
 date: 2026-07-14
 url: /posts/havana/
-eyebrow: "Field Notes"
 lede: "A week spent chasing colour and shade down the Malecón — where the light does most of the composing for you."
-meta:
-  - label: "Location"
-    value: "Havana, Cuba"
-  - label: "Camera"
-    value: "Leica M6"
-  - label: "Year"
-    value: "2026"
 ---
 
 The city hands you contrast before you've had coffee. Hard sun on one side of the

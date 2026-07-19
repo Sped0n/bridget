@@ -20,6 +20,7 @@
                   width="{{- $lo.Width -}}"
                   height="{{- $lo.Height -}}"
                   alt="{{- $.Title -}}"
+                  draggable="false"
                 />
               {{- else -}}
                 <img
@@ -29,6 +30,7 @@
                   height="{{- $lo.Height -}}"
                   alt=""
                   loading="lazy"
+                  draggable="false"
                 />
               {{- end -}}
             {{- end -}}
