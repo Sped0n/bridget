@@ -13,6 +13,24 @@ $tablet: map.get($breakpoints, 'tablet') - 1;
   --z-post-cursor: 1000;
 }
 
+/* --- canvas feel: hide the scrollbar (scrolling still works) ------------- */
+html:has(.postArticle) {
+  scrollbar-width: none; // Firefox
+
+  &::-webkit-scrollbar {
+    display: none; // Chromium/WebKit
+  }
+
+  // mobile scrolls the .container, not the window
+  .container {
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
 /* --- quiet top nav ------------------------------------------------------- */
 .postNav {
   // keeps the theme default: fixed bottom (desktop), top on mobile.
