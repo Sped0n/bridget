@@ -153,6 +153,8 @@ $tablet: map.get($breakpoints, 'tablet') - 1;
     display: block;
     width: 100%;
     height: auto;
+
+    @include broken-image-placeholder;
   }
 
   figcaption {

@@ -28,3 +28,30 @@ $breakpoints: (
     @error "Unfortunately, no value could be retrieved from `#{$breakpoint}`. " + "Available breakpoints are: #{map-keys($breakpoints)}.";
   }
 }
+
+// Broken-image fallback: when the <img> fails to load, its ::before renders
+// (pseudo-elements only paint on broken replaced elements) and covers the
+// native question-mark glyph + alt text with a thin grey box and a caps label.
+// The <img> must carry width/height so the box keeps its footprint.
+@mixin broken-image-placeholder {
+  position: relative;
+
+  &::before {
+    content: 'Image not found';
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    background: white;
+
+    font-family: 'FW', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.4);
+  }
+}
