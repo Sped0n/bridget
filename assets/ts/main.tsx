@@ -24,6 +24,9 @@ export interface Container extends HTMLDivElement {
   }
 }
 
+// disable right-click / context menu site-wide
+document.addEventListener('contextmenu', (e) => e.preventDefault())
+
 // container
 const container = document.getElementsByClassName('container')[0] as Container
 
