@@ -1,7 +1,10 @@
 {{- /* Title */ -}}
 {{- $page_title := "" -}}
-{{- with partial "function/currentMenuItem.html" . -}}
-  {{- $page_title = printf "%s" site.Title | printf "%s%s" " | " | printf "%s%s" .Title | printf "%s" -}}
+{{- $menu_item := partial "function/currentMenuItem.html" . -}}
+{{- if eq $menu_item.Title "404" -}}
+  {{- $page_title = .Title -}}
+{{- else -}}
+  {{- $page_title = printf "%s" site.Title | printf "%s%s" " | " | printf "%s%s" $menu_item.Title | printf "%s" -}}
 {{- end -}}
 <title>{{- $page_title -}}</title>
 
