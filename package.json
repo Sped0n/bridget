@@ -40,7 +40,7 @@
   "homepage": "https://github.com/Sped0n/bridget#readme",
   "devDependencies": {
     "@eslint/js": "^9.39.4",
-    "@types/node": "^25.9.0",
+    "@types/node": "^26.1.1",
     "@typescript-eslint/parser": "^8.59.4",
     "eslint": "^9.39.2",
     "eslint-config-love": "^154.0.0",
