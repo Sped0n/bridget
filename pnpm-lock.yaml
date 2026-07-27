@@ -76,8 +76,8 @@ importers:
         specifier: ^8.1.5
         version: 8.1.5(@types/node@25.9.0)(esbuild@0.27.2)(sass-embedded@1.100.0)(sass@1.100.0)
       vite-plugin-solid:
-        specifier: ^2.11.13
-        version: 2.11.13(solid-js@1.9.14)(vite@8.1.5(@types/node@25.9.0)(esbuild@0.27.2)(sass-embedded@1.100.0)(sass@1.100.0))
+        specifier: ^2.11.14
+        version: 2.11.14(solid-js@1.9.14)(vite@8.1.5(@types/node@25.9.0)(esbuild@0.27.2)(sass-embedded@1.100.0)(sass@1.100.0))
       vitefu:
         specifier: ^1.1.3
         version: 1.1.3(vite@8.1.5(@types/node@25.9.0)(esbuild@0.27.2)(sass-embedded@1.100.0)(sass@1.100.0))
@@ -966,8 +966,8 @@ packages:
     resolution: {integrity: sha512-BLrgEcRTwX2o6gGxGOCNyMvGSp35YofuYzw9h1IMTRmKqttAZZVU67bdb9Pr2vUHA8+j3i2tJfjO6C6+4myGTA==}
     engines: {node: 18 || 20 || >=22}
 
-  baseline-browser-mapping@2.10.44:
-    resolution: {integrity: sha512-T3ghW+sl/ZJ8w1v/yQx3qvJ9040DWoLBz8JT/CILbAKcFyG9b2MRe75v6W5uXjv6uH1lumK2Kv46y2zSkcej0Q==}
+  baseline-browser-mapping@2.11.5:
+    resolution: {integrity: sha512-xJo6a6YZnwZfnyGmQKWMbVOcii7XRibjOskRh+WJ9UHQoX16xrQrcIgAMQOzfvs8XiLMx6ih/fsLPF73iY2D1A==}
     engines: {node: '>=6.0.0'}
     hasBin: true
 
@@ -981,8 +981,8 @@ packages:
     resolution: {integrity: sha512-7oFy703dxfY3/NLxC1fh2SUCQ0H9rmAY+5EpDVfXjUTTs+HEwR2nYaqLv+GWcTsumwxPfiz6CzCNkwXwBUwqCA==}
     engines: {node: 18 || 20 || >=22}
 
-  browserslist@4.28.6:
-    resolution: {integrity: sha512-FQBYNK15VMslhLHpA7+n+n1GOlF1kId2xcCg7/j95f24AOF6VDYMNH4mFxF7KuaTdv627faazpOAjFzMrfJOUw==}
+  browserslist@4.28.7:
+    resolution: {integrity: sha512-JxV13hNrFxqjOc8alRbq9dK1MM79NEXYpma2B2J4wAtpWS5zIEIKqWPGCl7N4o7Uc7B7itylh7SuDujATRyyTw==}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
 
@@ -1102,8 +1102,8 @@ packages:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
     engines: {node: '>= 0.4'}
 
-  electron-to-chromium@1.5.393:
-    resolution: {integrity: sha512-kiDJdIUawuEIcp9XoICKp1iTYDEbgguIPq526N1Q7jIQDeQ3CqoMx71025PI/7E48Ddtw2HuWsVjY7afEgNxmg==}
+  electron-to-chromium@1.5.396:
+    resolution: {integrity: sha512-yHiw2Y3C3H9U6TMbOfoWK/BPreiOPXRfTWPBwQBoZG6/8TB6eOPnsy5oaRYuatR7Fw2SJ4kKforgufeo7fq0EQ==}
 
   enhanced-resolve@5.21.4:
     resolution: {integrity: sha512-wE4fDO8OjJhrPFH69HUQStq5oKvGRTNXEyW+k5C/pUQLASSsTu7obd2V3GvCDgPcY9AWjhJ4jz9Kh7iRvrxhJg==}
@@ -2368,10 +2368,10 @@ packages:
   varint@6.0.0:
     resolution: {integrity: sha512-cXEIW6cfr15lFv563k4GuVuW/fiwjknytD37jIOLSdSWuOI6WnO/oKwmP2FQTU2l01LP8/M5TSAJpzUaGe3uWg==}
 
-  vite-plugin-solid@2.11.13:
-    resolution: {integrity: sha512-YaCNMzwIawUO8K16uj5jaxUJIYCstBEjkUppC5OKElBz/K2+R7Q7MWycHDgqzjBca5WWy/2ZQQ45IHexaabYew==}
+  vite-plugin-solid@2.11.14:
+    resolution: {integrity: sha512-7ZVBt8rpoyqmlwin2kRIUveaHoF6/kulY7gsnD+qFh4nS29V4OPAnw+ojoAspXIjObiL9o1xh9a/nTuYHm02Rw==}
     peerDependencies:
-      '@testing-library/jest-dom': ^5.16.6 || ^5.17.0 || ^6.*
+      '@testing-library/jest-dom': ^5.16.6 || ^5.17.0 || ^6.0.0 || ^7.0.0
       solid-js: ^1.7.2
       vite: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
     peerDependenciesMeta:
@@ -2507,7 +2507,7 @@ snapshots:
     dependencies:
       '@babel/compat-data': 7.29.7
       '@babel/helper-validator-option': 7.29.7
-      browserslist: 4.28.6
+      browserslist: 4.28.7
       lru-cache: 5.1.1
       semver: 6.3.1
 
@@ -3315,7 +3315,7 @@ snapshots:
 
   balanced-match@4.0.4: {}
 
-  baseline-browser-mapping@2.10.44: {}
+  baseline-browser-mapping@2.11.5: {}
 
   brace-expansion@1.1.12:
     dependencies:
@@ -3330,13 +3330,13 @@ snapshots:
     dependencies:
       balanced-match: 4.0.4
 
-  browserslist@4.28.6:
+  browserslist@4.28.7:
     dependencies:
-      baseline-browser-mapping: 2.10.44
+      baseline-browser-mapping: 2.11.5
       caniuse-lite: 1.0.30001806
-      electron-to-chromium: 1.5.393
+      electron-to-chromium: 1.5.396
       node-releases: 2.0.51
-      update-browserslist-db: 1.2.3(browserslist@4.28.6)
+      update-browserslist-db: 1.2.3(browserslist@4.28.7)
 
   call-bind-apply-helpers@1.0.2:
     dependencies:
@@ -3461,7 +3461,7 @@ snapshots:
       es-errors: 1.3.0
       gopd: 1.2.0
 
-  electron-to-chromium@1.5.393: {}
+  electron-to-chromium@1.5.396: {}
 
   enhanced-resolve@5.21.4:
     dependencies:
@@ -3595,7 +3595,7 @@ snapshots:
   eslint-compat-utils@0.5.1(eslint@9.39.2):
     dependencies:
       eslint: 9.39.2
-      semver: 7.8.0
+      semver: 7.8.5
 
   eslint-config-love@154.0.0(@typescript-eslint/parser@8.59.4(eslint@9.39.2)(typescript@5.9.3))(eslint-import-resolver-typescript@4.4.4)(eslint@9.39.2)(ts-declaration-location@1.0.7(typescript@5.9.3))(typescript@5.9.3):
     dependencies:
@@ -4838,9 +4838,9 @@ snapshots:
       '@unrs/resolver-binding-win32-ia32-msvc': 1.11.1
       '@unrs/resolver-binding-win32-x64-msvc': 1.11.1
 
-  update-browserslist-db@1.2.3(browserslist@4.28.6):
+  update-browserslist-db@1.2.3(browserslist@4.28.7):
     dependencies:
-      browserslist: 4.28.6
+      browserslist: 4.28.7
       escalade: 3.2.0
       picocolors: 1.1.1
 
@@ -4855,7 +4855,7 @@ snapshots:
 
   varint@6.0.0: {}
 
-  vite-plugin-solid@2.11.13(solid-js@1.9.14)(vite@8.1.5(@types/node@25.9.0)(esbuild@0.27.2)(sass-embedded@1.100.0)(sass@1.100.0)):
+  vite-plugin-solid@2.11.14(solid-js@1.9.14)(vite@8.1.5(@types/node@25.9.0)(esbuild@0.27.2)(sass-embedded@1.100.0)(sass@1.100.0)):
     dependencies:
       '@babel/core': 7.29.7
       '@types/babel__core': 7.20.5
