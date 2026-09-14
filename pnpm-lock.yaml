@@ -49,8 +49,8 @@ importers:
         specifier: ^5.5.6
         version: 5.5.6(eslint-config-prettier@10.1.8(eslint@9.39.2))(eslint@9.39.2)(prettier@3.9.6)
       eslint-plugin-solid:
-        specifier: ^0.17.0
-        version: 0.17.0(eslint@9.39.2)(typescript@5.9.3)
+        specifier: ^0.18.0
+        version: 0.18.0(eslint@9.39.2)(typescript@5.9.3)
       npm-run-all:
         specifier: ^4.1.5
         version: 4.1.5
@@ -1184,8 +1184,8 @@ packages:
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
 
-  eslint-plugin-solid@0.17.0:
-    resolution: {integrity: sha512-0x38zjAZVm4vW5u5mS14WxO9BJsal3IxsR/8QOB2nBiXBdH1LlbbRs2YfqgtPWVpy3OIlnt6yGhoXuZmoHULwQ==}
+  eslint-plugin-solid@0.18.0:
+    resolution: {integrity: sha512-Q3tSfb5EqU1nt8raRR8u7uMCLmB1779atKFxZ48TLor0rX+S0Bxt1gcTgYQTK+FK0T/iwFZJf13sSQncjFOBPg==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       eslint: ^9.0.0 || ^10.0.0
@@ -3476,7 +3476,7 @@ snapshots:
       '@eslint-community/eslint-utils': 4.10.1(eslint@9.39.2)
       eslint: 9.39.2
 
-  eslint-plugin-solid@0.17.0(eslint@9.39.2)(typescript@5.9.3):
+  eslint-plugin-solid@0.18.0(eslint@9.39.2)(typescript@5.9.3):
     dependencies:
       '@typescript-eslint/utils': 8.70.0(eslint@9.39.2)(typescript@5.9.3)
       eslint: 9.39.2
