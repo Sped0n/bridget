@@ -4,7 +4,6 @@ import {
   createEffect,
   createMemo,
   createSignal,
-  createStore,
   For,
   onCleanup,
   onSettled
@@ -35,7 +34,10 @@ export default function Gallery(props: {
   const [mobile, { setIndex, setIsAnimating, setIsScrollLocked }] = useMobileState()
   const loadingText = createMemo(() => capitalizeFirstLetter(props.loadingText))
   const [animationGsap, setAnimationGsap] = createSignal<typeof gsap>()
-  const [loads, setLoads] = createStore(Array<boolean>(imageState().length).fill(false))
+  const imageLoads = Array.from({ length: imageState().length }, () => {
+    const [isLoaded, setIsLoaded] = createSignal(false)
+    return { isLoaded, setIsLoaded }
+  })
 
   let lastIndex = -1
   let scrollIndex = -1
@@ -109,9 +111,7 @@ export default function Gallery(props: {
     const indexes = removeDuplicates(
       getActiveImageIndexes(index, imageState().length, direction)
     )
-    setLoads((draft) => {
-      for (const activeIndex of indexes) draft[activeIndex] = true
-    })
+    for (const activeIndex of indexes) imageLoads[activeIndex].setIsLoaded(true)
     lastIndex = index
     if (mobile.isOpen() && index !== scrollIndex) positionSlide(index)
   })
@@ -153,7 +153,11 @@ export default function Gallery(props: {
           <For each={imageState().images}>
             {(ij, i) => (
               <div ref={slides[i()]} class="gallerySlide">
-                <GalleryImage load={loads[i()]} ij={ij} loadingText={loadingText()} />
+                <GalleryImage
+                  load={imageLoads[i()].isLoaded()}
+                  ij={ij}
+                  loadingText={loadingText()}
+                />
               </div>
             )}
           </For>
