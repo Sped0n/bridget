@@ -25,7 +25,7 @@
           default = pkgs.mkShellNoCC {
             packages = with pkgs; [
               nodejs_24
-              pnpm_12
+              pnpm_11
               hugo
               go
             ];
