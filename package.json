@@ -3,7 +3,7 @@
   "version": "v1.0.0",
   "type": "module",
   "description": "bridget theme source file",
-  "packageManager": "pnpm@10.20.0",
+  "packageManager": "pnpm@12",
   "private": true,
   "sideEffects": false,
   "scripts": {

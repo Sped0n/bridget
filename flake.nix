@@ -1,13 +1,12 @@
 {
   description = "bridget";
-  inputs.nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1";
+  inputs.nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
   outputs =
     { self, ... }@inputs:
     let
       supportedSystems = [
         "x86_64-linux"
         "aarch64-linux"
-        "x86_64-darwin"
         "aarch64-darwin"
       ];
       forEachSupportedSystem =
@@ -25,8 +24,8 @@
         {
           default = pkgs.mkShellNoCC {
             packages = with pkgs; [
-              nodejs
-              nodePackages.pnpm
+              nodejs_24
+              pnpm_12
               hugo
               go
             ];
