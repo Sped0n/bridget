@@ -39,16 +39,9 @@ export default function GalleryNav(props: {
           <span class="num">{indexLength()[2]}</span>
           <span class="num">{indexLength()[3]}</span>
         </div>
-        <div
-          class="navClose"
-          onClick={onClick}
-          onTouchEnd={onClick}
-          onKeyDown={onClick}
-          role="button"
-          tabindex="0"
-        >
+        <button class="navClose" type="button" onClick={onClick}>
           {capitalizeFirstLetter(props.closeText)}
-        </div>
+        </button>
       </div>
     </>
   )
