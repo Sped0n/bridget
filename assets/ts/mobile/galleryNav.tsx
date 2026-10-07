@@ -1,4 +1,5 @@
-import { createMemo, type JSX } from 'solid-js'
+import { type JSX } from '@solidjs/web'
+import { createMemo } from 'solid-js'
 
 import { useImageState } from '../imageState'
 import { expand } from '../utils'
@@ -44,7 +45,7 @@ export default function GalleryNav(props: {
           onTouchEnd={onClick}
           onKeyDown={onClick}
           role="button"
-          tabIndex="0"
+          tabindex="0"
         >
           {capitalizeFirstLetter(props.closeText)}
         </div>

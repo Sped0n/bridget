@@ -1,4 +1,5 @@
-import { Show, createEffect, onCleanup, type JSX } from 'solid-js'
+import { type JSX } from '@solidjs/web'
+import { Show, createEffect, onCleanup } from 'solid-js'
 
 import { useImageState } from '../imageState'
 
@@ -25,15 +26,11 @@ export default function Mobile(props: {
   const imageState = useImageState()
   const [mobile] = useMobileState()
 
-  createEffect(() => {
+  createEffect(mobile.isScrollLocked, (isScrollLocked) => {
     const container = document.getElementsByClassName('container').item(0)
     if (container === null) return
 
-    if (mobile.isScrollLocked()) {
-      container.classList.add('disableScroll')
-    } else {
-      container.classList.remove('disableScroll')
-    }
+    container.classList.toggle('disableScroll', isScrollLocked)
   })
 
   onCleanup(() => {

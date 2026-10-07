@@ -1,10 +1,10 @@
+import { type JSX } from '@solidjs/web'
 import {
   createComponent,
   createContext,
   createSignal,
   useContext,
   type Accessor,
-  type JSX,
   type Setter
 } from 'solid-js'
 import invariant from 'tiny-invariant'
@@ -64,7 +64,7 @@ export function DesktopStateProvider(props: { children?: JSX.Element }): JSX.Ele
     )
   }
 
-  return createComponent(DesktopStateContext.Provider, {
+  return createComponent(DesktopStateContext, {
     value: [
       { index, cordHist, hoverText, isOpen, isAnimating, isLoading, navVector },
       {

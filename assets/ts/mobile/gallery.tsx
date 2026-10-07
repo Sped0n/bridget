@@ -1,15 +1,13 @@
+import { type JSX } from '@solidjs/web'
 import { type gsap } from 'gsap'
 import {
   createEffect,
   createMemo,
   createSignal,
+  createStore,
   For,
-  on,
-  onMount,
-  untrack,
-  type JSX
+  onSettled
 } from 'solid-js'
-import { createStore } from 'solid-js/store'
 import { type Swiper } from 'swiper'
 import invariant from 'tiny-invariant'
 
@@ -82,12 +80,12 @@ export default function Gallery(props: {
   const galleryLoadImages: () => void = () => {
     const currentIndex = mobile.index()
 
-    setLoads(
-      removeDuplicates(
-        getActiveImageIndexes(currentIndex, imageState().length, navigateVector)
-      ),
-      true
+    const indexes = removeDuplicates(
+      getActiveImageIndexes(currentIndex, imageState().length, navigateVector)
     )
+    setLoads((draft) => {
+      for (const index of indexes) draft[index] = true
+    })
   }
 
   const changeSlide: (slide: number) => void = (slide) => {
@@ -113,13 +111,6 @@ export default function Gallery(props: {
 
         setLibLoaded(true)
         setSwiperReady(true)
-
-        const initialIndex = untrack(mobile.index)
-
-        if (initialIndex >= 0) {
-          changeSlide(initialIndex)
-          lastIndex = initialIndex
-        }
       } catch (e) {
         initPromise = undefined
         setSwiperReady(false)
@@ -130,7 +121,7 @@ export default function Gallery(props: {
     await initPromise
   }
 
-  onMount(() => {
+  onSettled(() => {
     window.addEventListener('touchstart', () => void ensureGalleryReady(), {
       once: true,
       passive: true
@@ -138,37 +129,34 @@ export default function Gallery(props: {
     mounted = true
   })
 
+  // Position the selected slide only after Solid's staged readiness write commits.
   createEffect(
-    on(
-      () => [swiperReady(), mobile.index()] as const,
-      ([ready, index]) => {
-        if (!ready || index < 0) return
-        if (index === lastIndex) return
-        if (lastIndex === -1) navigateVector = 'none'
-        else if (index < lastIndex) navigateVector = 'prev'
-        else if (index > lastIndex) navigateVector = 'next'
-        else navigateVector = 'none'
-        changeSlide(index)
-        lastIndex = index
-      }
-    )
+    () => [swiperReady(), mobile.index()] as const,
+    ([ready, index]) => {
+      if (!ready || index < 0) return
+      if (index === lastIndex) return
+      if (lastIndex === -1) navigateVector = 'none'
+      else if (index < lastIndex) navigateVector = 'prev'
+      else if (index > lastIndex) navigateVector = 'next'
+      else navigateVector = 'none'
+      changeSlide(index)
+      lastIndex = index
+    }
   )
 
   createEffect(
-    on(
-      () => mobile.isOpen(),
-      async (isOpen) => {
-        if (isOpen && !swiperReady()) {
-          await ensureGalleryReady()
-        }
+    () => [mobile.isOpen(), swiperReady()] as const,
+    ([isOpen, ready], previous) => {
+      if (isOpen && !ready) {
+        void ensureGalleryReady()
+        return
+      }
 
-        if (!libLoaded() || !swiperReady()) return
-        if (mobile.isAnimating()) return
-        if (isOpen) slideUp()
-        else slideDown()
-      },
-      { defer: true }
-    )
+      if (!ready || mobile.isAnimating()) return
+      if (isOpen) slideUp()
+      else if (previous?.[0]) slideDown()
+    },
+    { defer: true }
   )
 
   return (
