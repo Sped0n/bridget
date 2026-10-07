@@ -1,4 +1,5 @@
-import { For, createEffect, on, onMount, type JSX } from 'solid-js'
+import { type JSX } from '@solidjs/web'
+import { For, createEffect, onSettled } from 'solid-js'
 
 import { useImageState } from '../imageState'
 
@@ -46,7 +47,7 @@ export default function Collection(): JSX.Element {
   }
 
   // effects
-  onMount(() => {
+  onSettled(() => {
     imgs.forEach((img, i) => {
       // preload first 5 images on page load
       if (i < 5) {
@@ -82,13 +83,11 @@ export default function Collection(): JSX.Element {
   })
 
   createEffect(
-    on(
-      mobile.isOpen,
-      () => {
-        if (!mobile.isOpen()) scrollToActive() // scroll to active when closed
-      },
-      { defer: true }
-    )
+    mobile.isOpen,
+    (isOpen) => {
+      if (!isOpen) scrollToActive() // scroll to active when closed
+    },
+    { defer: true }
   )
 
   return (

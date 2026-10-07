@@ -1,5 +1,6 @@
+import { type JSX } from '@solidjs/web'
 import { type gsap } from 'gsap'
-import { createEffect, on, onMount, type JSX } from 'solid-js'
+import { createEffect, onSettled } from 'solid-js'
 import invariant from 'tiny-invariant'
 
 import type { ImageJSON } from '../resources'
@@ -58,7 +59,7 @@ export default function GalleryImage(props: {
     _gsap.to(loadingDiv, { opacity: 0, duration: 0.5, ease: 'power3.in' })
   }
 
-  onMount(() => {
+  onSettled(() => {
     gsapPromise = loadGsap()
       .then((g) => {
         _gsap = g
@@ -83,14 +84,12 @@ export default function GalleryImage(props: {
   })
 
   createEffect(
-    on(
-      () => props.load,
-      (load) => {
-        if (!load || img === undefined || !img.complete || img.currentSrc === '') return
-        void revealImage()
-      },
-      { defer: true }
-    )
+    () => props.load,
+    (load) => {
+      if (!load || img === undefined || !img.complete || img.currentSrc === '') return
+      void revealImage()
+    },
+    { defer: true }
   )
 
   return (
@@ -98,7 +97,7 @@ export default function GalleryImage(props: {
       <div class="slideContainer">
         <img
           ref={img}
-          {...(props.load && { src: props.ij.hiUrl })}
+          src={props.load ? props.ij.hiUrl : undefined}
           height={props.ij.hiImgH}
           width={props.ij.hiImgW}
           data-src={props.ij.hiUrl}

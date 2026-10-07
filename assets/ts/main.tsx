@@ -1,5 +1,5 @@
-import { Match, Show, Switch, createResource, lazy, type JSX } from 'solid-js'
-import { render } from 'solid-js/web'
+import { render, type JSX } from '@solidjs/web'
+import { Match, Reveal, Switch, createMemo, lazy } from 'solid-js'
 
 import { ConfigStateProvider } from './configState'
 import { DesktopStateProvider } from './desktop/state'
@@ -59,7 +59,7 @@ function AppContent(props: {
 
 function Main(): JSX.Element {
   // variables
-  const [ijs] = createResource(getImageJSON)
+  const ijs = createMemo(getImageJSON)
   const ua = window.navigator.userAgent.toLowerCase()
   const hasTouchInput = 'ontouchstart' in window || window.navigator.maxTouchPoints > 0
   const hasTouchLayout =
@@ -71,8 +71,8 @@ function Main(): JSX.Element {
 
   return (
     <>
-      <Show when={ijs.state === 'ready'}>
-        <ImageStateProvider images={ijs() ?? []}>
+      <Reveal>
+        <ImageStateProvider images={ijs()}>
           <ConfigStateProvider>
             <AppContent
               isMobile={isMobile}
@@ -83,7 +83,7 @@ function Main(): JSX.Element {
             />
           </ConfigStateProvider>
         </ImageStateProvider>
-      </Show>
+      </Reveal>
     </>
   )
 }

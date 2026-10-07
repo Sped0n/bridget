@@ -1,10 +1,10 @@
+import { type JSX } from '@solidjs/web'
 import {
   createContext,
   createMemo,
   createSignal,
   useContext,
-  type Accessor,
-  type JSX
+  type Accessor
 } from 'solid-js'
 import invariant from 'tiny-invariant'
 
@@ -66,7 +66,7 @@ export function ConfigStateProvider(props: { children?: JSX.Element }): JSX.Elem
   }
 
   return (
-    <ConfigStateContext.Provider
+    <ConfigStateContext
       value={[
         state,
         {
@@ -80,7 +80,7 @@ export function ConfigStateProvider(props: { children?: JSX.Element }): JSX.Elem
       ]}
     >
       {props.children}
-    </ConfigStateContext.Provider>
+    </ConfigStateContext>
   )
 }
 

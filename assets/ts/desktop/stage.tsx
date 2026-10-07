@@ -1,5 +1,6 @@
+import { type JSX } from '@solidjs/web'
 import { type gsap } from 'gsap'
-import { For, createEffect, on, onMount, type JSX } from 'solid-js'
+import { For, createEffect, onSettled } from 'solid-js'
 
 import { useConfigState } from '../configState'
 import { useImageState } from '../imageState'
@@ -115,7 +116,7 @@ export default function Stage(): JSX.Element {
     })
   }
 
-  onMount(() => {
+  onSettled(() => {
     imgs.forEach((img, i) => {
       if (i < 5) {
         img.src = img.dataset.loUrl
@@ -160,54 +161,50 @@ export default function Stage(): JSX.Element {
   })
 
   createEffect(
-    on(
-      () => desktop.cordHist(),
-      () => {
-        setPosition()
-      },
-      { defer: true }
-    )
+    desktop.cordHist,
+    () => {
+      setPosition()
+    },
+    { defer: true }
   )
 
   createEffect(
-    on(
-      desktop.isOpen,
-      async (isOpen) => {
-        if (desktop.isAnimating()) return
+    desktop.isOpen,
+    (isOpen) => {
+      if (desktop.isAnimating()) return
 
-        if (isOpen) {
-          if (desktop.index() < 0 || desktop.cordHist().length === 0) {
-            setIsOpen(false)
-            return
-          }
-
-          await expandImage()
-            .catch(() => {
-              setIsOpen(false)
-              setIsAnimating(false)
-              setIsLoading(false)
-            })
-            .then(() => {
-              abortController?.abort()
-            })
-        } else {
-          await minimizeImage()
-            .catch(() => {
-              void 0
-            })
-            .then(() => {
-              abortController = new AbortController()
-              const abortSignal = abortController.signal
-              window.addEventListener('mousemove', onMouse, {
-                passive: true,
-                signal: abortSignal
-              })
-              setIsLoading(false)
-            })
+      if (isOpen) {
+        if (desktop.index() < 0 || desktop.cordHist().length === 0) {
+          setIsOpen(false)
+          return
         }
-      },
-      { defer: true }
-    )
+
+        void expandImage()
+          .catch(() => {
+            setIsOpen(false)
+            setIsAnimating(false)
+            setIsLoading(false)
+          })
+          .then(() => {
+            abortController?.abort()
+          })
+      } else {
+        void minimizeImage()
+          .catch(() => {
+            void 0
+          })
+          .then(() => {
+            abortController = new AbortController()
+            const abortSignal = abortController.signal
+            window.addEventListener('mousemove', onMouse, {
+              passive: true,
+              signal: abortSignal
+            })
+            setIsLoading(false)
+          })
+      }
+    },
+    { defer: true }
   )
 
   return (

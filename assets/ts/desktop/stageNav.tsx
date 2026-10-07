@@ -1,4 +1,5 @@
-import { For, createEffect, createMemo, on, onCleanup, type JSX } from 'solid-js'
+import { type JSX } from '@solidjs/web'
+import { For, createEffect, createMemo, onCleanup } from 'solid-js'
 
 import { useImageState } from '../imageState'
 import { decrement, increment } from '../utils'
@@ -66,20 +67,18 @@ export default function StageNav(props: {
     else if (e.key === 'ArrowRight') nextImage()
   }
 
-  createEffect(
-    on(desktop.isOpen, (isOpen) => {
-      controller?.abort()
+  createEffect(desktop.isOpen, (isOpen) => {
+    controller?.abort()
 
-      if (isOpen) {
-        controller = new AbortController()
-        const abortSignal = controller.signal
-        window.addEventListener('keydown', handleKey, {
-          passive: true,
-          signal: abortSignal
-        })
-      }
-    })
-  )
+    if (isOpen) {
+      controller = new AbortController()
+      const abortSignal = controller.signal
+      window.addEventListener('keydown', handleKey, {
+        passive: true,
+        signal: abortSignal
+      })
+    }
+  })
 
   onCleanup(() => {
     controller?.abort()
@@ -87,7 +86,7 @@ export default function StageNav(props: {
 
   return (
     <>
-      <div class="navOverlay" classList={{ active: active() }}>
+      <div class={['navOverlay', { active: active() }]}>
         <For each={navItems}>
           {(item) => (
             <div
@@ -97,7 +96,7 @@ export default function StageNav(props: {
               }}
               onFocus={() => setHoverText(item)}
               onMouseOver={() => setHoverText(item)}
-              tabIndex="-1"
+              tabindex="-1"
             />
           )}
         </For>

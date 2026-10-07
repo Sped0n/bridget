@@ -1,10 +1,5 @@
-import {
-  createContext,
-  createMemo,
-  useContext,
-  type Accessor,
-  type JSX
-} from 'solid-js'
+import { type JSX } from '@solidjs/web'
+import { createContext, createMemo, useContext, type Accessor } from 'solid-js'
 import invariant from 'tiny-invariant'
 
 import type { ImageJSON } from './resources'
@@ -27,11 +22,7 @@ export function ImageStateProvider(props: {
     length: props.images.length
   }))
 
-  return (
-    <ImageStateContext.Provider value={state}>
-      {props.children}
-    </ImageStateContext.Provider>
-  )
+  return <ImageStateContext value={state}>{props.children}</ImageStateContext>
 }
 
 export function useImageState(): ImageStateContextType {

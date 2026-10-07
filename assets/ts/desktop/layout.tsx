@@ -1,4 +1,5 @@
-import { Show, createMemo, type JSX } from 'solid-js'
+import { type JSX } from '@solidjs/web'
+import { Show, createMemo } from 'solid-js'
 
 import { useImageState } from '../imageState'
 
