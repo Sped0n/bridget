@@ -20,7 +20,7 @@
     "hugo:build": "hugo --logLevel info --source=exampleSite --minify",
     "hugo:preview": "hugo --logLevel info --source=exampleSite -D",
     "hugo:dev": "hugo server --source=exampleSite -D --disableFastRender --watch --logLevel info",
-    "hugo:server": "hugo server --source=exampleSite --disableFastRender -e production --watch --logLevel info"
+    "hugo:server": "hugo server --source=exampleSite --disableFastRender --renderToMemory -e production --watch --logLevel info"
   },
   "repository": {
     "type": "git",
