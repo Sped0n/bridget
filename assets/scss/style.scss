@@ -1,5 +1,12 @@
 @charset "utf-8";
 
+@use '_core/foundation';
+@use '_variables';
+@use '_core/base';
+
+@use '_partial/nav';
+@use '_partial/article';
+@use '_partial/container';
 @use '_partial/customCursor';
 @use '_partial/stage';
 @use '_partial/stageNav';
