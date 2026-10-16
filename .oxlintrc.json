@@ -1,0 +1,34 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "import"],
+  "categories": {
+    "correctness": "error"
+  },
+  "rules": {
+    "import/no-cycle": "error",
+    "typescript/no-floating-promises": "error",
+    "typescript/no-misused-promises": [
+      "error",
+      { "checksVoidReturn": { "attributes": false } }
+    ]
+  },
+  "options": {
+    "typeAware": true
+  },
+  "ignorePatterns": [
+    "node_modules/**",
+    "static/**",
+    "exampleSite/**",
+    "bundled/**",
+    ".pi/**",
+    ".direnv/**"
+  ],
+  "overrides": [
+    {
+      "files": ["assets/ts/**/*.tsx"],
+      "rules": {
+        "no-unassigned-vars": "off"
+      }
+    }
+  ]
+}

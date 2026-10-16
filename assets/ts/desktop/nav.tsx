@@ -1,9 +1,8 @@
-import { createEffect, onCleanup, onMount } from 'solid-js'
+import { createEffect, onCleanup, onSettled } from 'solid-js'
 
 import { useConfigState } from '../configState'
 import { useImageState } from '../imageState'
 import { expand } from '../utils'
-
 import { useDesktopState } from './state'
 
 export default function Nav(): null {
@@ -33,7 +32,7 @@ export default function Nav(): null {
     })
   }
 
-  onMount(() => {
+  onSettled(() => {
     const thresholdDiv = document.getElementsByClassName(
       'threshold'
     )[0] as HTMLDivElement
@@ -51,13 +50,18 @@ export default function Nav(): null {
 
     decButton.addEventListener('click', decThreshold, { signal })
     incButton.addEventListener('click', incThreshold, { signal })
-  })
 
-  createEffect(() => {
-    if (thresholdNums.length === 0 || indexNums.length === 0) return
-
-    updateIndexText(expand(desktop.index() + 1), expand(imageState().length))
-    updateThresholdText(expand(config().threshold))
+    createEffect(
+      () => ({
+        index: expand(desktop.index() + 1),
+        length: expand(imageState().length),
+        threshold: expand(config().threshold)
+      }),
+      ({ index, length, threshold }) => {
+        updateIndexText(index, length)
+        updateThresholdText(threshold)
+      }
+    )
   })
 
   onCleanup(() => {

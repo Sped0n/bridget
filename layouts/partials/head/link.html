@@ -1,39 +1,13 @@
-{{- /* fingerprint */ -}}
-{{- $fingerprint := .Scratch.Get "fingerprint" | default "" -}}
+{{- range resources.Match "bundled/js/**" -}}
+  {{- .Publish -}}
+{{- end -}}
 
-{{- /* critical style */ -}}
-{{- $style := dict "Source" "bundled/css/critical.css" "Fingerprint" $fingerprint -}}
-{{- $options := dict "enableSourceMap" false -}}
-{{- $style = dict "Context" . "ToCSS" $options "Inline" true "Template" true | merge $style -}}
-{{- partial "plugin/style.html" $style -}}
+{{- partial "plugin/style.html" (dict "Source" "bundled/css/style.css" "Template" "bundled/css/style.css" "Inline" true "Context" .) -}}
 
-{{- $style := dict "Link" ("bundled/css/main.css" | absURL) "Defer" true -}}
-{{- partial "plugin/style.html" $style -}}
 
-{{- /* fuck safari */ -}}
-<script>
-  function z() {
-    const r = document.querySelector(':root')
-    r.style.setProperty('--window-height', `${window.innerHeight}px`)
-  }
-  z()
-  window.addEventListener('resize', z, { passive: true })
+<link rel="preload" href="{{- "lib/fonts/fw.woff2" | absURL -}}" as="font" crossorigin />
+<link rel="preload" href="{{- "lib/fonts/GeistVF.woff2" | absURL -}}" as="font" crossorigin />
+
+<script data-base="{{ "bundled/" | absURL }}">
+  {{- (resources.Get "bundled/entry-loader.js").Content | safeJS -}}
 </script>
-
-{{- /* main js */ -}}
-{{- $script := dict "Link" ("bundled/js/main.js" | absURL) "Defer" true "Esm" true -}}
-{{- partial "plugin/script.html" $script -}}
-
-{{- /* fonts */ -}}
-<link
-  rel="preload"
-  href="{{- "lib/fonts/fw.woff2" | absURL -}}"
-  as="font"
-  crossorigin
-/>
-<link
-  rel="preload"
-  href="{{- "lib/fonts/GeistVF.woff2" | absURL -}}"
-  as="font"
-  crossorigin
-/>

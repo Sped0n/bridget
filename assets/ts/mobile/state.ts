@@ -1,15 +1,15 @@
+import { type JSX } from '@solidjs/web'
 import {
   createComponent,
   createContext,
   createSignal,
   useContext,
   type Accessor,
-  type JSX,
   type Setter
 } from 'solid-js'
-import invariant from 'tiny-invariant'
 
 import { useImageState } from '../imageState'
+import { invariant } from '../invariant'
 import { decrement, increment } from '../utils'
 
 export interface MobileState {
@@ -49,7 +49,7 @@ export function MobileStateProvider(props: { children?: JSX.Element }): JSX.Elem
     )
   }
 
-  return createComponent(MobileStateContext.Provider, {
+  return createComponent(MobileStateContext, {
     value: [
       { index, isOpen, isAnimating, isScrollLocked },
       {

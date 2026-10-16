@@ -45,12 +45,7 @@
 
   {{- /* Plausible Analytics */ -}}
   {{- with $analytics.plausible.data_domain -}}
-    <script
-      async
-      defer
-      data-domain="{{- . -}}"
-      src="{{- $analytics.plausible.src -}}"
-    ></script>
+    <script async defer data-domain="{{- . -}}" src="{{- $analytics.plausible.src -}}"></script>
   {{- end -}}
 
   {{- /* Cloudflare Analytics */ -}}
@@ -74,11 +69,9 @@
     {{- with $analytics.splitbee.data_token -}}
       {{- $attr = printf `%v data-token="%v"` $attr . -}}
     {{- end -}}
-    <script
-      defer
+    <script defer
       {{- with $attr -}}{{- . | safeHTMLAttr -}}{{- end -}}
-      src="https://cdn.splitbee.io/sb.js"
-    ></script>
+      src="https://cdn.splitbee.io/sb.js"></script>
   {{- end -}}
 
 {{- end -}}

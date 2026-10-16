@@ -1,5 +1,4 @@
 import { decrement, increment } from '../utils'
-
 import type { DesktopImage } from './layout'
 import type { HistoryItem } from './state'
 
