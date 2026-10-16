@@ -4,7 +4,6 @@
     "removeComments": true,
     "target": "es2021",
     "module": "esnext",
-    "baseUrl": "./",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,

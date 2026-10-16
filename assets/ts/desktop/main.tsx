@@ -3,7 +3,6 @@ import { render } from '@solidjs/web'
 import { loadPage } from '../bootstrap'
 import { ConfigStateProvider } from '../configState'
 import { ImageStateProvider } from '../imageState'
-
 import Desktop from './layout'
 import { DesktopStateProvider } from './state'
 

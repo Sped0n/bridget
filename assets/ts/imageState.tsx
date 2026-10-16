@@ -1,7 +1,7 @@
 import { type JSX } from '@solidjs/web'
 import { createContext, createMemo, useContext, type Accessor } from 'solid-js'
-import invariant from 'tiny-invariant'
 
+import { invariant } from './invariant'
 import type { ImageJSON } from './resources'
 
 export interface ImageState {

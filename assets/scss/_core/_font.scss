@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'Geist';
   src:
-    url(/* @vite-ignore */'{{- "lib/fonts/GeistVF.woff2" | absURL -}}')
+    url(/* @vite-ignore */ '{{- "lib/fonts/GeistVF.woff2" | absURL -}}')
       format('woff2 supports variations'),
-    url(/* @vite-ignore */'{{- "lib/fonts/GeistVF.woff2" | absURL -}}')
+    url(/* @vite-ignore */ '{{- "lib/fonts/GeistVF.woff2" | absURL -}}')
       format('woff2-variations');
   font-weight: 400;
   font-style: normal;
@@ -12,7 +12,7 @@
 
 @font-face {
   font-family: 'FW';
-  src: url(/* @vite-ignore */'{{- "lib/fonts/fw.woff2" | absURL -}}') format('woff2');
+  src: url(/* @vite-ignore */ '{{- "lib/fonts/fw.woff2" | absURL -}}') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;

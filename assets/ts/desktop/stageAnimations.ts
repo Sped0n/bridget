@@ -1,7 +1,6 @@
 import { type gsap } from 'gsap'
 
 import type { Vector } from '../utils'
-
 import type { DesktopImage } from './layout'
 import {
   getCurrentElIndex,

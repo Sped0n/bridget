@@ -1,0 +1,24 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "useTabs": false,
+  "tabWidth": 2,
+  "printWidth": 88,
+  "singleQuote": true,
+  "trailingComma": "none",
+  "bracketSpacing": true,
+  "semi": false,
+  "sortImports": true,
+  "sortPackageJson": true,
+  "embeddedLanguageFormatting": "off",
+  "ignorePatterns": [
+    "node_modules/**",
+    "static/**",
+    "exampleSite/**",
+    "bundled/**",
+    ".pi/**",
+    ".direnv/**",
+    "layouts/**/*.html",
+    "pnpm-lock.yaml",
+    "single.json"
+  ]
+}

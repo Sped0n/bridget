@@ -1,11 +1,10 @@
 import { type JSX } from '@solidjs/web'
 import { type gsap } from 'gsap'
 import { createEffect, onSettled } from 'solid-js'
-import invariant from 'tiny-invariant'
 
+import { invariant } from '../invariant'
 import type { ImageJSON } from '../resources'
 import { loadGsap } from '../utils'
-
 import { useMobileState } from './state'
 
 export default function GalleryImage(props: {

@@ -1,5 +1,4 @@
-import invariant from 'tiny-invariant'
-
+import { invariant } from './invariant'
 import { getImageJSON, type ImageJSON } from './resources'
 
 interface PageContainer extends HTMLDivElement {
@@ -23,7 +22,8 @@ export async function loadPage(): Promise<{
   }
 
   const container = document.getElementsByClassName('container')[0] as
-    PageContainer | undefined
+    | PageContainer
+    | undefined
   invariant(container, 'page container is not defined')
 
   return { container, images: await getImageJSON() }

@@ -3,7 +3,6 @@ import { For, createEffect, createMemo, onCleanup } from 'solid-js'
 
 import { useImageState } from '../imageState'
 import { decrement, increment } from '../utils'
-
 import { useDesktopState } from './state'
 
 export default function StageNav(props: {

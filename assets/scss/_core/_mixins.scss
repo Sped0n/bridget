@@ -15,7 +15,8 @@ $breakpoints: (
       @content;
     }
   } @else {
-    @error "Unfortunately, no value could be retrieved from `#{$breakpoint}`. " + "Available breakpoints are: #{map-keys($breakpoints)}.";
+    @error 'Unfortunately, no value could be retrieved from `#{$breakpoint}`. ' +
+      'Available breakpoints are: #{map-keys($breakpoints)}.';
   }
 }
 
@@ -25,6 +26,7 @@ $breakpoints: (
       @content;
     }
   } @else {
-    @error "Unfortunately, no value could be retrieved from `#{$breakpoint}`. " + "Available breakpoints are: #{map-keys($breakpoints)}.";
+    @error 'Unfortunately, no value could be retrieved from `#{$breakpoint}`. ' +
+      'Available breakpoints are: #{map-keys($breakpoints)}.';
   }
 }

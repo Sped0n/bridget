@@ -3,7 +3,6 @@ import { createMemo } from 'solid-js'
 
 import { useImageState } from '../imageState'
 import { expand } from '../utils'
-
 import { useMobileState } from './state'
 
 export function capitalizeFirstLetter(str: string): string {

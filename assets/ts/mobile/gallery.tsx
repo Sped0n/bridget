@@ -8,11 +8,10 @@ import {
   onCleanup,
   onSettled
 } from 'solid-js'
-import invariant from 'tiny-invariant'
 
 import { useImageState } from '../imageState'
+import { invariant } from '../invariant'
 import { loadGsap, removeDuplicates, type Vector } from '../utils'
-
 import GalleryImage from './galleryImage'
 import GalleryNav, { capitalizeFirstLetter } from './galleryNav'
 import { closeGallery, openGallery } from './galleryTransitions'

@@ -2,7 +2,6 @@ import { render } from '@solidjs/web'
 
 import { loadPage } from '../bootstrap'
 import { ImageStateProvider } from '../imageState'
-
 import Mobile from './layout'
 import { MobileStateProvider } from './state'
 

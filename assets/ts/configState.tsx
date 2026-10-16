@@ -6,8 +6,8 @@ import {
   useContext,
   type Accessor
 } from 'solid-js'
-import invariant from 'tiny-invariant'
 
+import { invariant } from './invariant'
 import { getThresholdSessionIndex } from './utils'
 
 export interface ThresholdRelated {

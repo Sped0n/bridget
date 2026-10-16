@@ -5,7 +5,6 @@ import { For, createEffect, onSettled } from 'solid-js'
 import { useConfigState } from '../configState'
 import { useImageState } from '../imageState'
 import { increment, loadGsap } from '../utils'
-
 import type { DesktopImage } from './layout'
 import { expandStage, minimizeStage, syncStagePosition } from './stageAnimations'
 import { onMutation } from './stageUtils'

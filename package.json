@@ -1,16 +1,35 @@
 {
   "name": "bridget",
   "version": "v1.0.0",
-  "type": "module",
-  "description": "bridget theme source file",
-  "packageManager": "pnpm@11.27.0",
   "private": true,
+  "description": "bridget theme source file",
+  "keywords": [
+    "hugo",
+    "photography",
+    "sass",
+    "theme",
+    "typescript"
+  ],
+  "homepage": "https://github.com/Sped0n/bridget#readme",
+  "bugs": {
+    "url": "https://github.com/Sped0n/bridget/issues"
+  },
+  "license": "MIT",
+  "author": "spedon",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sped0n/bridget.git"
+  },
+  "type": "module",
   "sideEffects": false,
   "scripts": {
     "test": "node --test gallery.test.mjs",
     "vite": "DISABLE_WATCH=1 vite build",
-    "lint": "eslint . --fix && prettier --write .",
-    "lint:check": "eslint . && prettier . --check",
+    "lint": "oxlint --fix && oxfmt --write . && pnpm run format:hugo",
+    "lint:check": "oxlint --deny-warnings && oxfmt --check . && pnpm run format:hugo:check && pnpm run check:types",
+    "format:hugo": "node format-hugo.mjs --write",
+    "format:hugo:check": "node format-hugo.mjs --check",
+    "check:types": "tsc --noEmit",
     "dev": "run-p vite:dev hugo:dev",
     "build": "run-s vite:build hugo:build",
     "server": "run-p vite:server hugo:server",
@@ -22,49 +41,21 @@
     "hugo:dev": "hugo server --source=exampleSite -D --disableFastRender --watch --logLevel info",
     "hugo:server": "hugo server --source=exampleSite --disableFastRender --renderToMemory -e production --watch --logLevel info"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Sped0n/bridget.git"
-  },
-  "keywords": [
-    "hugo",
-    "theme",
-    "photography",
-    "typescript",
-    "sass"
-  ],
-  "author": "spedon",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Sped0n/bridget/issues"
-  },
-  "homepage": "https://github.com/Sped0n/bridget#readme",
-  "devDependencies": {
-    "@eslint/js": "^9.39.5",
-    "@solidjs/vite-plugin": "3.0.0-next.50",
-    "@types/node": "^26.5.0",
-    "@typescript-eslint/parser": "^8.70.0",
-    "eslint": "^9.39.2",
-    "eslint-config-love": "^155.0.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-import-resolver-typescript": "^4.4.4",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-prettier": "^5.5.6",
-    "eslint-plugin-solid": "^0.17.0",
-    "npm-run-all": "^4.1.5",
-    "prettier": "3.9.6",
-    "prettier-plugin-go-template": "^0.0.15",
-    "prettier-plugin-organize-imports": "^4.3.0",
-    "sass-embedded": "^1.104.0",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.70.0",
-    "vite": "^8.2.2",
-    "vitefu": "^1.1.3"
-  },
   "dependencies": {
     "@solidjs/web": "2.0.0-rc.15",
     "gsap": "^3.15.0",
-    "solid-js": "2.0.0-rc.15",
-    "tiny-invariant": "^1.3.3"
-  }
+    "solid-js": "2.0.0-rc.15"
+  },
+  "devDependencies": {
+    "@solidjs/vite-plugin": "3.0.0-next.50",
+    "@types/node": "^26.6.5",
+    "npm-run-all2": "^9.0.3",
+    "oxfmt": "0.73.0",
+    "oxlint": "1.88.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "sass-embedded": "^1.105.1",
+    "typescript": "^6.0.3",
+    "vite": "^8.3.4"
+  },
+  "packageManager": "pnpm@11.27.0"
 }

@@ -5,18 +5,8 @@
 {{- partial "plugin/style.html" (dict "Source" "bundled/css/style.css" "Template" "bundled/css/style.css" "Inline" true "Context" .) -}}
 
 
-<link
-  rel="preload"
-  href="{{- "lib/fonts/fw.woff2" | absURL -}}"
-  as="font"
-  crossorigin
-/>
-<link
-  rel="preload"
-  href="{{- "lib/fonts/GeistVF.woff2" | absURL -}}"
-  as="font"
-  crossorigin
-/>
+<link rel="preload" href="{{- "lib/fonts/fw.woff2" | absURL -}}" as="font" crossorigin />
+<link rel="preload" href="{{- "lib/fonts/GeistVF.woff2" | absURL -}}" as="font" crossorigin />
 
 <script data-base="{{ "bundled/" | absURL }}">
   {{- (resources.Get "bundled/entry-loader.js").Content | safeJS -}}

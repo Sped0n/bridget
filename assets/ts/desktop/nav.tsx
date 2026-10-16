@@ -3,7 +3,6 @@ import { createEffect, onCleanup, onSettled } from 'solid-js'
 import { useConfigState } from '../configState'
 import { useImageState } from '../imageState'
 import { expand } from '../utils'
-
 import { useDesktopState } from './state'
 
 export default function Nav(): null {

@@ -13,20 +13,13 @@
     {{- range $menus -}}
       {{- $url := .URL | relURL -}}
       {{- if eq (add $index 1) $len -}}
-        <a
-          href="{{- .URL | relURL -}}"
-          class="link{{- if eq $index $currentIndex -}}
+        <a href="{{- .URL | relURL -}}" class="link{{- if eq $index $currentIndex -}}
             {{- printf " current" -}}
-          {{- end -}}"
-          >{{- .Title -}}</a
-        >
+          {{- end -}}">{{- .Title -}}</a>
       {{- else -}}
-        <a
-          href="{{- .URL | relURL -}}"
-          class="link{{- if eq $index $currentIndex -}}
+        <a href="{{- .URL | relURL -}}" class="link{{- if eq $index $currentIndex -}}
             {{- printf " current" -}}
-          {{- end -}}"
-          >{{- .Title -}}</a
+          {{- end -}}">{{- .Title -}}</a
         >,&nbsp
       {{- end -}}
       {{- $index = add $index 1 -}}
@@ -49,10 +42,8 @@
     <span class="num">0</span><span class="num">0</span><span class="num">0</span
     ><span class="num">0</span>
     <span>/</span>
-    <span class="num">{{- math.Floor (div $length 1000) -}}</span
-    ><span class="num">{{- mod (math.Floor (div $length 100)) 10 -}}</span
-    ><span class="num">{{- mod (math.Floor (div $length 10)) 10 -}}</span
-    ><span class="num">{{- mod $length 10 -}}</span>
+    <span class="num">{{- math.Floor (div $length 1000) -}}</span><span class="num">{{- mod (math.Floor (div $length 100)) 10 -}}</span
+    ><span class="num">{{- mod (math.Floor (div $length 10)) 10 -}}</span><span class="num">{{- mod $length 10 -}}</span>
   </div>
 </nav>
 {{- /* for threshold */ -}}

@@ -7,9 +7,9 @@ import {
   type Accessor,
   type Setter
 } from 'solid-js'
-import invariant from 'tiny-invariant'
 
 import { useImageState } from '../imageState'
+import { invariant } from '../invariant'
 import { decrement, increment, type Vector } from '../utils'
 
 export interface HistoryItem {

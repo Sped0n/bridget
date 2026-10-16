@@ -2,7 +2,6 @@ import { type JSX } from '@solidjs/web'
 import { For, createEffect, onSettled } from 'solid-js'
 
 import { useImageState } from '../imageState'
-
 import type { MobileImage } from './layout'
 import { useMobileState } from './state'
 

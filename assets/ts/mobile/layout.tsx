@@ -2,7 +2,6 @@ import { type JSX } from '@solidjs/web'
 import { Show, createEffect, onCleanup } from 'solid-js'
 
 import { useImageState } from '../imageState'
-
 import Collection from './collection'
 import Gallery from './gallery'
 import { useMobileState } from './state'

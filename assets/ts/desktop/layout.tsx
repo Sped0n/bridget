@@ -2,7 +2,6 @@ import { type JSX } from '@solidjs/web'
 import { Show, createMemo } from 'solid-js'
 
 import { useImageState } from '../imageState'
-
 import CustomCursor from './customCursor'
 import Nav from './nav'
 import Stage from './stage'
