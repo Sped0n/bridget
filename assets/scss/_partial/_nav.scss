@@ -1,9 +1,3 @@
-@use 'sass:map';
-
-@use '_core/mixins' as *;
-
-$tablet: map.get($breakpoints, 'tablet') - 1;
-
 nav {
   display: flex;
   justify-content: space-between;
@@ -14,7 +8,7 @@ nav {
   padding: 0 var(--space-standard);
 
   position: fixed;
-  bottom: 0;
+  top: 0;
   background: white;
 
   z-index: var(--z-nav);
@@ -34,11 +28,12 @@ nav {
   text-decoration: underline;
 }
 
-@media (max-width: $tablet), (hover: none) {
-  nav {
-    top: 0;
-  }
+html[data-layout='desktop'] nav {
+  top: auto;
+  bottom: 0;
+}
 
+html:not([data-layout='desktop']) nav {
   .index,
   .threshold {
     display: none;

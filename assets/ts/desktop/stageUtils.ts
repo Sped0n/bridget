@@ -1,5 +1,4 @@
 import { decrement, increment } from '../utils'
-
 import type { DesktopImage } from './layout'
 import type { HistoryItem } from './state'
 
@@ -35,8 +34,7 @@ export function getImagesFromIndexes(
 
 export function hires(imgs: DesktopImage[]): void {
   imgs.forEach((img) => {
-    if (img.src === img.dataset.hiUrl) return
-    img.src = img.dataset.hiUrl
+    if (img.getAttribute('src') !== img.dataset.hiUrl) img.src = img.dataset.hiUrl
     img.height = parseInt(img.dataset.hiImgH)
     img.width = parseInt(img.dataset.hiImgW)
   })
@@ -44,8 +42,7 @@ export function hires(imgs: DesktopImage[]): void {
 
 export function lores(imgs: DesktopImage[]): void {
   imgs.forEach((img) => {
-    if (img.src === img.dataset.loUrl) return
-    img.src = img.dataset.loUrl
+    if (img.getAttribute('src') !== img.dataset.loUrl) img.src = img.dataset.loUrl
     img.height = parseInt(img.dataset.loImgH)
     img.width = parseInt(img.dataset.loImgW)
   })

@@ -1,21 +1,10 @@
-import { Show, createEffect, onCleanup, type JSX } from 'solid-js'
+import { type JSX } from '@solidjs/web'
+import { Show, createEffect, onCleanup } from 'solid-js'
 
 import { useImageState } from '../imageState'
-
 import Collection from './collection'
 import Gallery from './gallery'
 import { useMobileState } from './state'
-
-/**
- * interfaces
- */
-
-export interface MobileImage extends HTMLImageElement {
-  dataset: {
-    src: string
-    index: string
-  }
-}
 
 export default function Mobile(props: {
   children?: JSX.Element
@@ -25,21 +14,15 @@ export default function Mobile(props: {
   const imageState = useImageState()
   const [mobile] = useMobileState()
 
-  createEffect(() => {
-    const container = document.getElementsByClassName('container').item(0)
-    if (container === null) return
-
-    if (mobile.isScrollLocked()) {
-      container.classList.add('disableScroll')
-    } else {
-      container.classList.remove('disableScroll')
+  const container = document.querySelector('.container')
+  createEffect(
+    () => mobile().phase === 'open' || mobile().phase === 'closing',
+    (locked) => {
+      container?.classList.toggle('disableScroll', locked)
     }
-  })
+  )
 
-  onCleanup(() => {
-    const container = document.getElementsByClassName('container').item(0)
-    container?.classList.remove('disableScroll')
-  })
+  onCleanup(() => container?.classList.remove('disableScroll'))
 
   return (
     <>

@@ -1,14 +1,13 @@
+import { type JSX } from '@solidjs/web'
 import {
   createContext,
   createMemo,
   createSignal,
   useContext,
-  type Accessor,
-  type JSX
+  type Accessor
 } from 'solid-js'
-import invariant from 'tiny-invariant'
 
-import { getThresholdSessionIndex } from './utils'
+import { invariant } from './invariant'
 
 export interface ThresholdRelated {
   threshold: number
@@ -39,14 +38,23 @@ const thresholds: ThresholdRelated[] = [
 
 const ConfigStateContext = createContext<ConfigStateContextType>()
 
-function getSafeThresholdIndex(): number {
-  const index = getThresholdSessionIndex()
-  if (index < 0 || index >= thresholds.length) return 2
-  return index
+const THRESHOLD_STORAGE_KEY = 'thresholdsIndex'
+
+function getInitialThresholdIndex(): number {
+  try {
+    const storedIndex = sessionStorage.getItem(THRESHOLD_STORAGE_KEY)
+    if (storedIndex !== null) {
+      const index = Number.parseInt(storedIndex, 10)
+      if (index >= 0 && index < thresholds.length) return index
+    }
+  } catch {
+    // The gallery still works when storage is unavailable.
+  }
+  return 2
 }
 
 export function ConfigStateProvider(props: { children?: JSX.Element }): JSX.Element {
-  const [thresholdIndex, setThresholdIndex] = createSignal(getSafeThresholdIndex())
+  const [thresholdIndex, setThresholdIndex] = createSignal(getInitialThresholdIndex())
 
   const state = createMemo<ConfigState>(() => {
     const current = thresholds[thresholdIndex()]
@@ -61,12 +69,16 @@ export function ConfigStateProvider(props: { children?: JSX.Element }): JSX.Elem
   const updateThreshold = (stride: number): void => {
     const nextIndex = thresholdIndex() + stride
     if (nextIndex < 0 || nextIndex >= thresholds.length) return
-    sessionStorage.setItem('thresholdsIndex', nextIndex.toString())
     setThresholdIndex(nextIndex)
+    try {
+      sessionStorage.setItem(THRESHOLD_STORAGE_KEY, nextIndex.toString())
+    } catch {
+      // Keep the in-memory selection if it cannot be persisted.
+    }
   }
 
   return (
-    <ConfigStateContext.Provider
+    <ConfigStateContext
       value={[
         state,
         {
@@ -80,7 +92,7 @@ export function ConfigStateProvider(props: { children?: JSX.Element }): JSX.Elem
       ]}
     >
       {props.children}
-    </ConfigStateContext.Provider>
+    </ConfigStateContext>
   )
 }
 

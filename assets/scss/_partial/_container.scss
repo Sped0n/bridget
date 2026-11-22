@@ -1,10 +1,4 @@
-@use 'sass:map';
-
-@use '_core/mixins' as *;
-
-$tablet: map.get($breakpoints, 'tablet') - 1;
-
-@media (max-width: $tablet), (hover: none) {
+html[data-layout='mobile'] {
   .container {
     position: fixed;
     top: 0;

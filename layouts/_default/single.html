@@ -1,6 +1,10 @@
 {{- define "main" -}}
+  {{- $galleryOutput := .OutputFormats.Get "JSON" -}}
   <div
     class="container"
+    {{ if and $galleryOutput (partial "function/getImageSlice.html" .) -}}
+      data-gallery-url="{{ $galleryOutput.RelPermalink }}"
+    {{ end -}}
     data-next="{{- site.Params.labels.next -}}"
     data-prev="{{- site.Params.labels.prev -}}"
     data-close="{{- site.Params.labels.close -}}"

@@ -1,15 +1,16 @@
+import { type JSX } from '@solidjs/web'
 import {
   createComponent,
   createContext,
+  createMemo,
   createSignal,
   useContext,
   type Accessor,
-  type JSX,
   type Setter
 } from 'solid-js'
-import invariant from 'tiny-invariant'
 
 import { useImageState } from '../imageState'
+import { invariant } from '../invariant'
 import { decrement, increment, type Vector } from '../utils'
 
 export interface HistoryItem {
@@ -31,9 +32,7 @@ export interface DesktopState {
 export type DesktopStateContextType = readonly [
   DesktopState,
   {
-    readonly setIndex: Setter<number>
-    readonly incIndex: () => void
-    readonly decIndex: () => void
+    readonly navigate: (direction: 'prev' | 'next') => void
     readonly setCordHist: Setter<HistoryItem[]>
     readonly setHoverText: Setter<string>
     readonly setIsOpen: Setter<boolean>
@@ -48,33 +47,26 @@ const DesktopStateContext = createContext<DesktopStateContextType>()
 export function DesktopStateProvider(props: { children?: JSX.Element }): JSX.Element {
   const imageState = useImageState()
 
-  const [index, setIndex] = createSignal(-1)
   const [cordHist, setCordHist] = createSignal<HistoryItem[]>([])
+  const index = createMemo(() => cordHist().at(-1)?.i ?? -1)
   const [hoverText, setHoverText] = createSignal('')
   const [isOpen, setIsOpen] = createSignal(false)
   const [isAnimating, setIsAnimating] = createSignal(false)
   const [isLoading, setIsLoading] = createSignal(false)
   const [navVector, setNavVector] = createSignal<Vector>('none')
 
-  const updateIndex = (stride: 1 | -1): void => {
+  const navigate = (direction: 'prev' | 'next'): void => {
+    const step = direction === 'prev' ? decrement : increment
     const length = imageState().length
-    if (length <= 0) return
-    setIndex((current) =>
-      stride === 1 ? increment(current, length) : decrement(current, length)
-    )
+    setNavVector(direction)
+    setCordHist((trail) => trail.map((item) => ({ ...item, i: step(item.i, length) })))
   }
 
-  return createComponent(DesktopStateContext.Provider, {
+  return createComponent(DesktopStateContext, {
     value: [
       { index, cordHist, hoverText, isOpen, isAnimating, isLoading, navVector },
       {
-        setIndex,
-        incIndex: () => {
-          updateIndex(1)
-        },
-        decIndex: () => {
-          updateIndex(-1)
-        },
+        navigate,
         setCordHist,
         setHoverText,
         setIsOpen,

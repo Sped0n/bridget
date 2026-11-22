@@ -10,31 +10,13 @@ export interface ImageJSON {
   hiImgW: number
 }
 
-export async function getImageJSON(): Promise<ImageJSON[]> {
-  if (document.title.split(' | ')[0] === '404') {
-    return [] // no images on 404 page
-  }
-
-  const ogUrlMetaTag = document.querySelector(
-    'meta[property="og:url"]'
-  ) as HTMLMetaElement | null
-  const indexJsonUrl = ogUrlMetaTag?.content
-    ? new URL('index.json', ogUrlMetaTag.content).href
-    : new URL('index.json', window.location.href).href
-
+export async function getImageJSON(url: string): Promise<ImageJSON[]> {
   try {
-    const response = await fetch(indexJsonUrl, {
-      headers: {
-        Accept: 'application/json'
-      }
-    })
+    const response = await fetch(url, { headers: { Accept: 'application/json' } })
+    if (!response.ok)
+      throw new Error(`Gallery data request failed: ${response.status} ${url}`)
     const data: ImageJSON[] = await response.json()
-    return data.sort((a: ImageJSON, b: ImageJSON) => {
-      if (a.index < b.index) {
-        return -1
-      }
-      return 1
-    })
+    return data.sort((a, b) => a.index - b.index)
   } catch (e) {
     console.error(e)
     return []

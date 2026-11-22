@@ -1,4 +1,4 @@
-name: 'Build'
+name: Build
 on:
   push:
     branches:
@@ -13,97 +13,36 @@ permissions:
 
 jobs:
   build:
-    timeout-minutes: 30
-    runs-on: ubuntu-latest
-    name: Build (Hugo ${{ matrix.hugo_variant_to_install }})
+    name: Build (Hugo ${{ matrix.hugo-variant }})
     if: github.event.repository.fork == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
     strategy:
       matrix:
-        hugo_variant_to_install: ['Minimum', 'Latest']
+        hugo-variant: ['Minimum', 'Latest']
+    env:
+      PUBLISH_ARTIFACTS: ${{ matrix.hugo-variant == 'Latest' && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          token: ${{ secrets.PAT }}
+          token: ${{ env.PUBLISH_ARTIFACTS == 'true' && secrets.PAT || github.token }}
+          persist-credentials: ${{ env.PUBLISH_ARTIFACTS == 'true' }}
 
-      - name: Resolve Hugo variant to install
-        id: resolve_hugo_variant_to_install
-        run: |
-          if [ '${{ matrix.hugo_variant_to_install }}' = 'Minimum' ]; then
-            version=$(awk -F '"' '/^min = / { print $2; exit }' theme.toml)
-          else
-            version=$(printf '%s' '${{ matrix.hugo_variant_to_install }}' | tr '[:upper:]' '[:lower:]')
-          fi
-
-          if [ -z "$version" ]; then
-            echo 'Could not resolve Hugo version from theme.toml' >&2
-            exit 1
-          fi
-
-          echo "Resolved Hugo variant to install: $version"
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-
-      - name: Setup Mise
-        uses: jdx/mise-action@v4
+      - name: Setup
+        uses: ./.github/actions
         with:
-          install_args: node@latest pnpm@10 hugo-extended@${{ steps.resolve_hugo_variant_to_install.outputs.version }}
-          tool_versions: |
-            node latest
-            pnpm 10
-            hugo-extended ${{ steps.resolve_hugo_variant_to_install.outputs.version }}
-          cache: true
-
-      - name: Detect installed Hugo version
-        id: detect_hugo_installed_version
-        run: |
-          version=$(hugo version | awk '{ print $2 }')
-
-          if [ -z "$version" ]; then
-            echo 'Could not detect installed Hugo version' >&2
-            exit 1
-          fi
-
-          echo "Detected installed Hugo version: $version"
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-
-      - name: Get pnpm store path
-        id: pnpm-cache
-        run: 'echo "STORE_PATH=$(pnpm store path)" >> "$GITHUB_OUTPUT"'
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v5
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: pnpm-store-${{ hashFiles('./pnpm-lock.yaml') }}
-          restore-keys: |
-            pnpm-store-
-
-      - name: Setup Hugo cache
-        uses: actions/cache@v5
-        with:
-          path: exampleSite/resources/_gen
-          key: hugo-${{ hashFiles('./exampleSite/**/*.jpg') }}-${{ steps.detect_hugo_installed_version.outputs.version }}-${{ hashFiles('./assets/**', './layouts/**') }}
-          restore-keys: |
-            hugo-${{ hashFiles('./exampleSite/**/*.jpg') }}-${{ steps.detect_hugo_installed_version.outputs.version }}-
-            hugo-${{ hashFiles('./exampleSite/**/*.jpg') }}-
-            hugo-
-
-      - name: Install project dependencies
-        run: 'pnpm install'
+          hugo-variant: ${{ matrix.hugo-variant }}
 
       - name: Pre-build cleanup
-        if: >
-          matrix.hugo_variant_to_install == 'Latest' &&
-          (github.event_name == 'push' || github.event.pull_request.merged == true)
-        run: 'rm -rf bundled'
+        if: env.PUBLISH_ARTIFACTS == 'true'
+        run: rm -rf bundled
 
       - name: Build
-        run: 'pnpm run build'
+        run: pnpm run build
 
       - name: Push artifacts
-        if: >
-          matrix.hugo_variant_to_install == 'Latest' &&
-          (github.event_name == 'push' || github.event.pull_request.merged == true)
+        if: env.PUBLISH_ARTIFACTS == 'true'
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           file_pattern: 'bundled/**/*.js bundled/**/*.css'

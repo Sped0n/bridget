@@ -1,11 +1,4 @@
-import { type Swiper } from 'swiper'
-
 import type { Vector } from '../utils'
-
-export async function loadSwiper(): Promise<typeof Swiper> {
-  const swiper = await import('swiper')
-  return swiper.Swiper
-}
 
 export function getActiveImageIndexes(
   currentIndex: number,
@@ -17,9 +10,9 @@ export function getActiveImageIndexes(
 
   switch (navigateVector) {
     case 'next':
-      return [nextIndex]
+      return [currentIndex, nextIndex]
     case 'prev':
-      return [prevIndex]
+      return [currentIndex, prevIndex]
     case 'none':
       return [currentIndex, nextIndex, prevIndex]
   }

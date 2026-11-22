@@ -1,7 +1,6 @@
 import { type gsap } from 'gsap'
 
 import type { Vector } from '../utils'
-
 import type { DesktopImage } from './layout'
 import {
   getCurrentElIndex,
@@ -15,70 +14,6 @@ import {
 } from './stageUtils'
 import type { HistoryItem } from './state'
 
-type SetLoading = (value: boolean) => void
-
-export function setLoaderForHiresImage(args: {
-  gsap: typeof gsap
-  img: DesktopImage
-  mounted: boolean
-  setIsLoading: SetLoading
-}): void {
-  const { gsap, img, mounted, setIsLoading } = args
-  if (!mounted) return
-
-  if (img.complete) {
-    gsap
-      .set(img, { opacity: 1 })
-      .then(() => {
-        setIsLoading(false)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
-    return
-  }
-
-  setIsLoading(true)
-
-  const controller = new AbortController()
-  const abortSignal = controller.signal
-
-  img.addEventListener(
-    'load',
-    () => {
-      gsap
-        .to(img, { opacity: 1, ease: 'power3.out', duration: 0.5 })
-        .then(() => {
-          setIsLoading(false)
-        })
-        .catch((e) => {
-          console.log(e)
-        })
-        .finally(() => {
-          controller.abort()
-        })
-    },
-    { once: true, passive: true, signal: abortSignal }
-  )
-  img.addEventListener(
-    'error',
-    () => {
-      gsap
-        .set(img, { opacity: 1 })
-        .then(() => {
-          setIsLoading(false)
-        })
-        .catch((e) => {
-          console.log(e)
-        })
-        .finally(() => {
-          controller.abort()
-        })
-    },
-    { once: true, passive: true, signal: abortSignal }
-  )
-}
-
 export function syncStagePosition(args: {
   gsap: typeof gsap
   imgs: DesktopImage[]
@@ -88,7 +23,7 @@ export function syncStagePosition(args: {
   isOpen: boolean
   navVector: Vector
   mounted: boolean
-  setIsLoading: SetLoading
+  reveal: (img: DesktopImage) => void
 }): void {
   const {
     gsap,
@@ -99,7 +34,7 @@ export function syncStagePosition(args: {
     isOpen,
     navVector,
     mounted,
-    setIsLoading
+    reveal
   } = args
 
   if (!mounted || imgs.length === 0) return
@@ -143,7 +78,7 @@ export function syncStagePosition(args: {
   hires(getImagesFromIndexes(imgs, indexArrayToHires))
   gsap.set(getImagesFromIndexes(imgs, indexArrayToCleanup), { opacity: 0 })
   gsap.set(current, { x: 0, y: 0, scale: 1 })
-  setLoaderForHiresImage({ gsap, img: current, mounted, setIsLoading })
+  reveal(current)
 }
 
 export async function expandStage(args: {
@@ -153,19 +88,11 @@ export async function expandStage(args: {
   trailLength: number
   length: number
   mounted: boolean
-  setIsLoading: SetLoading
+  reveal: (img: DesktopImage) => void
   setIsAnimating: (value: boolean) => void
 }): Promise<void> {
-  const {
-    gsap,
-    imgs,
-    cordHist,
-    trailLength,
-    length,
-    mounted,
-    setIsLoading,
-    setIsAnimating
-  } = args
+  const { gsap, imgs, cordHist, trailLength, length, mounted, reveal, setIsAnimating } =
+    args
 
   if (!mounted) throw new Error('not mounted')
 
@@ -181,7 +108,7 @@ export async function expandStage(args: {
       getNextElIndex(cordHist, length)
     ])
   )
-  setLoaderForHiresImage({ gsap, img: current, mounted, setIsLoading })
+  reveal(current)
 
   const tl = gsap.timeline()
   const trailInactiveEls = getImagesFromIndexes(

@@ -26,14 +26,3 @@ export async function loadGsap(): Promise<typeof gsap> {
   const g = await import('gsap')
   return g.gsap
 }
-
-export function getThresholdSessionIndex(): number {
-  const s = sessionStorage.getItem('thresholdsIndex')
-  if (s === null) return 2
-  return parseInt(s)
-}
-
-export function removeDuplicates<T>(arr: T[]): T[] {
-  if (arr.length < 2) return arr // optimization
-  return [...new Set(arr)]
-}

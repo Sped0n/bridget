@@ -1,7 +1,5 @@
-import { For, createEffect, createMemo, on, onCleanup, type JSX } from 'solid-js'
-
-import { useImageState } from '../imageState'
-import { decrement, increment } from '../utils'
+import { type JSX } from '@solidjs/web'
+import { For, createEffect, createMemo, onCleanup } from 'solid-js'
 
 import { useDesktopState } from './state'
 
@@ -11,75 +9,40 @@ export default function StageNav(props: {
   closeText: string
   nextText: string
 }): JSX.Element {
-  // types
-  type NavItem = (typeof navItems)[number]
-
-  // variables
   let controller: AbortController | undefined
-  // eslint-disable-next-line solid/reactivity
-  const navItems = [props.prevText, props.closeText, props.nextText] as const
-
-  // states
-  const imageState = useImageState()
-  const [
-    desktop,
-    { incIndex, decIndex, setCordHist, setHoverText, setIsOpen, setNavVector }
-  ] = useDesktopState()
+  const navItems = [
+    { action: 'prev', text: props.prevText },
+    { action: 'close', text: props.closeText },
+    { action: 'next', text: props.nextText }
+  ] as const
+  const [desktop, { navigate, setHoverText, setIsOpen }] = useDesktopState()
 
   const active = createMemo(() => desktop.isOpen() && !desktop.isAnimating())
 
-  const prevImage: () => void = () => {
-    setNavVector('prev')
-    setCordHist((c) =>
-      c.map((item) => {
-        return { ...item, i: decrement(item.i, imageState().length) }
+  const handleAction = (action: (typeof navItems)[number]['action']): void => {
+    if (!active()) return
+    if (action === 'close') setIsOpen(false)
+    else navigate(action)
+  }
+
+  const handleKey = (event: KeyboardEvent): void => {
+    if (event.key === 'ArrowLeft') handleAction('prev')
+    else if (event.key === 'Escape') handleAction('close')
+    else if (event.key === 'ArrowRight') handleAction('next')
+  }
+
+  createEffect(desktop.isOpen, (isOpen) => {
+    controller?.abort()
+
+    if (isOpen) {
+      controller = new AbortController()
+      const abortSignal = controller.signal
+      window.addEventListener('keydown', handleKey, {
+        passive: true,
+        signal: abortSignal
       })
-    )
-    decIndex()
-  }
-
-  const closeImage: () => void = () => {
-    setIsOpen(false)
-  }
-
-  const nextImage: () => void = () => {
-    setNavVector('next')
-    setCordHist((c) =>
-      c.map((item) => {
-        return { ...item, i: increment(item.i, imageState().length) }
-      })
-    )
-    incIndex()
-  }
-
-  const handleClick: (item: NavItem) => void = (item) => {
-    if (!desktop.isOpen() || desktop.isAnimating()) return
-    if (item === navItems[0]) prevImage()
-    else if (item === navItems[1]) closeImage()
-    else nextImage()
-  }
-
-  const handleKey: (e: KeyboardEvent) => void = (e) => {
-    if (!desktop.isOpen() || desktop.isAnimating()) return
-    if (e.key === 'ArrowLeft') prevImage()
-    else if (e.key === 'Escape') closeImage()
-    else if (e.key === 'ArrowRight') nextImage()
-  }
-
-  createEffect(
-    on(desktop.isOpen, (isOpen) => {
-      controller?.abort()
-
-      if (isOpen) {
-        controller = new AbortController()
-        const abortSignal = controller.signal
-        window.addEventListener('keydown', handleKey, {
-          passive: true,
-          signal: abortSignal
-        })
-      }
-    })
-  )
+    }
+  })
 
   onCleanup(() => {
     controller?.abort()
@@ -87,17 +50,15 @@ export default function StageNav(props: {
 
   return (
     <>
-      <div class="navOverlay" classList={{ active: active() }}>
+      <div class={['navOverlay', { active: active() }]}>
         <For each={navItems}>
           {(item) => (
             <div
               class="overlay"
-              onClick={() => {
-                handleClick(item)
-              }}
-              onFocus={() => setHoverText(item)}
-              onMouseOver={() => setHoverText(item)}
-              tabIndex="-1"
+              onClick={() => handleAction(item.action)}
+              onFocus={() => setHoverText(item.text)}
+              onMouseOver={() => setHoverText(item.text)}
+              tabindex="-1"
             />
           )}
         </For>

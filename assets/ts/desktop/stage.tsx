@@ -1,10 +1,10 @@
+import { type JSX } from '@solidjs/web'
 import { type gsap } from 'gsap'
-import { For, createEffect, on, onMount, type JSX } from 'solid-js'
+import { For, createEffect, onCleanup, onSettled } from 'solid-js'
 
 import { useConfigState } from '../configState'
 import { useImageState } from '../imageState'
 import { increment, loadGsap } from '../utils'
-
 import type { DesktopImage } from './layout'
 import { expandStage, minimizeStage, syncStagePosition } from './stageAnimations'
 import { onMutation } from './stageUtils'
@@ -18,7 +18,7 @@ export default function Stage(): JSX.Element {
   const [config] = useConfigState()
   const [
     desktop,
-    { setIndex, setCordHist, setIsOpen, setIsAnimating, setIsLoading, setNavVector }
+    { setCordHist, setIsOpen, setIsAnimating, setIsLoading, setNavVector }
   ] = useDesktopState()
 
   const imgs: DesktopImage[] = Array<DesktopImage>(imageState().length)
@@ -26,6 +26,52 @@ export default function Stage(): JSX.Element {
   let abortController: AbortController | undefined
   let gsapLoaded = false
   let mounted = false
+  let cancelImageReveal: (() => void) | undefined
+
+  const reveal = (img: DesktopImage): void => {
+    cancelImageReveal?.()
+    cancelImageReveal = undefined
+    if (img.complete) {
+      _gsap.set(img, { opacity: 1 })
+      setIsLoading(false)
+      return
+    }
+
+    setIsLoading(true)
+    const controller = new AbortController()
+    let fade: gsap.core.Tween | undefined
+    const listenerOptions = { signal: controller.signal, once: true }
+    cancelImageReveal = () => {
+      controller.abort()
+      fade?.kill()
+    }
+    img.addEventListener(
+      'load',
+      () => {
+        controller.abort()
+        fade = _gsap.to(img, {
+          opacity: 1,
+          ease: 'power3.out',
+          duration: 0.5,
+          onComplete: () => {
+            setIsLoading(false)
+          }
+        })
+      },
+      listenerOptions
+    )
+    img.addEventListener(
+      'error',
+      () => {
+        controller.abort()
+        _gsap.set(img, { opacity: 1 })
+        setIsLoading(false)
+      },
+      listenerOptions
+    )
+  }
+
+  onCleanup(() => cancelImageReveal?.())
 
   const ensureGsapReady: () => Promise<void> = async () => {
     if (gsapPromise !== undefined) return await gsapPromise
@@ -56,7 +102,6 @@ export default function Stage(): JSX.Element {
       const nextIndex = increment(desktop.index(), length)
 
       last = cord
-      setIndex(nextIndex)
       setCordHist((prev) => [...prev, { i: nextIndex, ...cord }].slice(-length))
     }
   }
@@ -67,7 +112,7 @@ export default function Stage(): JSX.Element {
     }
 
     if (desktop.isAnimating() || !gsapLoaded) return
-    if (desktop.index() < 0 || desktop.cordHist().length === 0) return
+    if (desktop.index() < 0) return
     setIsOpen(true)
   }
 
@@ -81,7 +126,7 @@ export default function Stage(): JSX.Element {
       isOpen: desktop.isOpen(),
       navVector: desktop.navVector(),
       mounted,
-      setIsLoading
+      reveal
     })
   }
 
@@ -95,7 +140,7 @@ export default function Stage(): JSX.Element {
       trailLength: config().trailLength,
       length: imageState().length,
       mounted,
-      setIsLoading,
+      reveal,
       setIsAnimating
     })
   }
@@ -115,7 +160,7 @@ export default function Stage(): JSX.Element {
     })
   }
 
-  onMount(() => {
+  onSettled(() => {
     imgs.forEach((img, i) => {
       if (i < 5) {
         img.src = img.dataset.loUrl
@@ -160,54 +205,52 @@ export default function Stage(): JSX.Element {
   })
 
   createEffect(
-    on(
-      () => desktop.cordHist(),
-      () => {
-        setPosition()
-      },
-      { defer: true }
-    )
+    desktop.cordHist,
+    () => {
+      setPosition()
+    },
+    { defer: true }
   )
 
   createEffect(
-    on(
-      desktop.isOpen,
-      async (isOpen) => {
-        if (desktop.isAnimating()) return
+    desktop.isOpen,
+    (isOpen) => {
+      if (desktop.isAnimating()) return
 
-        if (isOpen) {
-          if (desktop.index() < 0 || desktop.cordHist().length === 0) {
-            setIsOpen(false)
-            return
-          }
-
-          await expandImage()
-            .catch(() => {
-              setIsOpen(false)
-              setIsAnimating(false)
-              setIsLoading(false)
-            })
-            .then(() => {
-              abortController?.abort()
-            })
-        } else {
-          await minimizeImage()
-            .catch(() => {
-              void 0
-            })
-            .then(() => {
-              abortController = new AbortController()
-              const abortSignal = abortController.signal
-              window.addEventListener('mousemove', onMouse, {
-                passive: true,
-                signal: abortSignal
-              })
-              setIsLoading(false)
-            })
+      if (isOpen) {
+        if (desktop.index() < 0) {
+          setIsOpen(false)
+          return
         }
-      },
-      { defer: true }
-    )
+
+        void expandImage()
+          .catch(() => {
+            cancelImageReveal?.()
+            setIsOpen(false)
+            setIsAnimating(false)
+            setIsLoading(false)
+          })
+          .then(() => {
+            abortController?.abort()
+          })
+      } else {
+        cancelImageReveal?.()
+        setIsLoading(false)
+        void minimizeImage()
+          .catch(() => {
+            void 0
+          })
+          .then(() => {
+            abortController = new AbortController()
+            const abortSignal = abortController.signal
+            window.addEventListener('mousemove', onMouse, {
+              passive: true,
+              signal: abortSignal
+            })
+          })
+      }
+    },
+    { defer: true }
   )
 
   return (

@@ -1,0 +1,8 @@
+{{- $image := . -}}
+{{- if ne site.Params.autoOrient false -}}
+  {{- $image = $image | images.Filter (images.AutoOrient) -}}
+{{- end -}}
+{{- return (dict
+  "Thumbnail" ($image.Resize (site.Params.loResOpt | default "700x webp Lanczos q60"))
+  "Full" ($image.Resize (site.Params.hiResOpt | default "2000x webp Lanczos q75"))
+) -}}
