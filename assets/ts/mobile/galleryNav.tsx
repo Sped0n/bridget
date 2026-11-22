@@ -1,8 +1,8 @@
-import { createMemo, type JSX } from 'solid-js'
+import { type JSX } from '@solidjs/web'
+import { createMemo } from 'solid-js'
 
 import { useImageState } from '../imageState'
 import { expand } from '../utils'
-
 import { useMobileState } from './state'
 
 export function capitalizeFirstLetter(str: string): string {
@@ -13,16 +13,13 @@ export default function GalleryNav(props: {
   children?: JSX.Element
   closeText: string
 }): JSX.Element {
-  // states
   const imageState = useImageState()
-  const [mobile, { setIsOpen }] = useMobileState()
-  const indexValue = createMemo(() => expand(mobile.index() + 1))
+  const [mobile, { close }] = useMobileState()
+  const indexValue = createMemo(() => {
+    const state = mobile()
+    return expand(state.phase === 'closed' ? 0 : state.index + 1)
+  })
   const indexLength = createMemo(() => expand(imageState().length))
-
-  const onClick: () => void = () => {
-    if (mobile.isAnimating()) return
-    setIsOpen(false)
-  }
 
   return (
     <>
@@ -38,16 +35,9 @@ export default function GalleryNav(props: {
           <span class="num">{indexLength()[2]}</span>
           <span class="num">{indexLength()[3]}</span>
         </div>
-        <div
-          class="navClose"
-          onClick={onClick}
-          onTouchEnd={onClick}
-          onKeyDown={onClick}
-          role="button"
-          tabIndex="0"
-        >
+        <button class="navClose" type="button" onClick={() => close()}>
           {capitalizeFirstLetter(props.closeText)}
-        </div>
+        </button>
       </div>
     </>
   )

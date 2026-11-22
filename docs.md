@@ -240,7 +240,7 @@ _[Contents](#contents)_
 
 _[Contents](#contents)_
 
-**Just copy it.**
+Keep the `JSON` output alongside `HTML` for gallery pages. Hugo writes its URL into `data-gallery-url` and preloads the first thumbnail. Pages without gallery images skip both requests.
 
 _[Contents](#contents)_
 

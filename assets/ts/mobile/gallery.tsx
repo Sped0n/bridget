@@ -1,25 +1,21 @@
+import { type JSX } from '@solidjs/web'
 import { type gsap } from 'gsap'
 import {
   createEffect,
   createMemo,
   createSignal,
   For,
-  on,
-  onMount,
-  untrack,
-  type JSX
+  onCleanup,
+  onSettled
 } from 'solid-js'
-import { createStore } from 'solid-js/store'
-import { type Swiper } from 'swiper'
-import invariant from 'tiny-invariant'
 
 import { useImageState } from '../imageState'
-import { loadGsap, removeDuplicates, type Vector } from '../utils'
-
+import { invariant } from '../invariant'
+import { loadGsap, type Vector } from '../utils'
 import GalleryImage from './galleryImage'
 import GalleryNav, { capitalizeFirstLetter } from './galleryNav'
-import { closeGallery, openGallery } from './galleryTransitions'
-import { getActiveImageIndexes, loadSwiper } from './galleryUtils'
+import { animateGallery } from './galleryTransitions'
+import { getActiveImageIndexes } from './galleryUtils'
 import { useMobileState } from './state'
 
 export default function Gallery(props: {
@@ -27,163 +23,132 @@ export default function Gallery(props: {
   closeText: string
   loadingText: string
 }): JSX.Element {
-  let _gsap: typeof gsap
-  let _swiper: Swiper | undefined
-  let initPromise: Promise<void> | undefined
-
   let curtain: HTMLDivElement | undefined
   let gallery: HTMLDivElement | undefined
   let galleryInner: HTMLDivElement | undefined
+  let animationGsap: typeof gsap | undefined
+  const slides: HTMLDivElement[] = []
 
-  const imageState = useImageState()
-  const [mobile, { setIndex, setIsAnimating, setIsScrollLocked }] = useMobileState()
-
+  const { images, length } = useImageState()()
+  const [mobile, { select, finishOpening, cancelOpening, finishClosing }] =
+    useMobileState()
+  const selectedIndex = createMemo(() => {
+    const state = mobile()
+    return state.phase === 'closed' ? -1 : state.index
+  })
   const loadingText = createMemo(() => capitalizeFirstLetter(props.loadingText))
+  const imageLoads = Array.from({ length }, () => createSignal(false))
 
-  let lastIndex = -1
-  let mounted = false
-  let navigateVector: Vector = 'none'
-
-  const [libLoaded, setLibLoaded] = createSignal(false)
-  const [swiperReady, setSwiperReady] = createSignal(false)
-  const [loads, setLoads] = createStore(Array<boolean>(imageState().length).fill(false))
-
-  const slideUp: () => void = () => {
-    if (!libLoaded() || !mounted) return
-
-    invariant(curtain, 'curtain is not defined')
-    invariant(gallery, 'gallery is not defined')
-
-    openGallery({
-      gsap: _gsap,
-      curtain,
-      gallery,
-      setIsAnimating,
-      setIsScrollLocked
+  const positionSlide = (index: number): void => {
+    if (galleryInner === undefined || slides[index] === undefined) return
+    galleryInner.scrollTo({
+      left: slides[index].offsetLeft - slides[0].offsetLeft,
+      behavior: 'instant'
     })
   }
 
-  const slideDown: () => void = () => {
-    invariant(gallery, 'curtain is not defined')
-    invariant(curtain, 'gallery is not defined')
+  const onScroll = (): void => {
+    if (mobile().phase !== 'open' || galleryInner === undefined || slides.length === 0)
+      return
+    const stride =
+      slides.length > 1
+        ? slides[1].offsetLeft - slides[0].offsetLeft
+        : galleryInner.clientWidth
+    if (stride <= 0) return
 
-    closeGallery({
-      gsap: _gsap,
-      curtain,
-      gallery,
-      setIsAnimating,
-      setIsScrollLocked,
-      onClosed: () => {
-        lastIndex = -1
-      }
-    })
-  }
-
-  const galleryLoadImages: () => void = () => {
-    const currentIndex = mobile.index()
-
-    setLoads(
-      removeDuplicates(
-        getActiveImageIndexes(currentIndex, imageState().length, navigateVector)
-      ),
-      true
+    const index = Math.max(
+      0,
+      Math.min(slides.length - 1, Math.round(galleryInner.scrollLeft / stride))
     )
+    select(index)
   }
 
-  const changeSlide: (slide: number) => void = (slide) => {
-    if (!swiperReady() || _swiper === undefined) return
-    galleryLoadImages()
-    _swiper.slideTo(slide, 0)
-  }
-
-  const ensureGalleryReady: () => Promise<void> = async () => {
-    if (initPromise !== undefined) return await initPromise
-
-    initPromise = (async () => {
-      try {
-        const [g, S] = await Promise.all([loadGsap(), loadSwiper()])
-
-        _gsap = g
-
-        invariant(galleryInner, 'galleryInner is not defined')
-        _swiper = new S(galleryInner, { spaceBetween: 20 })
-        _swiper.on('slideChange', ({ realIndex }) => {
-          setIndex(realIndex)
-        })
-
-        setLibLoaded(true)
-        setSwiperReady(true)
-
-        const initialIndex = untrack(mobile.index)
-
-        if (initialIndex >= 0) {
-          changeSlide(initialIndex)
-          lastIndex = initialIndex
-        }
-      } catch (e) {
-        initPromise = undefined
-        setSwiperReady(false)
-        console.log(e)
-      }
-    })()
-
-    await initPromise
-  }
-
-  onMount(() => {
-    window.addEventListener('touchstart', () => void ensureGalleryReady(), {
-      once: true,
-      passive: true
+  onSettled(() => {
+    invariant(galleryInner, 'galleryInner is not defined')
+    const observer = new ResizeObserver(() => {
+      const state = mobile()
+      if (state.phase === 'opening' || state.phase === 'open')
+        positionSlide(state.index)
     })
-    mounted = true
+    observer.observe(galleryInner)
+    onCleanup(() => observer.disconnect())
+  })
+
+  createEffect(selectedIndex, (index, previous) => {
+    if (index < 0) return
+    const direction: Vector =
+      previous === undefined || previous < 0
+        ? 'none'
+        : index > previous
+          ? 'next'
+          : 'prev'
+    for (const activeIndex of getActiveImageIndexes(index, length, direction)) {
+      imageLoads[activeIndex][1](true)
+    }
   })
 
   createEffect(
-    on(
-      () => [swiperReady(), mobile.index()] as const,
-      ([ready, index]) => {
-        if (!ready || index < 0) return
-        if (index === lastIndex) return
-        if (lastIndex === -1) navigateVector = 'none'
-        else if (index < lastIndex) navigateVector = 'prev'
-        else if (index > lastIndex) navigateVector = 'next'
-        else navigateVector = 'none'
-        changeSlide(index)
-        lastIndex = index
+    () => mobile().phase,
+    (phase) => {
+      const state = mobile()
+      const panel = gallery
+      const backdrop = curtain
+      if (phase === 'open' && state.phase === 'open' && state.restoreFocus) {
+        panel?.querySelector('button')?.focus({ preventScroll: true })
       }
-    )
-  )
+      if (state.phase !== 'opening' && state.phase !== 'closing') return
+      invariant(panel && backdrop, 'gallery elements are not defined')
 
-  createEffect(
-    on(
-      () => mobile.isOpen(),
-      async (isOpen) => {
-        if (isOpen && !swiperReady()) {
-          await ensureGalleryReady()
-        }
-
-        if (!libLoaded() || !swiperReady()) return
-        if (mobile.isAnimating()) return
-        if (isOpen) slideUp()
-        else slideDown()
-      },
-      { defer: true }
-    )
+      const opening = state.phase === 'opening'
+      if (opening) positionSlide(state.index)
+      let cancelled = false
+      let transition: gsap.core.Timeline | undefined
+      const animate = (g: typeof gsap): void => {
+        if (cancelled) return
+        animationGsap = g
+        transition = animateGallery(
+          g,
+          backdrop,
+          panel,
+          opening,
+          opening ? finishOpening : finishClosing
+        )
+      }
+      if (animationGsap) animate(animationGsap)
+      else {
+        void loadGsap().then(animate, (error) => {
+          if (cancelled) return
+          cancelOpening()
+          console.error(error)
+        })
+      }
+      return () => {
+        cancelled = true
+        transition?.kill()
+      }
+    }
   )
 
   return (
     <>
-      <div ref={gallery} class="gallery">
-        <div ref={galleryInner} class="galleryInner">
-          <div class="swiper-wrapper">
-            <For each={imageState().images}>
-              {(ij, i) => (
-                <div class="swiper-slide">
-                  <GalleryImage load={loads[i()]} ij={ij} loadingText={loadingText()} />
-                </div>
-              )}
-            </For>
-          </div>
+      <div
+        ref={gallery}
+        class="gallery"
+        inert={mobile().phase === 'closed' || mobile().phase === 'opening'}
+      >
+        <div ref={galleryInner} class="galleryInner" onScroll={onScroll}>
+          <For each={images}>
+            {(ij, i) => (
+              <div ref={slides[i()]} class="gallerySlide">
+                <GalleryImage
+                  load={imageLoads[i()][0]()}
+                  selected={i() === selectedIndex()}
+                  ij={ij}
+                  loadingText={loadingText()}
+                />
+              </div>
+            )}
+          </For>
         </div>
         <GalleryNav closeText={props.closeText} />
       </div>

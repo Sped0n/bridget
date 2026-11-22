@@ -6,24 +6,29 @@
   padding-top: calc(var(--window-height) * 0.4);
   margin-top: calc(var(--nav-height) * -1);
 
-  img {
+  button {
     position: sticky;
     top: calc(var(--window-height) * 0.4);
-
+    display: block;
+    align-self: center;
     width: 60vw;
     height: 20vh;
+    font-family: inherit;
+    cursor: pointer;
 
-    object-fit: contain;
-
-    transform: translate3d(0, -50%, 0);
-    align-self: center;
+    &:focus-visible {
+      outline: 2px solid currentColor;
+    }
 
     &:last-child {
       margin-bottom: calc(var(--window-height) * 0.35);
     }
   }
-}
 
-.hidden {
-  display: none;
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 }

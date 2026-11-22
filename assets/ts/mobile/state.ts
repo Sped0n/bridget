@@ -1,68 +1,79 @@
+import { type JSX } from '@solidjs/web'
 import {
   createComponent,
   createContext,
   createSignal,
   useContext,
-  type Accessor,
-  type JSX,
-  type Setter
+  type Accessor
 } from 'solid-js'
-import invariant from 'tiny-invariant'
 
-import { useImageState } from '../imageState'
-import { decrement, increment } from '../utils'
+import { invariant } from '../invariant'
 
-export interface MobileState {
-  index: Accessor<number>
-  isOpen: Accessor<boolean>
-  isAnimating: Accessor<boolean>
-  isScrollLocked: Accessor<boolean>
+interface Selection {
+  openingIndex: number
+  index: number
+  restoreFocus: boolean
 }
 
-export type MobileStateContextType = readonly [
-  MobileState,
+type MobileState =
+  | { phase: 'closed' }
+  | ({ phase: 'opening' | 'open' | 'closing' } & Selection)
+
+type MobileContext = readonly [
+  Accessor<MobileState>,
   {
-    readonly setIndex: Setter<number>
-    readonly incIndex: () => void
-    readonly decIndex: () => void
-    readonly setIsOpen: Setter<boolean>
-    readonly setIsAnimating: Setter<boolean>
-    readonly setIsScrollLocked: Setter<boolean>
+    open: (index: number, restoreFocus: boolean) => void
+    select: (index: number) => void
+    close: () => void
+    finishOpening: () => void
+    cancelOpening: () => void
+    finishClosing: () => void
   }
 ]
 
-const MobileStateContext = createContext<MobileStateContextType>()
+const MobileStateContext = createContext<MobileContext>()
 
 export function MobileStateProvider(props: { children?: JSX.Element }): JSX.Element {
-  const imageState = useImageState()
+  const [state, setState] = createSignal<MobileState>({ phase: 'closed' })
 
-  const [index, setIndex] = createSignal(-1)
-  const [isOpen, setIsOpen] = createSignal(false)
-  const [isAnimating, setIsAnimating] = createSignal(false)
-  const [isScrollLocked, setIsScrollLocked] = createSignal(false)
-
-  const updateIndex = (stride: 1 | -1): void => {
-    const length = imageState().length
-    if (length <= 0) return
-    setIndex((current) =>
-      stride === 1 ? increment(current, length) : decrement(current, length)
-    )
-  }
-
-  return createComponent(MobileStateContext.Provider, {
+  return createComponent(MobileStateContext, {
     value: [
-      { index, isOpen, isAnimating, isScrollLocked },
+      state,
       {
-        setIndex,
-        incIndex: () => {
-          updateIndex(1)
+        open(index, restoreFocus) {
+          setState((current) =>
+            current.phase === 'closed'
+              ? { phase: 'opening', openingIndex: index, index, restoreFocus }
+              : current
+          )
         },
-        decIndex: () => {
-          updateIndex(-1)
+        select(index) {
+          setState((current) =>
+            current.phase === 'open' && current.index !== index
+              ? { ...current, index }
+              : current
+          )
         },
-        setIsOpen,
-        setIsAnimating,
-        setIsScrollLocked
+        close() {
+          setState((current) =>
+            current.phase === 'open' ? { ...current, phase: 'closing' } : current
+          )
+        },
+        finishOpening() {
+          setState((current) =>
+            current.phase === 'opening' ? { ...current, phase: 'open' } : current
+          )
+        },
+        cancelOpening() {
+          setState((current) =>
+            current.phase === 'opening' ? { phase: 'closed' } : current
+          )
+        },
+        finishClosing() {
+          setState((current) =>
+            current.phase === 'closing' ? { phase: 'closed' } : current
+          )
+        }
       }
     ],
     get children() {
@@ -71,7 +82,7 @@ export function MobileStateProvider(props: { children?: JSX.Element }): JSX.Elem
   })
 }
 
-export function useMobileState(): MobileStateContextType {
+export function useMobileState(): MobileContext {
   const context = useContext(MobileStateContext)
   invariant(context, 'undefined mobile context')
   return context

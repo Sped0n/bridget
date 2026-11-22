@@ -15,14 +15,31 @@
   transform: translate3d(0, 100%, 0);
 
   .galleryInner {
+    position: relative;
+    display: flex;
+    gap: 20px;
     flex: 1;
     height: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    touch-action: pan-x pinch-zoom;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
-  .swiper-slide {
+  .gallerySlide {
     display: flex;
+    flex: 0 0 100%;
+    min-width: 0;
     align-items: center;
     justify-content: center;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
   }
 
   img {
@@ -42,6 +59,23 @@
   .slideContainer {
     position: relative;
     display: inline-block;
+    max-width: 100%;
+
+    &.loading img {
+      opacity: 0;
+    }
+
+    &.ready .loadingText {
+      opacity: 0;
+    }
+
+    &.fade-in img {
+      animation: gallery-opacity 0.5s ease-out 0.5s both;
+    }
+
+    &.fade-in .loadingText {
+      animation: gallery-opacity 0.5s ease-in reverse both;
+    }
   }
 
   .nav {
@@ -54,6 +88,7 @@
 
     .navClose {
       cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
       z-index: calc(var(--z-nav-gallery) + 1);
 
       min-width: 25%;
@@ -65,7 +100,22 @@
 
       margin-right: calc(var(--space-standard) * -1);
       padding-right: var(--space-standard);
+
+      &:focus-visible {
+        outline: 2px solid currentColor;
+        outline-offset: -6px;
+      }
     }
+  }
+}
+
+@keyframes gallery-opacity {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }
 

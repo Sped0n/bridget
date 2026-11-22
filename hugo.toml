@@ -13,6 +13,3 @@ target = 'static'
 [[module.mounts]]
 source = "bundled"
 target = "assets/bundled"
-[[module.mounts]]
-source = "bundled"
-target = "static/bundled"

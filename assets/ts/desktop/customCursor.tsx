@@ -1,4 +1,5 @@
-import { createSignal, onCleanup, onMount, type Accessor, type JSX } from 'solid-js'
+import { type JSX } from '@solidjs/web'
+import { createSignal, onCleanup, onSettled, type Accessor } from 'solid-js'
 
 export default function CustomCursor(props: {
   children?: JSX.Element
@@ -24,7 +25,7 @@ export default function CustomCursor(props: {
   }
 
   // effects
-  onMount(() => {
+  onSettled(() => {
     controller = new AbortController()
     const abortSignal = controller.signal
     window.addEventListener('mousemove', onMouse, {
@@ -40,8 +41,7 @@ export default function CustomCursor(props: {
   return (
     <>
       <div
-        class="cursor"
-        classList={{ active: props.active() }}
+        class={['cursor', { active: props.active() }]}
         style={{ transform: `translate3d(${xy().x}px, ${xy().y}px, 0)` }}
       >
         <div class="cursorInner">{props.cursorText()}</div>
