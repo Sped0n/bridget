@@ -87,14 +87,16 @@
       }
 
       @media (prefers-reduced-motion: no-preference) {
+        --gallery-fade-duration: 300ms;
+
         .slideImage {
-          transition: opacity 200ms ease-out;
+          transition: opacity var(--gallery-fade-duration) ease-out;
         }
 
         .loadingText {
           transition:
-            opacity 200ms ease-out,
-            visibility 200ms;
+            opacity var(--gallery-fade-duration) ease-out,
+            visibility var(--gallery-fade-duration);
         }
       }
     }
