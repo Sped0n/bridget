@@ -282,7 +282,13 @@ _[Contents](#contents)_
 >
 > - `pnpm install` to install dependencies.
 > - `pnpm run dev` to start a dev server (`http://localhost:1313`).
-> - `pnpm run build` to update artifacts.
+> - `pnpm run build` to build the site and regenerate `bundled/` locally.
+> - `pnpm format` to format files, including Hugo templates.
+> - `pnpm check` to check lint, formatting, and types without rewriting files.
+>
+> After installing dependencies, run `prek install` once per clone. The hook
+> checks lint, formatting, and types and rejects staged `bundled/` changes.
+> GitHub Actions publishes generated files after merging.
 
 ### Change Font
 

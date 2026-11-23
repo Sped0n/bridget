@@ -1,0 +1,50 @@
+name: Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          fetch-depth: ${{ github.event_name == 'pull_request' && '0' || '1' }}
+          persist-credentials: false
+
+      - name: Reject bundled changes in pull request commits
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          # Check each commit so a later revert cannot hide a bundled change.
+          # Combined merge diffs allow merging in artifacts already on the base branch.
+          commit_changes=$(git log --format= --name-only --no-renames --full-history \
+            --diff-merges=combined "$BASE_SHA..$HEAD_SHA" -- bundled/)
+          # Also check what the PR would actually merge into the base branch.
+          merge_changes=$(git diff --name-only --no-renames HEAD^1 HEAD -- bundled/)
+
+          if [[ -n "$commit_changes" || -n "$merge_changes" ]]; then
+            printf '%s\n' 'GitHub Actions updates bundled/. Remove these changes from the PR commits:'
+            printf '%s\n' "$commit_changes" "$merge_changes" | sort -u
+            exit 1
+          fi
+
+      - name: Setup
+        uses: ./.github/actions
+
+      - name: Check lint, formatting, and types
+        run: pnpm run check

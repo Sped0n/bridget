@@ -28,6 +28,7 @@
               pnpm_11
               hugo
               go
+              prek
             ];
           };
         }
