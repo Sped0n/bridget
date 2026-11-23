@@ -30,7 +30,7 @@ runs:
         echo "hugo=hugo-extended $version" >> "$GITHUB_OUTPUT"
 
     - name: Setup mise
-      uses: jdx/mise-action@v4
+      uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
       with:
         tool_versions: |
           node 24
@@ -59,7 +59,7 @@ runs:
         } >> "$GITHUB_OUTPUT"
 
     - name: Restore pnpm cache
-      uses: actions/cache@v5
+      uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
       with:
         path: ${{ steps.versions.outputs.store }}
         key: pnpm-${{ runner.os }}-${{ runner.arch }}-${{ steps.versions.outputs.node }}-${{ steps.versions.outputs.pnpm }}-${{ hashFiles('pnpm-lock.yaml') }}
@@ -68,7 +68,7 @@ runs:
 
     - name: Restore Hugo resources
       if: ${{ inputs.hugo-variant != '' }}
-      uses: actions/cache@v5
+      uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
       with:
         path: exampleSite/resources/_gen
         key: hugo-${{ runner.os }}-${{ runner.arch }}-${{ steps.versions.outputs.hugo }}-${{ hashFiles('exampleSite/content/**') }}-${{ hashFiles('assets/**', 'layouts/**', 'exampleSite/config/**', 'theme.toml') }}
