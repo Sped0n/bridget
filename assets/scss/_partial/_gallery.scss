@@ -75,6 +75,25 @@
       width: 100%;
       height: 100%;
     }
+
+    &.fadeFromLoading {
+      .loadingText {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .fullImage {
+          transition: opacity 200ms ease-out;
+        }
+
+        .loadingText {
+          transition:
+            opacity 200ms ease-out,
+            visibility 200ms;
+        }
+      }
+    }
   }
 
   .nav {

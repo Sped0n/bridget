@@ -13,10 +13,14 @@ export default function GalleryImage(props: {
   let thumbnail: HTMLImageElement | undefined
   let fullImage: HTMLImageElement | undefined
   const [thumbnailStatus, setThumbnailStatus] = createSignal<ImageStatus>('loading')
-  const [fullStatus, setFullStatus] = createSignal<ImageStatus>('loading')
+  const [fullStatus, setFullStatus] = createSignal<ImageStatus | 'ready-with-fade'>(
+    'loading'
+  )
+  const fadeFromLoading = () => fullStatus() === 'ready-with-fade'
   const showFull = createMemo(
     () =>
       fullStatus() === 'ready' ||
+      fadeFromLoading() ||
       // Let the browser show the full image's alt text if neither rendition loads.
       (fullStatus() === 'failed' && thumbnailStatus() === 'failed')
   )
@@ -34,14 +38,15 @@ export default function GalleryImage(props: {
         () => setThumbnailStatus('failed')
       )
       void fullImage.decode().then(
-        () => setFullStatus('ready'),
+        () =>
+          setFullStatus(thumbnailStatus() === 'ready' ? 'ready' : 'ready-with-fade'),
         () => setFullStatus('failed')
       )
     }
   )
 
   return (
-    <div class="slideContainer">
+    <div class={['slideContainer', fadeFromLoading() && 'fadeFromLoading']}>
       <img
         ref={fullImage}
         class={['fullImage', !showFull() && 'unrevealed']}
@@ -50,7 +55,11 @@ export default function GalleryImage(props: {
         alt={props.ij.alt}
       />
       <img ref={thumbnail} class="thumbnail" alt="" hidden={!showThumbnail()} />
-      <div class="loadingText" hidden={showFull() || showThumbnail()}>
+      <div
+        class="loadingText"
+        aria-hidden={fadeFromLoading() ? 'true' : undefined}
+        hidden={(showFull() && !fadeFromLoading()) || showThumbnail()}
+      >
         {props.loadingText}
       </div>
     </div>
