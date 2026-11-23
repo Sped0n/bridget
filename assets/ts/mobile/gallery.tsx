@@ -142,7 +142,6 @@ export default function Gallery(props: {
               <div ref={slides[i()]} class="gallerySlide">
                 <GalleryImage
                   load={imageLoads[i()][0]()}
-                  selected={i() === selectedIndex()}
                   ij={ij}
                   loadingText={loadingText()}
                 />
