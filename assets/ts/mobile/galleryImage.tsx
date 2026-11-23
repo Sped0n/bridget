@@ -13,18 +13,14 @@ export default function GalleryImage(props: {
   let thumbnail: HTMLImageElement | undefined
   let fullImage: HTMLImageElement | undefined
   const [thumbnailStatus, setThumbnailStatus] = createSignal<ImageStatus>('loading')
-  const [fullStatus, setFullStatus] = createSignal<ImageStatus | 'ready-with-fade'>(
-    'loading'
-  )
-  const fadeFromLoading = () => fullStatus() === 'ready-with-fade'
-  const showFull = createMemo(
-    () =>
-      fullStatus() === 'ready' ||
-      fadeFromLoading() ||
-      // Let the browser show the full image's alt text if neither rendition loads.
-      (fullStatus() === 'failed' && thumbnailStatus() === 'failed')
-  )
-  const showThumbnail = () => !showFull() && thumbnailStatus() === 'ready'
+  const [fullStatus, setFullStatus] = createSignal<ImageStatus>('loading')
+  const visibleImage = createMemo(() => {
+    if (fullStatus() === 'ready') return 'full'
+    if (thumbnailStatus() === 'ready') return 'thumbnail'
+    if (fullStatus() === 'failed' && thumbnailStatus() === 'failed') return 'error'
+    return 'none'
+  })
+  const hasImage = () => visibleImage() === 'full' || visibleImage() === 'thumbnail'
 
   createEffect(
     () => props.load,
@@ -38,27 +34,33 @@ export default function GalleryImage(props: {
         () => setThumbnailStatus('failed')
       )
       void fullImage.decode().then(
-        () =>
-          setFullStatus(thumbnailStatus() === 'ready' ? 'ready' : 'ready-with-fade'),
+        () => setFullStatus('ready'),
         () => setFullStatus('failed')
       )
     }
   )
 
   return (
-    <div class={['slideContainer', fadeFromLoading() && 'fadeFromLoading']}>
-      <img
-        ref={fullImage}
-        class={['fullImage', !showFull() && 'unrevealed']}
-        height={props.ij.hiImgH}
-        width={props.ij.hiImgW}
-        alt={props.ij.alt}
-      />
-      <img ref={thumbnail} class="thumbnail" alt="" hidden={!showThumbnail()} />
+    <div class={['slideContainer', hasImage() && 'imageReady']}>
+      <div class={['slideImage', visibleImage() === 'none' && 'unrevealed']}>
+        <img
+          ref={fullImage}
+          class={['fullImage', visibleImage() === 'thumbnail' && 'unrevealed']}
+          height={props.ij.hiImgH}
+          width={props.ij.hiImgW}
+          alt={props.ij.alt}
+        />
+        <img
+          ref={thumbnail}
+          class="thumbnail"
+          alt=""
+          hidden={visibleImage() !== 'thumbnail'}
+        />
+      </div>
       <div
         class="loadingText"
-        aria-hidden={fadeFromLoading() ? 'true' : undefined}
-        hidden={(showFull() && !fadeFromLoading()) || showThumbnail()}
+        aria-hidden={hasImage() ? 'true' : undefined}
+        hidden={visibleImage() === 'error'}
       >
         {props.loadingText}
       </div>

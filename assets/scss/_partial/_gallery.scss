@@ -61,12 +61,16 @@
     display: inline-block;
     max-width: 100%;
 
+    .slideImage {
+      position: relative;
+    }
+
     .fullImage {
       display: block;
+    }
 
-      &.unrevealed {
-        opacity: 0;
-      }
+    .unrevealed {
+      opacity: 0;
     }
 
     .thumbnail {
@@ -76,14 +80,14 @@
       height: 100%;
     }
 
-    &.fadeFromLoading {
+    &.imageReady {
       .loadingText {
         opacity: 0;
         visibility: hidden;
       }
 
       @media (prefers-reduced-motion: no-preference) {
-        .fullImage {
+        .slideImage {
           transition: opacity 200ms ease-out;
         }
 
